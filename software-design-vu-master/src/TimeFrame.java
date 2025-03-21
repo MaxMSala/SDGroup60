@@ -3,12 +3,12 @@ class Timeframe {
     User user;
     Appliance appliance;
     Datetime[] period = new Datetime[2];
-    float averageCarbonIntensity;
-    float carbonFootprint;
-    float gramsCO2PerKiloWattHour;
-    float tonnesCO2eq;
+    double averageCarbonIntensity;
+    double carbonFootprint;
+    double gramsCO2PerKiloWattHour;
+    double tonnesCO2eq;
 
-    public Timeframe(User user, Appliance appliance, Datetime start, Datetime end, float averageCarbonIntensity, float gramsCO2PerKiloWattHour) {
+    public Timeframe(User user, Appliance appliance, Datetime start, Datetime end, double averageCarbonIntensity, double gramsCO2PerKiloWattHour) {
         this.user = user;
         this.appliance = appliance;
         this.period[0] = start;
