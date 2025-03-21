@@ -10,39 +10,96 @@ import java.util.List;
 import javax.swing.SpinnerDateModel;
 
 public class Form {
-    private List<String> input;
-    private List<String> inputType;
+    private String houseInfo = "";
+    private List<String> appliances;
+    private List<String> users;
+    private List<String> timeframes;
 
     public Form() {
-        input = new ArrayList<>();
-        inputType = new ArrayList<>();
+        appliances = new ArrayList<>();
+        users = new ArrayList<>();
+        timeframes = new ArrayList<>();
     }
 
-    public void addInput(String inputValue, String type) {
-        input.add(inputValue);
-        inputType.add(type);
+    // House info
+    public void setHouseInfo(String info) {
+        this.houseInfo = info;
     }
 
-    public List<String> getInput() {
-        return input;
+    public String getHouseInfo() {
+        return houseInfo;
     }
 
-    public List<String> getInputType() {
-        return inputType;
+    // Appliances
+    public void addAppliance(String applianceInfo) {
+        appliances.add(applianceInfo);
     }
 
+    public List<String> getAppliances() {
+        return appliances;
+    }
+
+    // Users
+    public void addUser(String user) {
+        if (!users.contains(user)) {
+            users.add(user);
+        }
+    }
+
+    public List<String> getUsers() {
+        return users;
+    }
+
+    // Timeframes
+    public void addTimeframe(String timeframe) {
+        timeframes.add(timeframe);
+    }
+
+    public List<String> getTimeframes() {
+        return timeframes;
+    }
+
+    // All data combined for display
     public String getFormattedInput() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < input.size(); i++) {
-            sb.append(inputType.get(i)).append(": ").append(input.get(i)).append("\n");
+
+        sb.append("HOUSE INFO:\n").append(houseInfo).append("\n\n");
+
+        sb.append("USERS:\n");
+        if (users.isEmpty()) {
+            sb.append(" (None)\n");
+        } else {
+            for (String user : users) {
+                sb.append(" - ").append(user).append("\n");
+            }
         }
+
+        sb.append("\n APPLIANCES:\n");
+        if (appliances.isEmpty()) {
+            sb.append(" (None)\n");
+        } else {
+            for (String appliance : appliances) {
+                sb.append(appliance).append("\n");
+            }
+        }
+
+        sb.append("\n TIMEFRAMES:\n");
+        if (timeframes.isEmpty()) {
+            sb.append(" (None)\n");
+        } else {
+            for (String tf : timeframes) {
+                sb.append(" - ").append(tf).append("\n");
+            }
+        }
+
         return sb.toString();
     }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Form::createAndShowGUI);
     }
-
+// first window
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Energy Consumption Form");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -86,20 +143,18 @@ public class Form {
             String startDate = dateFormat.format(startDateChooser.getDate()) + " " + timeFormat.format((Date)startTimeSpinner.getValue());
             String endDate = dateFormat.format(endDateChooser.getDate()) + " " + timeFormat.format((Date)endTimeSpinner.getValue());
 
-            form.addInput(regionDropdown.getSelectedItem().toString(), "Region");
-            form.addInput(tariffField.getText(), "Tariff");
-            form.addInput(startDate, "Start DateTime");
-            form.addInput(endDate, "End DateTime");
+            StringBuilder houseDetails = new StringBuilder();
+            houseDetails.append("Region: ").append(regionDropdown.getSelectedItem().toString()).append("\n");
+            houseDetails.append("Tariff: ").append(tariffField.getText()).append("\n");
+            houseDetails.append("Start DateTime: ").append(startDate).append("\n");
+            houseDetails.append("End DateTime: ").append(endDate);
+            form.setHouseInfo(houseDetails.toString());
 
             JOptionPane.showMessageDialog(frame, form.getFormattedInput());
 
-            String newUser = JOptionPane.showInputDialog(frame, "Add new user:");
-            if (newUser != null && !newUser.trim().isEmpty()) {
-                form.addInput(newUser, "User");
-                JOptionPane.showMessageDialog(frame, "New user '" + newUser + "' added successfully!");
-                frame.dispose();
-                showApplianceWindow(form);
-            }
+            frame.dispose();
+            showApplianceWindow(form);
+
             String output = form.getFormattedInput();
 
             // Print to console to verify correctness
@@ -149,7 +204,7 @@ public class Form {
                     "Power Consumption: " + powerField.getText() + "\n" +
                     "Embodied Emmsion: " + embodiedEmission .getText();
 
-            form.addInput(applianceInfo, "Appliance");
+            form.addAppliance(applianceInfo.toString());
             JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
 
         });
@@ -199,7 +254,7 @@ public class Form {
         addTimeframeButton.addActionListener(e -> {
             String newTimeframe = addApplianceTimeframe(applianceFrame);
             if (!newTimeframe.equals("None")) {
-                timeframes.add(newTimeframe);
+                form.addTimeframe(newTimeframe);
                 timeframeArea.append("Timeframe " + timeframes.size() + ": " + newTimeframe + "\n");
             }
         });
@@ -228,7 +283,7 @@ public class Form {
                 applianceInfo.append("Timeframes: None\n");
             }
 
-            form.addInput(applianceInfo.toString(), "Appliance");
+            form.addAppliance(applianceInfo.toString());
             JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
 
             nameField.setText("");
@@ -247,7 +302,7 @@ public class Form {
         addUserButton.addActionListener(e -> {
             String newUser = JOptionPane.showInputDialog(applianceFrame, "Add new user:");
             if (newUser != null && !newUser.trim().isEmpty()) {
-                form.addInput(newUser, "User");
+                form.addUser(newUser);
                 JOptionPane.showMessageDialog(applianceFrame, "New user '" + newUser + "' added successfully!");
             }
         });
@@ -259,29 +314,52 @@ public class Form {
         applianceFrame.setVisible(true);
     }
     private static String addApplianceTimeframe(JFrame parentFrame) {
-        JPanel timeframePanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel timeframePanel = new JPanel(new GridLayout(4, 2, 10, 10));
 
-        JSpinner startSpinner = new JSpinner(new SpinnerDateModel());
-        startSpinner.setEditor(new JSpinner.DateEditor(startSpinner, "HH:mm"));
+        JTextField userField = new JTextField();
+        addPlaceholder(userField, "e.g., John Doe");
 
-        JSpinner endSpinner = new JSpinner(new SpinnerDateModel());
-        endSpinner.setEditor(new JSpinner.DateEditor(endSpinner, "HH:mm"));
+        JDateChooser startDateChooser = new JDateChooser();
+        JSpinner startTimeSpinner = new JSpinner(new SpinnerDateModel());
+        startTimeSpinner.setEditor(new JSpinner.DateEditor(startTimeSpinner, "HH:mm"));
 
+        JDateChooser endDateChooser = new JDateChooser();
+        JSpinner endTimeSpinner = new JSpinner(new SpinnerDateModel());
+        endTimeSpinner.setEditor(new JSpinner.DateEditor(endTimeSpinner, "HH:mm"));
+
+        timeframePanel.add(new JLabel("User:"));
+        timeframePanel.add(userField);
+        timeframePanel.add(new JLabel("Start Date:"));
+        timeframePanel.add(startDateChooser);
         timeframePanel.add(new JLabel("Start Time:"));
-        timeframePanel.add(startSpinner);
+        timeframePanel.add(startTimeSpinner);
+        timeframePanel.add(new JLabel("End Date:"));
+        timeframePanel.add(endDateChooser);
         timeframePanel.add(new JLabel("End Time:"));
-        timeframePanel.add(endSpinner);
+        timeframePanel.add(endTimeSpinner);
 
         int result = JOptionPane.showConfirmDialog(parentFrame, timeframePanel,
                 "Add Timeframe", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            return sdf.format(startSpinner.getValue()) + " - " + sdf.format(endSpinner.getValue());
+            String user = userField.getText().trim();
+            if (user.isEmpty() || startDateChooser.getDate() == null || endDateChooser.getDate() == null) {
+                JOptionPane.showMessageDialog(parentFrame, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+                return "None";
+            }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+            String start = dateFormat.format(startDateChooser.getDate()) + " " + timeFormat.format(startTimeSpinner.getValue());
+            String end = dateFormat.format(endDateChooser.getDate()) + " " + timeFormat.format(endTimeSpinner.getValue());
+
+            return "User: " + user + ", Start: " + start + ", End: " + end;
         } else {
             return "None";
         }
     }
+
 
     private static void addPlaceholder(JTextField textField, String placeholder) {
         textField.setForeground(Color.GRAY);
