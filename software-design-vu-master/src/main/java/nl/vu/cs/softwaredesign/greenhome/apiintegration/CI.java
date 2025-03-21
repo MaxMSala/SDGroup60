@@ -1,3 +1,5 @@
+package nl.vu.cs.softwaredesign.greenhome.apiintegration;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;

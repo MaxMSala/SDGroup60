@@ -1,3 +1,5 @@
+package nl.vu.cs.softwaredesign.greenhome.datavalidation;
+
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 import java.awt.*;
