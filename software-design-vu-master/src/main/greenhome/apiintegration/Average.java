@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.greenhome.apiintegration;
+package apiintegration;
 
 class Average {
     float averageEmissionsPerCap;
