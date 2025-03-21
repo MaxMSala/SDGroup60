@@ -1,1 +1,1 @@
-package nl.vu.cs.softwaredesign.greenhome.household;
+package household;

@@ -1,5 +1,4 @@
-package nl.vu.cs.softwaredesign.greenhome.household;
-
+package household;
 class User {
     String name;
     int ecoScore;

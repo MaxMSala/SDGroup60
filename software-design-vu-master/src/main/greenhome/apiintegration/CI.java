@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.greenhome.apiintegration;
+package apiintegration;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
