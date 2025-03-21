@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign;
+package nl.vu.cs.softwaredesign.greenhome;
 
 public class Main {
     public static void main (String[] args){
