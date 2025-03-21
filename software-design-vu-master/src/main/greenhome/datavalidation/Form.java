@@ -1,4 +1,4 @@
-package nl.vu.cs.softwaredesign.greenhome.datavalidation;
+package datavalidation;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
