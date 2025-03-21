@@ -18,6 +18,6 @@ class Timeframe {
     }
 
     public void calcFootPrint() {
-        this.carbonFootprint = appliance.embodiedEmissions + (appliance.kiloWattHours * this.gramsCO2PerKiloWattHour / 1000);
+        this.carbonFootprint = (appliance.kiloWattHours * this.gramsCO2PerKiloWattHour / 1000);
     }
 }
