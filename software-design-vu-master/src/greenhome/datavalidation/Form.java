@@ -224,20 +224,18 @@ public class Form {
         JTextField powerField = new JTextField();
         addPlaceholder(powerField, "e.g., 150W");
 
-        JTextField footprintField = new JTextField();
-        addPlaceholder(footprintField, "e.g., 2.4 kg CO2");
+        JTextField embodiedEmissions = new JTextField();
+        addPlaceholder(embodiedEmissions, "e.g., 2.4 kg CO2");
 
-        JTextField costField = new JTextField();
-        addPlaceholder(costField, "e.g., 0.36 USD/day");
+
 
         fieldsPanel.add(new JLabel("Name:"));
         fieldsPanel.add(nameField);
         fieldsPanel.add(new JLabel("Power Consumption:"));
         fieldsPanel.add(powerField);
-        fieldsPanel.add(new JLabel("Footprint:"));
-        fieldsPanel.add(footprintField);
-        fieldsPanel.add(new JLabel("Cost:"));
-        fieldsPanel.add(costField);
+        fieldsPanel.add(new JLabel("Embodied Emissions:"));
+        fieldsPanel.add(embodiedEmissions);
+
 
         JButton addTimeframeButton = new JButton("Add Timeframe");
         fieldsPanel.add(addTimeframeButton);
@@ -271,8 +269,7 @@ public class Form {
             StringBuilder applianceInfo = new StringBuilder();
             applianceInfo.append("Name: ").append(nameField.getText()).append("\n");
             applianceInfo.append("Power Consumption: ").append(powerField.getText()).append("\n");
-            applianceInfo.append("Footprint: ").append(footprintField.getText()).append("\n");
-            applianceInfo.append("Cost: ").append(costField.getText()).append("\n");
+            applianceInfo.append("Embodied Emission: ").append(embodiedEmissions.getText()).append("\n");
 
             if (!timeframes.isEmpty()) {
                 applianceInfo.append("Timeframes:\n");
@@ -288,15 +285,14 @@ public class Form {
 
             nameField.setText("");
             powerField.setText("");
-            footprintField.setText("");
-            costField.setText("");
+            embodiedEmissions.setText("");
             timeframeArea.setText("");
             timeframes.clear();
 
             addPlaceholder(nameField, "e.g., Fridge");
             addPlaceholder(powerField, "e.g., 150W");
-            addPlaceholder(footprintField, "e.g., 2.4 kg CO2");
-            addPlaceholder(costField, "e.g., 0.36 USD/day");
+            addPlaceholder(embodiedEmissions, "e.g., 2.4 kg CO2");
+
         });
 
         addUserButton.addActionListener(e -> {
