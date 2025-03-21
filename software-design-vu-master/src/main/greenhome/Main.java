@@ -7,7 +7,7 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.println("Welcome to GreenHome!");
 
-        System.out.println(CI.fetchCarbonIntensity());
+        //System.out.println(CI.fetchCarbonIntensity());
 
         for (int i = 1; i <= 5; i++) {
             //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
