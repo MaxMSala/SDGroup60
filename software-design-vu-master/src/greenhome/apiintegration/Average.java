@@ -1,4 +1,4 @@
-package apiintegration;
+package greenhome.apiintegration;
 
 class Average {
     float averageEmissionsPerCap;

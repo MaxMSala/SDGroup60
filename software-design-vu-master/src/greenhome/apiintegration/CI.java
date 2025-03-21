@@ -1,4 +1,4 @@
-package apiintegration;
+package greenhome.apiintegration;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

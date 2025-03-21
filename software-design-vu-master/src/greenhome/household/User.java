@@ -1,4 +1,5 @@
-package household;
+package greenhome.household;
+
 class User {
     String name;
     int ecoScore;

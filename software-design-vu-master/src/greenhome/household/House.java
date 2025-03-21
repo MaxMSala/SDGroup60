@@ -1,4 +1,5 @@
-package household;
+package greenhome.household;
+
 class House {
 
 }

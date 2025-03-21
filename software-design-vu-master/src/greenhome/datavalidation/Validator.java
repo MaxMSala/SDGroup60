@@ -1,1 +1,5 @@
-package nl.vu.cs.softwaredesign.greenhome.datavalidation;
+package greenhome.datavalidation;
+
+class Validator {
+
+}

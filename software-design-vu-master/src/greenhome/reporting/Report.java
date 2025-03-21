@@ -1,1 +1,5 @@
-package nl.vu.cs.softwaredesign.greenhome.reporting;
+package greenhome.reporting;
+
+class Report {
+
+}
