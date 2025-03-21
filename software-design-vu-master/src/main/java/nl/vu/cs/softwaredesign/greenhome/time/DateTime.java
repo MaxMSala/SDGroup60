@@ -1,3 +1,5 @@
+package nl.vu.cs.softwaredesign.greenhome.time;
+
 class Datetime {
     int day, month, year, hour, minute;
 

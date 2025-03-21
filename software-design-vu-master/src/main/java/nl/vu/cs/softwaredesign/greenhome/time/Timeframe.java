@@ -1,3 +1,5 @@
+package nl.vu.cs.softwaredesign.greenhome.time;
+
 class Timeframe {
     int count;
     User user;
