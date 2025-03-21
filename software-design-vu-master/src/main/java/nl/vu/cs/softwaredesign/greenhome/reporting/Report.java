@@ -1,1 +1,0 @@
-package nl.vu.cs.softwaredesign.greenhome.reporting;
