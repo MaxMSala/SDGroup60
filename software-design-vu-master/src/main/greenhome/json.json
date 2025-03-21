@@ -1,0 +1,165 @@
+{
+  "house": {
+    "appliances": [
+      {
+        "name": "Refrigerator",
+        "power": 150,
+        "hours": 24,
+        "emissions": 2.4
+      },
+      {
+        "name": "TV",
+        "power": 100,
+        "hours": 5,
+        "emissions": 0.5
+      },
+      {
+        "name": "Laptop",
+        "power": 65,
+        "hours": 6,
+        "emissions": 0.3
+      }
+    ],
+    "totalEmissions": 3.2,
+    "totalCosts": 0.48,
+    "ecoScoreLocal": 96.8,
+    "ecoScoreGlobal": 116.8,
+    "recommendations": "Reduce the usage of Refrigerator during peak hours."
+  },
+  "house": {
+    "appliances": [
+      {
+        "name": "Refrigerator",
+        "power": 150,
+        "hours": 24,
+        "emissions": 2.4
+      },
+      {
+        "name": "TV",
+        "power": 100,
+        "hours": 5,
+        "emissions": 0.5
+      },
+      {
+        "name": "Laptop",
+        "power": 65,
+        "hours": 6,
+        "emissions": 0.3
+      }
+    ],
+    "totalEmissions": 3.2,
+    "totalCosts": 0.48,
+    "ecoScoreLocal": 96.8,
+    "ecoScoreGlobal": 116.8,
+    "recommendations": "Reduce the usage of Refrigerator during peak hours."
+  },
+  "hous5": {
+    "appliances": [
+      {
+        "name": "Refrigerator",
+        "power": 150,
+        "hours": 24,
+        "emissions": 2.4
+      },
+      {
+        "name": "TV",
+        "power": 100,
+        "hours": 5,
+        "emissions": 0.5
+      },
+      {
+        "name": "Laptop",
+        "power": 65,
+        "hours": 6,
+        "emissions": 0.3
+      }
+    ],
+    "totalEmissions": 3.2,
+    "totalCosts": 0.48,
+    "ecoScoreLocal": 96.8,
+    "ecoScoreGlobal": 116.8,
+    "recommendations": "Reduce the usage of Refrigerator during peak hours."
+  },
+  "hous4": {
+    "appliances": [
+      {
+        "name": "Refrigerator",
+        "power": 150,
+        "hours": 24,
+        "emissions": 2.4
+      },
+      {
+        "name": "TV",
+        "power": 100,
+        "hours": 5,
+        "emissions": 0.5
+      },
+      {
+        "name": "Laptop",
+        "power": 65,
+        "hours": 6,
+        "emissions": 0.3
+      }
+    ],
+    "totalEmissions": 3.2,
+    "totalCosts": 0.48,
+    "ecoScoreLocal": 96.8,
+    "ecoScoreGlobal": 116.8,
+    "recommendations": "Reduce the usage of Refrigerator during peak hours."
+  },
+  "hous3": {
+    "appliances": [
+      {
+        "name": "Refrigerator",
+        "power": 150,
+        "hours": 24,
+        "emissions": 2.4
+      },
+      {
+        "name": "TV",
+        "power": 100,
+        "hours": 5,
+        "emissions": 0.5
+      },
+      {
+        "name": "Laptop",
+        "power": 65,
+        "hours": 6,
+        "emissions": 0.3
+      }
+    ],
+    "totalEmissions": 3.2,
+    "totalCosts": 0.48,
+    "ecoScoreLocal": 96.8,
+    "ecoScoreGlobal": 116.8,
+    "recommendations": "Reduce the usage of Refrigerator during peak hours."
+  },
+  "house2": {
+    "appliances": [
+      {
+        "name": "Refrigerator",
+        "power": 150,
+        "hours": 24,
+        "emissions": 2.4
+      },
+      {
+        "name": "TV",
+        "power": 100,
+        "hours": 5,
+        "emissions": 0.5
+      },
+      {
+        "name": "Laptop",
+        "power": 65,
+        "hours": 6,
+        "emissions": 0.3
+      }
+    ],
+    "totalEmissions": 3.2,
+    "totalCosts": 0.48,
+    "ecoScoreLocal": 96.8,
+    "ecoScoreGlobal": 116.8,
+    "recommendations": "Reduce the usage of Refrigerator during peak hours."
+  }
+
+}
