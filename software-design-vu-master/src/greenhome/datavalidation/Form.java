@@ -260,10 +260,12 @@ public class Form {
         JPanel bottomButtons = new JPanel(new GridLayout(1, 3, 10, 10));
         JButton addButton = new JButton("Add Appliance");
         JButton addUserButton = new JButton("Add New User");
-        JButton showReportButton = new JButton("Show Report");
+        JButton confirmButton = new JButton("Confirm All Information");
+        //JButton showReportButton = new JButton("Show Report");
         bottomButtons.add(addButton);
         bottomButtons.add(addUserButton);
-        bottomButtons.add(showReportButton);
+        bottomButtons.add(confirmButton);
+       // bottomButtons.add(showReportButton);
 
         addButton.addActionListener(e -> {
             StringBuilder applianceInfo = new StringBuilder();
@@ -302,13 +304,39 @@ public class Form {
                 JOptionPane.showMessageDialog(applianceFrame, "New user '" + newUser + "' added successfully!");
             }
         });
+        confirmButton.addActionListener(e -> {
+            // Create a new confirmation window
+            JFrame confirmFrame = new JFrame("Confirmation Summary");
+            confirmFrame.setSize(500, 500);
+            confirmFrame.setLayout(new BorderLayout(10, 10));
 
-        showReportButton.addActionListener(e -> JOptionPane.showMessageDialog(applianceFrame, form.getFormattedInput()));
+            JTextArea confirmationArea = new JTextArea(form.mergeAllData());
+            confirmationArea.setEditable(false);
+            JScrollPane scrollPane = new JScrollPane(confirmationArea);
+
+            confirmFrame.add(scrollPane, BorderLayout.CENTER);
+
+            // Bottom panel with "Show Report" only
+            JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            JButton finalReportButton = new JButton("Show Report");
+            bottomPanel.add(finalReportButton);
+            confirmFrame.add(bottomPanel, BorderLayout.SOUTH);
+
+            finalReportButton.addActionListener(ev -> {
+                JOptionPane.showMessageDialog(confirmFrame, form.mergeAllData(), "Final Report", JOptionPane.INFORMATION_MESSAGE);
+            });
+
+            confirmFrame.setLocationRelativeTo(null);
+            confirmFrame.setVisible(true);
+        });
+
+       // showReportButton.addActionListener(e -> JOptionPane.showMessageDialog(applianceFrame, form.getFormattedInput()));
 
         applianceFrame.add(bottomButtons, BorderLayout.SOUTH);
         applianceFrame.setLocationRelativeTo(null);
         applianceFrame.setVisible(true);
     }
+
     private static String addApplianceTimeframe(JFrame parentFrame) {
         JPanel timeframePanel = new JPanel(new GridLayout(4, 2, 10, 10));
 
@@ -376,5 +404,44 @@ public class Form {
                 }
             }
         });
+    }
+    public String mergeAllData() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("----- GreenHome Data Report -----\n\n");
+
+        sb.append("HOUSE INFO\n");
+        sb.append(houseInfo.isEmpty() ? "No house information provided.\n" : houseInfo + "\n");
+
+        sb.append("\nUSERS\n");
+        if (users.isEmpty()) {
+            sb.append("No users added.\n");
+        } else {
+            for (String user : users) {
+                sb.append("- ").append(user).append("\n");
+            }
+        }
+
+        sb.append("\nAPPLIANCES\n");
+        if (appliances.isEmpty()) {
+            sb.append("No appliances added.\n");
+        } else {
+            for (int i = 0; i < appliances.size(); i++) {
+                sb.append("Appliance ").append(i + 1).append(":\n").append(appliances.get(i)).append("\n");
+            }
+        }
+
+        sb.append("\nTIMEFRAMES\n");
+        if (timeframes.isEmpty()) {
+            sb.append("No usage timeframes recorded.\n");
+        } else {
+            for (int i = 0; i < timeframes.size(); i++) {
+                sb.append("Timeframe ").append(i + 1).append(": ").append(timeframes.get(i)).append("\n");
+            }
+        }
+
+        sb.append("\n----- End of Report -----");
+
+        return sb.toString();
     }
 }
