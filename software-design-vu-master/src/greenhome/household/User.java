@@ -1,6 +1,6 @@
 package greenhome.household;
 
-class User {
+public class User {
     String name;
     int ecoScore;
     float carbonFootprint = 0;

@@ -1,5 +1,5 @@
 package greenhome.household;
 
-class House {
+public class House {
 
 }

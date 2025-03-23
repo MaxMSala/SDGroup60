@@ -1,5 +1,5 @@
 package greenhome.household;
 
-class Parser {
+public class Parser {
 
 }
