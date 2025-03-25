@@ -3,7 +3,7 @@ import greenhome.datavalidation.*;
 import greenhome.apiintegration.*;
 import greenhome.household.*;
 
-class Timeframe {
+public class Timeframe {
     int count;
     User user;
     Appliance appliance;
