@@ -1,4 +1,7 @@
 package greenhome.time;
+import greenhome.datavalidation.*;
+import greenhome.apiintegration.*;
+
 public class DateTime {
     int day, month, year, hour, minute;
 
