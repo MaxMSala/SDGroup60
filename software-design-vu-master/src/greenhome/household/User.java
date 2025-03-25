@@ -6,6 +6,10 @@ public class User {
     float carbonFootprint = 0;
     float cost;
 
+    public User(String name) {
+        this.name = name;
+    }
+
     //public float getCarbonFootprint (TimeFrame[] timeFrames){
     //    for (int i = 0; i < timeFrames.length; i++) {
     //        if (timeFrames[i].User.name == this.name); {
