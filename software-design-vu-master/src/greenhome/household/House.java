@@ -8,17 +8,13 @@ import java.util.Set;
 public class House {
 
     // Aggregation (1..*) with User
-    // - residents: User[1..*] {Unique, Unordered}
     private Set<User> residents;
 
-    // - electricityTariff: Float
     private double electricityTariff;
 
     // Composition (1..*) with Appliance
-    // - appliances: Appliance[1..*]{Unique, Unordered}
     private Set<Appliance> appliances;
 
-    // + timeframes : TimeFrame[1..*] {Unique, Unordered}
     private Set<Timeframe> timeframes;
 
     // derived attributes ("/" prefix)
