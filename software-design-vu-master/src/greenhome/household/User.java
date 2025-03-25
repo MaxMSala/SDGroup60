@@ -1,5 +1,8 @@
 package greenhome.household;
 
+import greenhome.datavalidation.*;
+import greenhome.time.*;
+
 public class User {
     String name;
     int ecoScore;

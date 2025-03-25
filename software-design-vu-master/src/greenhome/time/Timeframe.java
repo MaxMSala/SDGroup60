@@ -1,6 +1,7 @@
 package greenhome.time;
-import greenhome.household.User;
-import greenhome.household.Appliance;
+import greenhome.datavalidation.*;
+import greenhome.apiintegration.*;
+import greenhome.household.*;
 
 class Timeframe {
     int count;
