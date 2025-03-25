@@ -4,14 +4,19 @@ import greenhome.apiintegration.*;
 import greenhome.household.*;
 
 public class Timeframe {
-    int count;
-    User user;
-    Appliance appliance;
-    DateTime[] period = new DateTime[2];
-    double averageCarbonIntensity;
-    double carbonFootprint;
-    double gramsCO2PerKiloWattHour;
-    double tonnesCO2eq;
+    public static int count;
+
+    // Associations
+    private User user;
+    private Appliance appliance;
+
+    private DateTime[] period = new DateTime[2];
+
+    public double averageCarbonIntensity;
+    public double carbonFootprint;
+
+    private double gramsCO2PerKiloWattHour;
+    private double tonnesCO2eq;
 
     public Timeframe(User user, Appliance appliance, DateTime start, DateTime end, double averageCarbonIntensity, double gramsCO2PerKiloWattHour) {
         this.user = user;
