@@ -7,7 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/software-design-vu-master/src/main/java/nl/vu/cs/softwaredesign/greenhome" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/software-design-vu-master/src" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="adopt-11" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="corretto-21" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="toedter.jcalendar" level="project" />
     <orderEntry type="library" name="json" level="project" />

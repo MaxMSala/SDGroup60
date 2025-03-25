@@ -4,8 +4,7 @@ import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 import javax.swing.SpinnerDateModel;
 
@@ -13,12 +12,11 @@ public class Form {
     private String houseInfo = "";
     private List<String> appliances;
     private List<String> users;
-    private List<String> timeframes;
+    private Map<String, List<String>> applianceTimeframes = new HashMap<>();
 
     public Form() {
         appliances = new ArrayList<>();
         users = new ArrayList<>();
-        timeframes = new ArrayList<>();
     }
 
     // House info
@@ -50,13 +48,13 @@ public class Form {
         return users;
     }
 
-    // Timeframes
-    public void addTimeframe(String timeframe) {
-        timeframes.add(timeframe);
+    public void addTimeframe(String applianceName, String timeframe) {
+        applianceTimeframes.putIfAbsent(applianceName, new ArrayList<>());
+        applianceTimeframes.get(applianceName).add(timeframe);
     }
 
-    public List<String> getTimeframes() {
-        return timeframes;
+    public Map<String, List<String>> getApplianceTimeframes() {
+        return applianceTimeframes;
     }
 
     // All data combined for display
@@ -84,11 +82,14 @@ public class Form {
         }
 
         sb.append("\n TIMEFRAMES:\n");
-        if (timeframes.isEmpty()) {
+        if (applianceTimeframes.isEmpty()) {
             sb.append(" (None)\n");
         } else {
-            for (String tf : timeframes) {
-                sb.append(" - ").append(tf).append("\n");
+            for (Map.Entry<String, List<String>> entry : applianceTimeframes.entrySet()) {
+                sb.append("Appliance: ").append(entry.getKey()).append("\n");
+                for (String tf : entry.getValue()) {
+                    sb.append("  - ").append(tf).append("\n");
+                }
             }
         }
 
@@ -99,10 +100,11 @@ public class Form {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Form::createAndShowGUI);
     }
-// first window
+
+    // first window
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Energy Consumption Form");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(500, 350);
 
         Form form = new Form();
@@ -140,8 +142,8 @@ public class Form {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-            String startDate = dateFormat.format(startDateChooser.getDate()) + " " + timeFormat.format((Date)startTimeSpinner.getValue());
-            String endDate = dateFormat.format(endDateChooser.getDate()) + " " + timeFormat.format((Date)endTimeSpinner.getValue());
+            String startDate = dateFormat.format(startDateChooser.getDate()) + " " + timeFormat.format((Date) startTimeSpinner.getValue());
+            String endDate = dateFormat.format(endDateChooser.getDate()) + " " + timeFormat.format((Date) endTimeSpinner.getValue());
 
             StringBuilder houseDetails = new StringBuilder();
             houseDetails.append("Region: ").append(regionDropdown.getSelectedItem().toString()).append("\n");
@@ -202,7 +204,7 @@ public class Form {
         addButton.addActionListener(e -> {
             String applianceInfo = "Name: " + nameField.getText() + "\n" +
                     "Power Consumption: " + powerField.getText() + "\n" +
-                    "Embodied Emmsion: " + embodiedEmission .getText();
+                    "Embodied Emmsion: " + embodiedEmission.getText();
 
             form.addAppliance(applianceInfo.toString());
             JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
@@ -211,6 +213,7 @@ public class Form {
 
         addAppliance(form);
     }
+
     private static void addAppliance(Form form) {
         JFrame applianceFrame = new JFrame("Add Appliance");
         applianceFrame.setSize(500, 500);
@@ -226,7 +229,6 @@ public class Form {
 
         JTextField embodiedEmissions = new JTextField();
         addPlaceholder(embodiedEmissions, "e.g., 2.4 kg CO2");
-
 
 
         fieldsPanel.add(new JLabel("Name:"));
@@ -252,7 +254,7 @@ public class Form {
         addTimeframeButton.addActionListener(e -> {
             String newTimeframe = addApplianceTimeframe(applianceFrame);
             if (!newTimeframe.equals("None")) {
-                form.addTimeframe(newTimeframe);
+                form.addTimeframe(nameField.getText(), newTimeframe);
                 timeframeArea.append("Timeframe " + timeframes.size() + ": " + newTimeframe + "\n");
             }
         });
@@ -265,7 +267,7 @@ public class Form {
         bottomButtons.add(addButton);
         bottomButtons.add(addUserButton);
         bottomButtons.add(confirmButton);
-       // bottomButtons.add(showReportButton);
+        // bottomButtons.add(showReportButton);
 
         addButton.addActionListener(e -> {
             StringBuilder applianceInfo = new StringBuilder();
@@ -330,7 +332,7 @@ public class Form {
             confirmFrame.setVisible(true);
         });
 
-       // showReportButton.addActionListener(e -> JOptionPane.showMessageDialog(applianceFrame, form.getFormattedInput()));
+        // showReportButton.addActionListener(e -> JOptionPane.showMessageDialog(applianceFrame, form.getFormattedInput()));
 
         applianceFrame.add(bottomButtons, BorderLayout.SOUTH);
         applianceFrame.setLocationRelativeTo(null);
@@ -405,6 +407,7 @@ public class Form {
             }
         });
     }
+
     public String mergeAllData() {
         StringBuilder sb = new StringBuilder();
 
@@ -431,12 +434,15 @@ public class Form {
             }
         }
 
-        sb.append("\nTIMEFRAMES\n");
-        if (timeframes.isEmpty()) {
+        sb.append("\nTIMEFRAMES PER APPLIANCE\n");
+        if (applianceTimeframes.isEmpty()) {
             sb.append("No usage timeframes recorded.\n");
         } else {
-            for (int i = 0; i < timeframes.size(); i++) {
-                sb.append("Timeframe ").append(i + 1).append(": ").append(timeframes.get(i)).append("\n");
+            for (Map.Entry<String, List<String>> entry : applianceTimeframes.entrySet()) {
+                sb.append("Appliance: ").append(entry.getKey()).append("\n");
+                for (String tf : entry.getValue()) {
+                    sb.append("  - ").append(tf).append("\n");
+                }
             }
         }
 
