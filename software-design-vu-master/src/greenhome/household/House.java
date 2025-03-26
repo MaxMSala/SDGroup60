@@ -83,6 +83,9 @@ public class House {
     public double getTariff(){
         return euroPerKiloWattHour;
     }
+    public Set<Timeframe> getTimeframes() {
+        return timeframes;
+    }
     private static final House instance = new House();
 
     public static House getInstance() {
