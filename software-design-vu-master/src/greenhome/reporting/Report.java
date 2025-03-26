@@ -38,6 +38,7 @@ class Report {
         buttonPanel.add(graphButton);
         graphButton.addActionListener(e -> openChartWindow());
         buttonPanel.add(whatIfButton);
+        whatIfButton.addActionListener(e -> openWhatIfWindow());
 
         panel.add(buttonPanel, BorderLayout.SOUTH);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -131,7 +132,31 @@ class Report {
         );
     }
 
+    private static void openWhatIfWindow() {
+        JFrame whatIfFrame = new JFrame("What If Scenarios");
+        whatIfFrame.setSize(400, 200);
+        whatIfFrame.setLayout(new GridLayout(3, 1, 10, 10));
+        whatIfFrame.setLocationRelativeTo(null);
 
+        JLabel instruction = new JLabel("Choose a What-If scenario type:", SwingConstants.CENTER);
+        JButton generalInfoButton = new JButton("Change General Info");
+        JButton applianceButton = new JButton("Appliance-Specific Changes");
+
+        whatIfFrame.add(instruction);
+        whatIfFrame.add(generalInfoButton);
+        whatIfFrame.add(applianceButton);
+
+        // Placeholder actions
+        generalInfoButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(whatIfFrame, "soon");
+        });
+
+        applianceButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(whatIfFrame, "soon");
+        });
+
+        whatIfFrame.setVisible(true);
+    }
 
     //dummydata
     private static void injectFakeData() {
