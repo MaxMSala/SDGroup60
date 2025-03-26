@@ -54,28 +54,28 @@ public class Parser {
             } else if (line.startsWith("End DateTime:")) {
                 //YEARGH
             } else if (line.startsWith("-")) {
-                users.add(new User(line.split("- ")[1]);
+               // users.add(new User(line.split("- ")[1]);
             } else if (line.startsWith("Appliance")) {
                 String name = lines[++i].split(": ")[1];
                 int powerConsumption = Integer.parseInt(lines[++i].split(": ")[1]);
                 int embodiedEmission = Integer.parseInt(lines[++i].split(": ")[1]);
-                appliances.add(new Appliance(name, powerConsumption, embodiedEmission));
+               // appliances.add(new Appliance(name, powerConsumption, embodiedEmission));
             } else if (line.startsWith("Timeframe ")) {
                 String userPart = lines[++i].split(": ")[1];
                 List<String> timeframeUsers = Arrays.asList(userPart.split(", "));
                 String start = lines[++i].split(": ")[1];
                 String end = lines[++i].split(": ")[1];
-                timeframes.add(new Timeframe(timeframeUsers, start, end));
+              //  timeframes.add(new Timeframe(timeframeUsers, start, end));
             }
             i++;
         }
 
-        DateTime[] period = new DateTime(startDateTime, endDateTime);
+      //  DateTime[] period = new DateTime(startDateTime, endDateTime);
 
-        h = new House(region, tariff, startDateTime, endDateTime);
-        h.users.addAll(users);
-        h.appliances.addAll(appliances);
-        h.timeframes.addAll(timeframes);
+       // h = new House(region, tariff, startDateTime, endDateTime);
+       // h.users.addAll(users);
+      //  h.appliances.addAll(appliances);
+       // h.timeframes.addAll(timeframes);
 
         return h;
     }

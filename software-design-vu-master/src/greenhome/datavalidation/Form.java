@@ -155,7 +155,7 @@ public class Form {
             JOptionPane.showMessageDialog(frame, form.getFormattedInput());
 
             frame.dispose();
-            showApplianceWindow(form);
+            showUserInputWindow(form);
 
             String output = form.getFormattedInput();
 
@@ -185,7 +185,46 @@ public class Form {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+    private static void showUserInputWindow(Form form) {
+        JFrame userFrame = new JFrame("Add Users");
+        userFrame.setSize(400, 300);
+        userFrame.setLayout(new BorderLayout(10, 10));
 
+        JPanel userPanel = new JPanel(new BorderLayout(10, 10));
+        JTextField userField = new JTextField();
+        addPlaceholder(userField, "Enter user name");
+        userPanel.add(userField, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+        JButton addUserButton = new JButton("Add User");
+        JButton continueButton = new JButton("Continue");
+        buttonPanel.add(addUserButton);
+        buttonPanel.add(continueButton);
+
+        JTextArea userListArea = new JTextArea();
+        userListArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(userListArea);
+
+        addUserButton.addActionListener(e -> {
+            String user = userField.getText().trim();
+            if (!user.isEmpty()) {
+                form.addUser(user);
+                userListArea.append(user + "\n");
+                userField.setText("");
+            }
+        });
+
+        continueButton.addActionListener(e -> {
+            userFrame.dispose();
+            showApplianceWindow(form); // now called only after adding users
+        });
+
+        userFrame.add(userPanel, BorderLayout.NORTH);
+        userFrame.add(scrollPane, BorderLayout.CENTER);
+        userFrame.add(buttonPanel, BorderLayout.SOUTH);
+        userFrame.setLocationRelativeTo(null);
+        userFrame.setVisible(true);
+    }
     private static void showApplianceWindow(Form form) {
         JFrame applianceFrame = new JFrame("Add Appliance");
         applianceFrame.setSize(400, 300);
@@ -199,7 +238,6 @@ public class Form {
         addPlaceholder(embodiedEmission, "e.g., Fridge");
 
         JButton addButton = new JButton("Add Appliance");
-        JButton addUserButton = new JButton("Add New User");
         JButton showReport = new JButton("show report");
         addButton.addActionListener(e -> {
             String applianceInfo = "Name: " + nameField.getText() + "\n" +
@@ -261,11 +299,9 @@ public class Form {
 
         JPanel bottomButtons = new JPanel(new GridLayout(1, 3, 10, 10));
         JButton addButton = new JButton("Add Appliance");
-        JButton addUserButton = new JButton("Add New User");
         JButton confirmButton = new JButton("Confirm All Information");
         //JButton showReportButton = new JButton("Show Report");
         bottomButtons.add(addButton);
-        bottomButtons.add(addUserButton);
         bottomButtons.add(confirmButton);
         // bottomButtons.add(showReportButton);
 
@@ -299,13 +335,13 @@ public class Form {
 
         });
 
-        addUserButton.addActionListener(e -> {
-            String newUser = JOptionPane.showInputDialog(applianceFrame, "Add new user:");
-            if (newUser != null && !newUser.trim().isEmpty()) {
-                form.addUser(newUser);
-                JOptionPane.showMessageDialog(applianceFrame, "New user '" + newUser + "' added successfully!");
-            }
-        });
+       //addUserButton.addActionListener(e -> {
+       //    String newUser = JOptionPane.showInputDialog(applianceFrame, "Add new user:");
+       //    if (newUser != null && !newUser.trim().isEmpty()) {
+       //        form.addUser(newUser);
+       //        JOptionPane.showMessageDialog(applianceFrame, "New user '" + newUser + "' added successfully!");
+       //    }
+       //});
         confirmButton.addActionListener(e -> {
             // Create a new confirmation window
             JFrame confirmFrame = new JFrame("Confirmation Summary");
@@ -321,7 +357,10 @@ public class Form {
             // Bottom panel with "Show Report" only
             JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             JButton finalReportButton = new JButton("Show Report");
+            JButton whatIfButton = new JButton("What If scenarios");
             bottomPanel.add(finalReportButton);
+            bottomPanel.add(whatIfButton);
+
             confirmFrame.add(bottomPanel, BorderLayout.SOUTH);
 
             finalReportButton.addActionListener(ev -> {
@@ -340,29 +379,46 @@ public class Form {
     }
 
     private static String addApplianceTimeframe(JFrame parentFrame) {
-        JPanel timeframePanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel timeframePanel = new JPanel();
+        timeframePanel.setLayout(new BoxLayout(timeframePanel, BoxLayout.Y_AXIS));
 
+        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        userPanel.add(new JLabel("User:"));
         JTextField userField = new JTextField();
+        userPanel.add(userField);
+        timeframePanel.add(userPanel);
         addPlaceholder(userField, "e.g., John Doe");
 
         JDateChooser startDateChooser = new JDateChooser();
         JSpinner startTimeSpinner = new JSpinner(new SpinnerDateModel());
         startTimeSpinner.setEditor(new JSpinner.DateEditor(startTimeSpinner, "HH:mm"));
+        JPanel startPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        startPanel.add(new JLabel("Start Date:"));
+        startPanel.add(startDateChooser);
+        startPanel.add(new JLabel("Start Time:"));
+        startPanel.add(startTimeSpinner);
+        timeframePanel.add(startPanel);
 
         JDateChooser endDateChooser = new JDateChooser();
         JSpinner endTimeSpinner = new JSpinner(new SpinnerDateModel());
         endTimeSpinner.setEditor(new JSpinner.DateEditor(endTimeSpinner, "HH:mm"));
+        JPanel endPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        endPanel.add(new JLabel("End Date:"));
+        endPanel.add(endDateChooser);
+        endPanel.add(new JLabel("End Time:"));
+        endPanel.add(endTimeSpinner);
+        timeframePanel.add(endPanel);
 
-        timeframePanel.add(new JLabel("User:"));
-        timeframePanel.add(userField);
-        timeframePanel.add(new JLabel("Start Date:"));
-        timeframePanel.add(startDateChooser);
-        timeframePanel.add(new JLabel("Start Time:"));
-        timeframePanel.add(startTimeSpinner);
-        timeframePanel.add(new JLabel("End Date:"));
-        timeframePanel.add(endDateChooser);
-        timeframePanel.add(new JLabel("End Time:"));
-        timeframePanel.add(endTimeSpinner);
+      //  timeframePanel.add(new JLabel("User:"));
+      //  timeframePanel.add(userField);
+      //  timeframePanel.add(new JLabel("Start Date:"));
+      //  timeframePanel.add(startDateChooser);
+      //  timeframePanel.add(new JLabel("Start Time:"));
+      //  timeframePanel.add(startTimeSpinner);
+      //  timeframePanel.add(new JLabel("End Date:"));
+      //  timeframePanel.add(endDateChooser);
+      //  timeframePanel.add(new JLabel("End Time:"));
+      //  timeframePanel.add(endTimeSpinner);
 
         int result = JOptionPane.showConfirmDialog(parentFrame, timeframePanel,
                 "Add Timeframe", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
