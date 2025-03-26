@@ -44,14 +44,14 @@ public class Appliance {
         return 0.0;
     }
 
-    public double calcCost(double electricityTariff, Set<Timeframe> timeframes) {
+    public double calcCost( Set<Timeframe> timeframes) {
         // to be implemented
         double totalCost = 0.0;
 
         for (Timeframe tf : timeframes) {
             if(tf.getAppliance().name.equals(this.name)) {
                 double usageHours = tf.getUsageDurationInHoursForAppliance();
-                totalCost += usageHours * electricityTariff;
+                totalCost += usageHours * House.getInstance().getElectricityTariff();
             }
         }
         this.generatedCost = totalCost;

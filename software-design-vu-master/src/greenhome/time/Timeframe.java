@@ -5,12 +5,13 @@ import greenhome.household.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 public class Timeframe {
     public static int count;
 
     // Associations
-    private User user;
+    private Set<User> users;
     private Appliance appliance;
 
     private DateTime[] period = new DateTime[2];
@@ -21,8 +22,8 @@ public class Timeframe {
     private double gramsCO2PerKiloWattHour;
     private double tonnesCO2eq;
 
-    public Timeframe(User user, Appliance appliance, DateTime start, DateTime end, double averageCarbonIntensity, double gramsCO2PerKiloWattHour) {
-        this.user = user;
+    public Timeframe(Set<User> users, Appliance appliance, DateTime start, DateTime end, double averageCarbonIntensity, double gramsCO2PerKiloWattHour) {
+        this.users = users;
         this.appliance = appliance;
         this.period[0] = start;
         this.period[1] = end;
@@ -34,8 +35,8 @@ public class Timeframe {
         return appliance;
     }
 
-    public User getUser() {
-        return user;
+    public Set<User> getUsers() {
+        return users;
     }
 
     // returns number of hours the appliance was used through the timeframe

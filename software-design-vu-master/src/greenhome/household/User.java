@@ -23,10 +23,14 @@ public class User {
         double totalCost = 0.0;
 
         for (Timeframe tf : timeframes) {
-            if(tf.getUser().getName().equals(this.name)) {
-                double usageHours = tf.getUsageDurationInHoursForAppliance();
-                totalCost += usageHours * electricityTariff;
+            for (User user : tf.getUsers()) {
+                if(user.getName().equals(this.name)) {
+                    double usageHours = tf.getUsageDurationInHoursForAppliance();
+                    double usageHoursAdjusted = usageHours / tf.getUsers().size();
+                    totalCost += usageHoursAdjusted * electricityTariff;
+                }
             }
+
         }
 
         this.costsGenerated = totalCost;
