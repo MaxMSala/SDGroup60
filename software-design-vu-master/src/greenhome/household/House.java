@@ -80,6 +80,9 @@ public class House {
     public double getElectricityTariff() {
         return electricityTariff;
     }
+    public double getTariff(){
+        return euroPerKiloWattHour;
+    }
     private static final House instance = new House();
 
     public static House getInstance() {
