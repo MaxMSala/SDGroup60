@@ -8,9 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/software-design-vu-master/src" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="corretto-21" jdkType="JavaSDK" />
+    <orderEntry type="library" exported="" name="jfree.jfreechart" level="project" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="toedter.jcalendar" level="project" />
     <orderEntry type="library" name="json" level="project" />
-    <orderEntry type="library" exported="" name="jfree.jfreechart" level="project" />
   </component>
 </module>

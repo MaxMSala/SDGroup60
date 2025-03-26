@@ -124,12 +124,18 @@ class Report {
             dataset.addValue(appliance.getGeneratedFootprint(), "CO2", appliance.getName());
         }
 
-        return ChartFactory.createBarChart(
+        JFreeChart chart = ChartFactory.createBarChart(
                 "Carbon Footprint per Appliance",
                 "Appliance",
                 "kg CO2",
                 dataset
         );
+
+        org.jfree.chart.plot.CategoryPlot plot = chart.getCategoryPlot();
+        org.jfree.chart.renderer.category.BarRenderer renderer = (org.jfree.chart.renderer.category.BarRenderer) plot.getRenderer();
+        renderer.setSeriesPaint(0, Color.BLUE);
+
+        return chart;
     }
 
     private static void openWhatIfWindow() {
