@@ -53,6 +53,7 @@ public class Timeframe {
     public void calcFootPrint() {
         this.carbonFootprint = (appliance.getKiloWattHours() * this.gramsCO2PerKiloWattHour / 1000);
     }
+
     public DateTime[] getPeriod() {
         return period;
     }
