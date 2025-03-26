@@ -21,6 +21,7 @@ public class House {
     // derived attributes ("/" prefix)
     private int ecoScore;
     private double footPrint;
+    private double costsGenerated = calcCost();
 
     // Internal attributes
     private double euroPerKiloWattHour;
@@ -30,6 +31,17 @@ public class House {
     private int calcEcoScore() {
         // to be implemented
         return 0;
+    }
+
+    public double calcCost() {
+        double totalCost = 0.0;
+
+        for (Appliance appliance : appliances) {
+            totalCost += appliance.calcCost(this.electricityTariff, this.timeframes);
+        }
+
+        this.costsGenerated = totalCost;
+        return totalCost;
     }
 
     private double sumFootPrint() {

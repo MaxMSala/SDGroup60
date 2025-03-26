@@ -60,8 +60,8 @@ class Report {
         Set<Appliance> appliances = house.getAppliances();
         if (appliances != null) {
             for (Appliance appliance : appliances) {
-                report.append(appliance.name).append(" - ")
-                        .append(appliance.generatedFootprint).append(" kg CO2\n");
+                report.append(appliance.getName()).append(" - ")
+                        .append(appliance.getGeneratedFootprint()).append(" kg CO2\n");
             }
         }
 
@@ -107,7 +107,7 @@ class Report {
         DefaultPieDataset dataset = new DefaultPieDataset();
         House house = House.getInstance();
         for (Appliance appliance : house.getAppliances()) {
-            dataset.setValue(appliance.name, appliance.generatedFootprint);
+            dataset.setValue(appliance.getName(), appliance.getGeneratedFootprint());
         }
 
         return ChartFactory.createPieChart(
@@ -121,7 +121,7 @@ class Report {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         House house = House.getInstance();
         for (Appliance appliance : house.getAppliances()) {
-            dataset.addValue(appliance.generatedFootprint, "CO2", appliance.name);
+            dataset.addValue(appliance.getGeneratedFootprint(), "CO2", appliance.getName());
         }
 
         return ChartFactory.createBarChart(
@@ -165,16 +165,16 @@ class Report {
 
             // Create appliance objects using no-arg constructor
             Appliance fridge = new Appliance();
-            fridge.name = "Fridge";
-            fridge.generatedFootprint = 120.5;
+            fridge.setName("Fridge");
+            fridge.setGeneratedFootprint(120.5);
 
             Appliance tv = new Appliance();
-            tv.name = "TV";
-            tv.generatedFootprint = 80.0;
+            tv.setName("TV");
+            tv.setGeneratedFootprint(80.0);
 
             Appliance washingMachine = new Appliance();
-            washingMachine.name = "Washing Machine";
-            washingMachine.generatedFootprint = 150.75;
+            washingMachine.setName("Washing Machine");
+            washingMachine.setGeneratedFootprint(150.75);
 
             Set<Appliance> fakeAppliances = new java.util.HashSet<>();
             fakeAppliances.add(fridge);

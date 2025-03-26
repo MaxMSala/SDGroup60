@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class Appliance {
 
-    public String name;
+    private String name;
 
     // Internal attributes
     private int powerConsumption;
@@ -16,8 +16,27 @@ public class Appliance {
     private double tonnesCO2eq;
 
     // Derived attributes ('/' prefix)
-    public double generatedFootprint;
+    private double generatedFootprint;
     public double generatedCost;
+
+    public double getGeneratedFootprint() {
+        return generatedFootprint;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    // to delete later
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // to delete later
+    public void setGeneratedFootprint(double generatedFootprint) {
+        this.generatedFootprint = generatedFootprint;
+    }
+
 
     // Methods
     public double sumFootPrint(Set<Timeframe> timeframes) {
@@ -27,6 +46,15 @@ public class Appliance {
 
     public double calcCost(double electricityTariff, Set<Timeframe> timeframes) {
         // to be implemented
+        double totalCost = 0.0;
+
+        for (Timeframe tf : timeframes) {
+            if(tf.getAppliance().name.equals(this.name)) {
+                double usageHours = tf.getUsageDurationInHoursForAppliance();
+                totalCost += usageHours * electricityTariff;
+            }
+        }
+        this.generatedCost = totalCost;
         return 0.0;
     }
 
