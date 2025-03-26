@@ -10,8 +10,8 @@ import javax.swing.SpinnerDateModel;
 
 public class Form {
     private String houseInfo = "";
-    private List<String> appliances;
-    private List<String> users;
+    private final List<String> appliances;
+    private final List<String> users;
     private Map<String, List<String>> applianceTimeframes = new HashMap<>();
 
     public Form() {
@@ -24,18 +24,17 @@ public class Form {
         this.houseInfo = info;
     }
 
-    public String getHouseInfo() {
-        return houseInfo;
-    }
+
+
+
 
     // Appliances
     public void addAppliance(String applianceInfo) {
         appliances.add(applianceInfo);
     }
 
-    public List<String> getAppliances() {
-        return appliances;
-    }
+
+
 
     // Users
     public void addUser(String user) {
@@ -53,9 +52,6 @@ public class Form {
         applianceTimeframes.get(applianceName).add(timeframe);
     }
 
-    public Map<String, List<String>> getApplianceTimeframes() {
-        return applianceTimeframes;
-    }
 
     // All data combined for display
     public String getFormattedInput() {
@@ -238,13 +234,13 @@ public class Form {
         addPlaceholder(embodiedEmission, "e.g., Fridge");
 
         JButton addButton = new JButton("Add Appliance");
-        JButton showReport = new JButton("show report");
+        JButton showReport = new JButton("show report"); // here for the future report button
         addButton.addActionListener(e -> {
             String applianceInfo = "Name: " + nameField.getText() + "\n" +
                     "Power Consumption: " + powerField.getText() + "\n" +
                     "Embodied Emmsion: " + embodiedEmission.getText();
 
-            form.addAppliance(applianceInfo.toString());
+            form.addAppliance(applianceInfo);
             JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
 
         });
