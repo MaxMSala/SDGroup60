@@ -19,18 +19,20 @@ public class User {
         return this.name;
     }
 
-    public double calcCost(double electricityTariff, Set<Timeframe> timeframes) {
+    public double calcCost() {
         double totalCost = 0.0;
+        House house = House.getInstance();
 
-        for (Timeframe tf : timeframes) {
+        for (Timeframe tf : house.getTimeframes()) {
             for (User user : tf.getUsers()) {
                 if(user.getName().equals(this.name)) {
                     double usageHours = tf.getUsageDurationInHoursForAppliance();
                     double usageHoursAdjusted = usageHours / tf.getUsers().size();
-                    totalCost += usageHoursAdjusted * electricityTariff;
+                    double elecTariff = house.getTariff();
+
+                    totalCost += usageHoursAdjusted * elecTariff;
                 }
             }
-
         }
 
         this.costsGenerated = totalCost;

@@ -7,49 +7,80 @@ import java.util.Set;
 
 public class House {
 
+    private static  House instance;
 
-    // Aggregation (1..*) with User
-    private Set<User> residents;
+    // Core attributes (initialized on creation)
+    private final Set<User> residents;
+    private final Set<Appliance> appliances;
+    private final Set<Timeframe> timeframes;
+    private final String region;
+    private final double electricityTariff;
 
-    private double electricityTariff;
-
-    // Composition (1..*) with Appliance
-    private Set<Appliance> appliances;
-
-    private Set<Timeframe> timeframes;
-
-    // derived attributes ("/" prefix)
+    // Derived values
     private int ecoScore;
-    private double footPrint;
-   // private double costsGenerated = calcCost();
+    private double footPrintGenerated;
+    private double costsGenerated;
 
-    // Internal attributes
-    private double euroPerKiloWattHour;
-    private double tonnesCO2eq;
+    // Private constructor
+    private House(Set<User> residents, Set<Appliance> appliances, Set<Timeframe> timeframes,
+                  String region, double electricityTariff) {
+        this.residents = residents;
+        this.appliances = appliances;
+        this.timeframes = timeframes;
+        this.region = region;
+        this.electricityTariff = electricityTariff;
 
-    // Methods
-    private int calcEcoScore() {
-        // to be implemented
-        return 0;
+        // Compute derived values
+        this.costsGenerated = calcCost();
+        this.footPrintGenerated = sumFootPrint();
+        this.ecoScore = calcEcoScore();
     }
 
-  //  public double calcCost() {
-  //      double totalCost = 0.0;
-  //
-  //      for (Appliance appliance : appliances) {
-  //          totalCost += appliance.calcCost(this.electricityTariff, this.timeframes);
-  //      }
-  //
-  //      this.costsGenerated = totalCost;
-  //      return totalCost;
-  //  }
-  //
+    // Singleton constructor (with params on first call)
+    public static synchronized House constructInstance(Set<User> residents,
+                                                 Set<Appliance> appliances,
+                                                 Set<Timeframe> timeframes,
+                                                 String region,
+                                                 double electricityTariff) {
+        if (instance == null) {
+            instance = new House(residents, appliances, timeframes, region, electricityTariff);
+        }
+        return instance;
+    }
+
+    // Singleton accessor (after the upper constructor has been already called)
+    public static House getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("House not initialized yet. Use getInstance(...) first.");
+        }
+        return instance;
+    }
+
+    // === Derived calculations ===
+
+    public double calcCost() {
+        double totalCost = 0.0;
+
+        for (Appliance appliance : appliances) {
+            totalCost += appliance.calcCost();
+        }
+
+        this.costsGenerated = totalCost;
+        return totalCost;
+    }
+
     private double sumFootPrint() {
         // to be implemented
         return 0.0;
     }
 
-    // Getters & Setters can be added later as needed
+    private int calcEcoScore() {
+        // to be implemented
+        return 0;
+    }
+
+    // Setters
+
    // public void setAppliances(Set<Appliance> appliances) {
    //     this.appliances = appliances;
    // }
@@ -65,12 +96,13 @@ public class House {
    // public void setFootPrint(double footprint) {
    //     this.footPrint = footprint;
    // }
-    public double getFootPrint() {
-        return footPrint;
-    }
+   public Set<Appliance> getAppliances() {
+       return appliances;
+   }
 
-    public Set<Appliance> getAppliances() {
-        return appliances;
+    // getters
+    public double getFootPrint() {
+        return footPrintGenerated;
     }
 
     public int getEcoScore() {
@@ -81,18 +113,14 @@ public class House {
         return electricityTariff;
     }
     public double getTariff(){
-        return euroPerKiloWattHour;
+        return electricityTariff;
     }
     public Set<Timeframe> getTimeframes() {
         return timeframes;
     }
-    private static final House instance = new House();
 
-    public static House getInstance() {
-        return instance;
-    }
     public double getTonnesCO2eq() {
-        return tonnesCO2eq;
+        return footPrintGenerated;
     }
 
     public Set<User> getResidents() {
