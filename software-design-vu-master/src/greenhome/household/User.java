@@ -6,6 +6,7 @@ import greenhome.time.*;
 import java.util.Set;
 
 public class User {
+
     private String name;
     private int ecoScore;
     private double carbonFootprint = 0;
@@ -13,10 +14,6 @@ public class User {
 
     public User(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
     }
 
     public double calcCost() {
@@ -34,7 +31,6 @@ public class User {
                 }
             }
         }
-
         this.costsGenerated = totalCost;
         return totalCost;
     }
@@ -46,4 +42,7 @@ public class User {
     //        }
     //    }
     //}
+
+    // getters
+    public String getName() {return this.name;}
 }
