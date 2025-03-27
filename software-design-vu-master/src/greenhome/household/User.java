@@ -28,7 +28,7 @@ public class User {
                 if(user.getName().equals(this.name)) {
                     double usageHours = tf.getUsageDurationInHoursForAppliance();
                     double usageHoursAdjusted = usageHours / tf.getUsers().size();
-                    double elecTariff = house.getTariff();
+                    double elecTariff = house.getElectricityTariff();
 
                     totalCost += usageHoursAdjusted * elecTariff;
                 }

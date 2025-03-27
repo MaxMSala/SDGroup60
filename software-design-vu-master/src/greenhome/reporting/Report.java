@@ -99,7 +99,7 @@ class Report {
         Average avg = new Average();
         avg.fetchAverage();
 
-        double perCapita = house.getTonnesCO2eq() / house.getResidents().size();
+        double perCapita = house.getFootPrint() / house.getResidents().size();
         report.append("\n--- Comparison to Global Averages ---\n");
         report.append(String.format("Your household CO2 per capita: %.2f tonnes\n", perCapita));
         report.append(String.format("Global average CO2 per capita: %.2f tonnes\n", avg.getAverageEmissionsPerCap()));

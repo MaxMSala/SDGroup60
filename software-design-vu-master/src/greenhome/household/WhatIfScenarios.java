@@ -276,7 +276,7 @@ public class WhatIfScenarios {
 
         JLabel tariffLabel = new JLabel("Electricity Tariff (€/kWh):");
         JTextField tariffField = new JTextField();
-        tariffField.setText(String.valueOf(house.getTariff()));
+        tariffField.setText(String.valueOf(house.getElectricityTariff()));
         formPanel.add(regionLabel);
         formPanel.add(regionDropdown);
         formPanel.add(tariffLabel);

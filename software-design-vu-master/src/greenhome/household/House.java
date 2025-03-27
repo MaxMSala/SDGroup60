@@ -42,17 +42,13 @@ public class House {
                                                  Set<Timeframe> timeframes,
                                                  String region,
                                                  double electricityTariff) {
-        if (instance == null) {
-            instance = new House(residents, appliances, timeframes, region, electricityTariff);
-        }
+        if (instance == null) {instance = new House(residents, appliances, timeframes, region, electricityTariff);}
         return instance;
     }
 
     // Singleton accessor (after the upper constructor has been already called)
     public static House getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("House not initialized yet. Use getInstance(...) first.");
-        }
+        if (instance == null) {throw new IllegalStateException("House not initialized yet. Use getInstance(...) first.");}
         return instance;
     }
 
@@ -81,49 +77,16 @@ public class House {
 
     // Setters
 
-   // public void setAppliances(Set<Appliance> appliances) {
-   //     this.appliances = appliances;
-   // }
-   //
-   // public void setElectricityTariff(double tariff) {
-   //     this.electricityTariff = tariff;
-   // }
-   //
-   // public void setEcoScore(int ecoScore) {
-   //     this.ecoScore = ecoScore;
-   // }
-   //
-   // public void setFootPrint(double footprint) {
-   //     this.footPrint = footprint;
-   // }
-   public Set<Appliance> getAppliances() {
-       return appliances;
-   }
+   // public void setAppliances(Set<Appliance> appliances) { this.appliances = appliances; }
+   // public void setElectricityTariff(double tariff) { this.electricityTariff = tariff; }
+   // public void setEcoScore(int ecoScore) { this.ecoScore = ecoScore; }
+   // public void setFootPrint(double footprint) { this.footPrint = footprint; }
 
-    // getters
-    public double getFootPrint() {
-        return footPrintGenerated;
-    }
-
-    public int getEcoScore() {
-        return ecoScore;
-    }
-
-    public double getElectricityTariff() {
-        return electricityTariff;
-    }
-    public double getTariff(){
-        return electricityTariff;
-    }
-    public Set<Timeframe> getTimeframes() {
-        return timeframes;
-    }
-
-    public double getTonnesCO2eq() {
-        return footPrintGenerated;
-    }
-
-    public Set<User> getResidents() {
-        return residents;
-    }
+    // Getters
+    public Set<Appliance> getAppliances() { return appliances;}
+    public double getFootPrint() { return footPrintGenerated; }
+    public int getEcoScore() { return ecoScore; }
+    public double getElectricityTariff() {return electricityTariff;}
+    public Set<Timeframe> getTimeframes() {return timeframes;}
+    public Set<User> getResidents() {return residents;}
 }
