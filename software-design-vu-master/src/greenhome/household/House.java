@@ -91,4 +91,11 @@ public class House {
     public static House getInstance() {
         return instance;
     }
+    public double getTonnesCO2eq() {
+        return tonnesCO2eq;
+    }
+
+    public Set<User> getResidents() {
+        return residents;
+    }
 }

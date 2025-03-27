@@ -1,25 +1,24 @@
 package greenhome.reporting;
 
+import greenhome.apiintegration.Average;
 import greenhome.household.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.List;
+import java.util.*;
+
+import greenhome.time.DateTime;
+import greenhome.time.Timeframe;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import java.util.Map;
-import java.util.HashMap;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
-import java.util.Date;
-import java.util.Calendar;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 class Report {
     private static final House house = House.getInstance();
@@ -93,6 +92,24 @@ class Report {
         report.append("--------------------------------\n");
         report.append("Local Ecoscore: ").append(house.getEcoScore()).append("\n");
         report.append("Total Costs: ").append(String.format("%.2f EUR", house.getElectricityTariff())).append("\n");
+
+        Average avg = new Average();
+        avg.fetchAverage();
+
+        double perCapita = house.getTonnesCO2eq() / house.getResidents().size();
+        report.append("\n--- Comparison to Global Averages ---\n");
+        report.append(String.format("Your household CO2 per capita: %.2f tonnes\n", perCapita));
+        report.append(String.format("Global average CO2 per capita: %.2f tonnes\n", avg.getAverageEmissionsPerCap()));
+
+        if (perCapita > avg.getAverageEmissionsPerCap()) {
+            double excess = perCapita - avg.getAverageEmissionsPerCap();
+            report.append(String.format(" You are %.2f tonnes above the global average.\n", excess));
+        } else {
+            double savings = avg.getAverageEmissionsPerCap()     - perCapita;
+            report.append(String.format(" You are %.2f tonnes below the global average. Well done!\n", savings));
+        }
+
+        report.append("--------------------------------\n");
         report.append("Recommendations: ").append("[Add logic or field for recommendations]");
 
         return report.toString();
@@ -509,6 +526,41 @@ class Report {
             java.lang.reflect.Field tariffField = House.class.getDeclaredField("electricityTariff");
             tariffField.setAccessible(true);
             tariffField.set(house, 95.60);
+
+            User alice = new User("Alice");
+            User bob = new User("Bob");
+            Set<User> usersAlice = new HashSet<>();
+            Set<User> usersBob = new HashSet<>();
+            usersAlice.add(alice);
+            usersBob.add(bob);
+
+// Create DateTime start/end
+            DateTime start1 = new DateTime(2025, 3, 27, 10, 0);
+            DateTime end1 = new DateTime(2025, 3, 27, 12, 0);
+
+            DateTime start2 = new DateTime(2025, 3, 28, 14, 0);
+            DateTime end2 = new DateTime(2025, 3, 28, 16, 0);
+
+// Create timeframe objects
+            Timeframe tf1 = new Timeframe(usersAlice, fridge, start1, end1, 200.0, 300.0);
+            Timeframe tf2 = new Timeframe(usersBob, tv, start2, end2, 150.0, 250.0);
+
+            Set<Timeframe> fakeTimeframes = new HashSet<>();
+            fakeTimeframes.add(tf1);
+            fakeTimeframes.add(tf2);
+
+// Set the 'timeframes' field via reflection
+            java.lang.reflect.Field tfField = House.class.getDeclaredField("timeframes");
+            tfField.setAccessible(true);
+            tfField.set(house, fakeTimeframes);
+
+// Also set residents (optional but recommended if you use User logic elsewhere)
+            Set<User> fakeUsers = new HashSet<>();
+            fakeUsers.add(alice);
+            fakeUsers.add(bob);
+            java.lang.reflect.Field userField = House.class.getDeclaredField("residents");
+            userField.setAccessible(true);
+            userField.set(house, fakeUsers);
 
         } catch (Exception e) {
             e.printStackTrace();
