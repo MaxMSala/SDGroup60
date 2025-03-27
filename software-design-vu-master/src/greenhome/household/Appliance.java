@@ -8,6 +8,15 @@ public class Appliance {
 
     private String name;
 
+    // constructor to be deleted later
+    public Appliance() {}
+
+    public Appliance(String name, double powerConsumption, double embodiedEmissions) {
+        this.name = name;
+        this.powerConsumption = powerConsumption;
+        this.embodiedEmissions = embodiedEmissions;
+    }
+
     // Internal attributes
     private double powerConsumption;
     private double embodiedEmissions;
