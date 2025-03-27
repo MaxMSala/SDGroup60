@@ -11,41 +11,22 @@ public class Appliance {
     // Internal attributes
     private double powerConsumption;
     private double embodiedEmissions;
-    private double euros;
-    private double tonnesCO2eq;
 
     // Derived attributes ('/' prefix)
     private double generatedFootprint;
     public double generatedCost;
 
-    public double getGeneratedFootprint() {
-        return generatedFootprint;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-    public double getPowerConsumption() { return powerConsumption; }
-
-    // to delete later
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    // to delete later
-    public void setGeneratedFootprint(double generatedFootprint) {
-        this.generatedFootprint = generatedFootprint;
-    }
-
-
     // Methods
-    public double sumFootPrint(Set<Timeframe> timeframes) {
+    public double sumFootPrint() {
         // to be implemented
+        House house = House.getInstance();
+        Set<Timeframe> timeframes = house.getTimeframes();
+
+
         return 0.0;
     }
 
     public double calcCost() {
-        // to be implemented
         double totalCost = 0.0;
         House house = House.getInstance();
 
@@ -61,4 +42,14 @@ public class Appliance {
         return totalCost;
     }
 
+    // setters
+    // to delete later
+    public void setGeneratedFootprint(double generatedFootprint) {this.generatedFootprint = generatedFootprint;}
+    // to delete later
+    public void setName(String name) {this.name = name;}
+
+    // getters
+    public double getGeneratedFootprint() {return generatedFootprint;}
+    public String getName() {return this.name;}
+    public double getPowerConsumption() { return powerConsumption; }
 }
