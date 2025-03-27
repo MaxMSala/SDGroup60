@@ -58,8 +58,4 @@ public class Appliance {
         return 0.0;
     }
 
-    public double getKiloWattHours() {
-        return kiloWattHours;
-    }
-
 }
