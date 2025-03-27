@@ -6,6 +6,7 @@ import greenhome.household.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.List;
 
 public class Timeframe {
     public static int count;
@@ -19,16 +20,16 @@ public class Timeframe {
     public double averageCarbonIntensity;
     public double carbonFootprint;
 
-    private double gramsCO2PerKiloWattHour;
+    private double CarbonIntensity;
     private double tonnesCO2eq;
 
-    public Timeframe(Set<User> users, Appliance appliance, DateTime start, DateTime end, double averageCarbonIntensity, double gramsCO2PerKiloWattHour) {
+    public Timeframe(Set<User> users, Appliance appliance, DateTime start, DateTime end, List<Integer> averageCarbonIntensity, double CarbonIntensity) {
         this.users = users;
         this.appliance = appliance;
         this.period[0] = start;
         this.period[1] = end;
         this.averageCarbonIntensity = averageCarbonIntensity;
-        this.gramsCO2PerKiloWattHour = gramsCO2PerKiloWattHour;
+        this.CarbonIntensity = CI.fetchCarbonIntensity();
     }
 
     public Appliance getAppliance() {
@@ -51,7 +52,7 @@ public class Timeframe {
     }
 
     public void calcFootPrint() {
-        this.carbonFootprint = (appliance.getKiloWattHours() * this.gramsCO2PerKiloWattHour / 1000);
+        this.carbonFootprint = (appliance.getPowerConsumption() * this.averageCarbonIntensity / 1000);
     }
 
     public DateTime[] getPeriod() {

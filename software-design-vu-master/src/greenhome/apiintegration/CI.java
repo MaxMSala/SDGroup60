@@ -7,7 +7,7 @@ import java.net.URL;
 import org.json.JSONObject;
 import java.util.List;
 
-class CI {
+public class CI {
     List<Integer> carbonIntensityByHour;
     float averageCarbonIntensity;
     int gramsCO2PerKiloWattHour;
