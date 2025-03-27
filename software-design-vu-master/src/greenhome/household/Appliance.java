@@ -9,9 +9,8 @@ public class Appliance {
     private String name;
 
     // Internal attributes
-    private int powerConsumption;
+    private double powerConsumption;
     private double embodiedEmissions;
-    private double kiloWattHours;
     private double euros;
     private double tonnesCO2eq;
 
@@ -26,6 +25,7 @@ public class Appliance {
     public String getName() {
         return this.name;
     }
+    public double getPowerConsumption() { return powerConsumption; }
 
     // to delete later
     public void setName(String name) {
