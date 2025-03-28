@@ -1,10 +1,8 @@
 package greenhome.household;
 
-import greenhome.datavalidation.*;
 import greenhome.time.Timeframe;
 
 import java.util.List;
-import java.util.Set;
 
 public class Appliance {
 
@@ -79,4 +77,5 @@ public class Appliance {
     public double getGeneratedFootprint() {return generatedFootprint;}
     public String getName() {return this.name;}
     public double getPowerConsumption() { return powerConsumption; }
+    public double getEmbodiedEmissions() {return embodiedEmissions;}
 }

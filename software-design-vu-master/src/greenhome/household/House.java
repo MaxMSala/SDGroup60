@@ -1,11 +1,9 @@
 package greenhome.household;
 
-import greenhome.datavalidation.*;
 import greenhome.time.DateTime;
 import greenhome.time.Timeframe;
 
 import java.util.List;
-import java.util.Set;
 
 
 public class House {
@@ -109,6 +107,9 @@ public class House {
     public double getElectricityTariff() {return electricityTariff;}
     public List<Timeframe> getTimeframes() {return timeframes;}
     public List<User> getResidents() {return residents;}
+    public String getRegion() {return region;}
+    public DateTime getStart() {return Start;}
+    public DateTime getEnd() {return End;}
 
     public void setStart(DateTime startDateTime) {
         this.Start = startDateTime;

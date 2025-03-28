@@ -1,6 +1,9 @@
-package greenhome.household;
+package greenhome.input;
 
 import com.toedter.calendar.JDateChooser;
+import greenhome.household.Appliance;
+import greenhome.household.House;
+import greenhome.household.Parser;
 
 import javax.swing.*;
 import java.awt.*;

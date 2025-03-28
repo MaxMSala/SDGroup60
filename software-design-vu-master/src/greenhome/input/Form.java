@@ -1,8 +1,9 @@
-package greenhome.datavalidation;
+package greenhome.input;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 import greenhome.household.Parser;
+import greenhome.validation.Validator;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
@@ -142,7 +143,18 @@ public class Form {
 
             String startDate = dateFormat.format(startDateChooser.getDate()) + " " + timeFormat.format((Date) startTimeSpinner.getValue());
             String endDate = dateFormat.format(endDateChooser.getDate()) + " " + timeFormat.format((Date) endTimeSpinner.getValue());
-
+            String tariffText = tariffField.getText().trim();
+            double tariff;
+            try {
+                tariff = Double.parseDouble(tariffText);
+                if (!Validator.validateElectricityTariff(tariff)) {
+                    JOptionPane.showMessageDialog(frame, "Tariff must be between 0.05 and 0.50 EUR/kWh.");
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Tariff must be a valid decimal number.");
+                return;
+            }
             StringBuilder houseDetails = new StringBuilder();
             houseDetails.append("Region: ").append(regionDropdown.getSelectedItem().toString()).append("\n");
             houseDetails.append("Tariff: ").append(tariffField.getText()).append("\n");
@@ -203,14 +215,17 @@ public class Form {
         userListArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(userListArea);
 
-        addUserButton.addActionListener(e -> {
-            String user = userField.getText().trim();
-            if (!user.isEmpty()) {
-                form.addUser(user);
-                userListArea.append(user + "\n");
-                userField.setText("");
+        String user = userField.getText().trim();
+        if (!user.isEmpty()) {
+            if (!Validator.validateUser(user)) {
+                JOptionPane.showMessageDialog(userFrame, "Usernames cannot contain commas.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
-        });
+            form.addUser(user);
+            userListArea.append(user + "\n");
+            userField.setText("");
+        }
+
 
         continueButton.addActionListener(e -> {
             userFrame.dispose();
@@ -304,10 +319,40 @@ public class Form {
         // bottomButtons.add(showReportButton);
 
         addButton.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            String powerStr = powerField.getText().trim().replaceAll("[^0-9]", "");
+            String emissionsStr = embodiedEmissions.getText().trim().replaceAll("[^0-9]", "");
+
+            if (name.isEmpty() || powerStr.isEmpty() || emissionsStr.isEmpty()) {
+                JOptionPane.showMessageDialog(applianceFrame, "All fields must be filled.");
+                return;
+            }
+            if (!Validator.validateInteger(powerStr)) {
+                JOptionPane.showMessageDialog(applianceFrame, "Power consumption must be a valid integer.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int power = Integer.parseInt(powerStr);
+            if (!Validator.validateDouble(emissionsStr)) {
+                JOptionPane.showMessageDialog(applianceFrame, "Embodied emissions must be a valid number.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            double emissions = Double.parseDouble(emissionsStr);
+
+            if (!Validator.validatePowerConsumption(power)) {
+                JOptionPane.showMessageDialog(applianceFrame, "Power consumption must be between 10 and 5000 W.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (!Validator.validateEmbodiedEmissions(emissions)) {
+                JOptionPane.showMessageDialog(applianceFrame, "Embodied emissions must be between 10 and 500 kg CO₂e.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+
             StringBuilder applianceInfo = new StringBuilder();
-            applianceInfo.append("Name: ").append(nameField.getText()).append("\n");
-            applianceInfo.append("Power Consumption: ").append(powerField.getText()).append("\n");
-            applianceInfo.append("Embodied Emission: ").append(embodiedEmissions.getText()).append("\n");
+            applianceInfo.append("Name: ").append(name).append("\n");
+            applianceInfo.append("Power Consumption: ").append(power).append("\n");
+            applianceInfo.append("Embodied Emission: ").append(emissions).append("\n");
 
             if (!timeframes.isEmpty()) {
                 applianceInfo.append("Timeframes:\n");
@@ -326,14 +371,10 @@ public class Form {
             embodiedEmissions.setText("");
             timeframeArea.setText("");
             timeframes.clear();
-
-            addPlaceholder(nameField, "e.g., Fridge");
-            addPlaceholder(powerField, "e.g., 150W");
-            addPlaceholder(embodiedEmissions, "e.g., 2.4 kg CO2");
-
         });
 
-       //addUserButton.addActionListener(e -> {
+
+        //addUserButton.addActionListener(e -> {
        //    String newUser = JOptionPane.showInputDialog(applianceFrame, "Add new user:");
        //    if (newUser != null && !newUser.trim().isEmpty()) {
        //        form.addUser(newUser);
