@@ -6,6 +6,7 @@ import greenhome.household.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import greenhome.time.DateTime;
 import greenhome.time.Timeframe;
@@ -17,6 +18,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 
 class Report {
+
     private static final House house = House.getInstance();
 
     public static void main(String[] args) {
@@ -109,8 +111,8 @@ class Report {
         }
 
         report.append("--------------------------------\n");
-        report.append("Recommendations: ").append("[Add logic or field for recommendations]");
-
+        report.append("Recommendations:\n\n");
+        report.append(Recommendations.generate(house));
         return report.toString();
     }
     private static void openChartWindow(Runnable onClose) {
@@ -195,6 +197,7 @@ class Report {
     //dummydata
     private static void injectFakeData() {
         try {
+
             House house = House.getInstance();
 
             // Create appliance objects using no-arg constructor

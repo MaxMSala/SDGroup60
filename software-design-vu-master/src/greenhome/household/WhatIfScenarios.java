@@ -111,7 +111,7 @@ public class WhatIfScenarios {
             JOptionPane.showMessageDialog(null, new JScrollPane(new JTextArea(finalResult)),
                     "Final What-If Submission", JOptionPane.INFORMATION_MESSAGE);
 
-            // TODO: MyParser.parse(finalResult);
+            Parser.whatifStringModHouse(finalResult);
         });
 
 

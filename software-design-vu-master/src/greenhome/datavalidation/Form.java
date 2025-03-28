@@ -2,6 +2,8 @@ package greenhome.datavalidation;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+import greenhome.household.Parser;
+
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -343,8 +345,8 @@ public class Form {
             JFrame confirmFrame = new JFrame("Confirmation Summary");
             confirmFrame.setSize(500, 500);
             confirmFrame.setLayout(new BorderLayout(10, 10));
-
-            JTextArea confirmationArea = new JTextArea(form.mergeAllData());
+            String summary = form.getFormattedInput();
+            JTextArea confirmationArea = new JTextArea(summary);
             confirmationArea.setEditable(false);
             JScrollPane scrollPane = new JScrollPane(confirmationArea);
 
@@ -360,7 +362,8 @@ public class Form {
             confirmFrame.add(bottomPanel, BorderLayout.SOUTH);
 
             finalReportButton.addActionListener(ev -> {
-                JOptionPane.showMessageDialog(confirmFrame, form.mergeAllData(), "Final Report", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(confirmFrame, summary, "Final Report", JOptionPane.INFORMATION_MESSAGE);
+                form.mergeAllData();
             });
 
             confirmFrame.setLocationRelativeTo(null);
@@ -460,46 +463,54 @@ public class Form {
         });
     }
 
-    public String mergeAllData() {
+    public void mergeAllData() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("----- GreenHome Data Report -----\n\n");
-
-        sb.append("HOUSE INFO\n");
-        sb.append(houseInfo.isEmpty() ? "No house information provided.\n" : houseInfo + "\n");
-
-        sb.append("\nUSERS\n");
-        if (users.isEmpty()) {
-            sb.append("No users added.\n");
+        if (!houseInfo.isEmpty()) {
+            sb.append(houseInfo).append("\n\n");
         } else {
-            for (String user : users) {
-                sb.append("- ").append(user).append("\n");
-            }
+            sb.append("Region: Unknown\n");
+            sb.append("Tariff: 0.0\n");
+            sb.append("Start DateTime: 0000-00-00 00:00\n");
+            sb.append("End DateTime: 0000-00-00 00:00\n\n");
+        }
+
+        for (String user : users) {
+            sb.append("- ").append(user).append("\n");
         }
 
         sb.append("\nAPPLIANCES\n");
-        if (appliances.isEmpty()) {
-            sb.append("No appliances added.\n");
-        } else {
-            for (int i = 0; i < appliances.size(); i++) {
-                sb.append("Appliance ").append(i + 1).append(":\n").append(appliances.get(i)).append("\n");
+
+        int applianceCount = 1;
+        for (String applianceRaw : appliances) {
+            sb.append("Appliance ").append(applianceCount++).append(":\n");
+
+            String[] lines = applianceRaw.split("\n");
+            for (String line : lines) {
+                if (line.startsWith("Name:")) {
+                    sb.append(line).append("\n");
+                } else if (line.startsWith("Power Consumption:")) {
+                    String val = line.replaceAll("[^0-9]", ""); // Strip units
+                    sb.append("Power Consumption: ").append(val).append("\n");
+                } else if (line.startsWith("Embodied Emission:")) {
+                    String val = line.replaceAll("[^0-9]", ""); // Strip units
+                    sb.append("Embodied Emission: ").append(val).append("\n");
+                }
             }
         }
 
         sb.append("\nTIMEFRAMES PER APPLIANCE\n");
-        if (applianceTimeframes.isEmpty()) {
-            sb.append("No usage timeframes recorded.\n");
-        } else {
-            for (Map.Entry<String, List<String>> entry : applianceTimeframes.entrySet()) {
-                sb.append("Appliance: ").append(entry.getKey()).append("\n");
-                for (String tf : entry.getValue()) {
-                    sb.append("  - ").append(tf).append("\n");
-                }
+
+        for (Map.Entry<String, List<String>> entry : applianceTimeframes.entrySet()) {
+            sb.append("Appliance: ").append(entry.getKey()).append("\n");
+            for (String tf : entry.getValue()) {
+                sb.append("  - ").append(tf).append("\n");
             }
         }
 
         sb.append("\n----- End of Report -----");
 
-        return sb.toString();
-    }
+        String finalInput = sb.toString();
+        System.out.println("✅ Final submission to parser:\n" + finalInput);
+        Parser.stringIntoHouse(finalInput);    }
 }

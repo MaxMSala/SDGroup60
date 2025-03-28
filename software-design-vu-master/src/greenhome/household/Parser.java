@@ -61,7 +61,7 @@ public class Parser {
                     DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
                     DateTime endTF = new DateTime(DateTime.stringToVals(line.split("End")[1]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
 
-                    h.addTimeframe(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF, 200.0/*placeholders till timeframe is fixed*/, 300/*placeholders till timeframe is fixed*/));
+                    //h.addTimeframe(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF, 200.0/*placeholders till timeframe is fixed*/, 300/*placeholders till timeframe is fixed*/));
                 i++;
                 }
             }
@@ -119,7 +119,7 @@ public class Parser {
                     DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
                     DateTime endTF = new DateTime(DateTime.stringToVals(line.split("End")[1]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
 
-                    timeframes.add(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF, 200.0/*placeholders till timeframe is fixed*/, 300/*placeholders till timeframe is fixed*/));
+                   // timeframes.add(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF, 200.0/*placeholders till timeframe is fixed*/, 300/*placeholders till timeframe is fixed*/));
                     i++;
                 }
             }
