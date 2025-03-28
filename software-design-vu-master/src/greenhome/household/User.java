@@ -1,9 +1,6 @@
 package greenhome.household;
 
-import greenhome.datavalidation.*;
 import greenhome.time.*;
-
-import java.util.Set;
 
 public class User {
 

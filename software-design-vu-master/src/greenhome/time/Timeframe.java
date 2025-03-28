@@ -1,12 +1,10 @@
 package greenhome.time;
-import greenhome.datavalidation.*;
 import greenhome.apiintegration.*;
 import greenhome.household.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.List;
 
 public class Timeframe {

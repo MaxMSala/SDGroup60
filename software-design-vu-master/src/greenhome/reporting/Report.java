@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import greenhome.input.WhatIfScenarios;
 import greenhome.time.DateTime;
 import greenhome.time.Timeframe;
 import org.jfree.chart.ChartFactory;

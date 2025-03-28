@@ -1,10 +1,8 @@
 package greenhome.household;
 
-import greenhome.datavalidation.*;
 import greenhome.time.Timeframe;
 
 import java.util.List;
-import java.util.Set;
 
 public class Appliance {
 

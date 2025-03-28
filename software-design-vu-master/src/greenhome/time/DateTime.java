@@ -1,6 +1,4 @@
 package greenhome.time;
-import greenhome.datavalidation.*;
-import greenhome.apiintegration.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,4 +41,11 @@ public class DateTime {
         sb.append(minute);
         return sb.toString();
     }
+
+    public int getYear(){return this.year;}
+    public int getMonth(){return this.month;}
+    public int getDay(){return this.day;}
+    public int getHour(){return this.hour;}
+    public int getMinute(){return this.minute;}
+
 }

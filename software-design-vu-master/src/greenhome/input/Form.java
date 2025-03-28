@@ -1,8 +1,9 @@
-package greenhome.datavalidation;
+package greenhome.input;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 import greenhome.household.Parser;
+import greenhome.validation.Validator;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;

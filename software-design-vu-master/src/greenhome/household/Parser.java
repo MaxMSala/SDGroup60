@@ -1,11 +1,14 @@
 package greenhome.household;
 import greenhome.time.DateTime;
 import greenhome.time.Timeframe;
+import greenhome.validation.*;
 import java.io.*;
 import org.json.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static greenhome.validation.Validator.validateDates;
 
 public class Parser {
 
@@ -59,10 +62,11 @@ public class Parser {
                     for (int j = 0; j < line.split(": ")[1].split(", Start:")[0].split(", ").length; j++) {
                         h.addUser(new User(line.split(": ")[1].split(", Start:")[0].split(", ")[j]));
                     }
-                    DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
-                    DateTime endTF = new DateTime(DateTime.stringToVals(line.split("End")[1]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
-
-                    h.addTimeframe(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF));
+                    DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line.split("End")[0]).get(1),DateTime.stringToVals(line.split("End")[0]).get(2),DateTime.stringToVals(line.split("End")[0]).get(3),DateTime.stringToVals(line.split("End")[0]).get(4));
+                    DateTime endTF = new DateTime(DateTime.stringToVals(line.split("End")[1]).get(0),DateTime.stringToVals(line.split("End")[1]).get(1),DateTime.stringToVals(line.split("End")[1]).get(2),DateTime.stringToVals(line.split("End")[1]).get(3),DateTime.stringToVals(line.split("End")[1]).get(4));
+                    if(validateDates(h.getStart(), startTF) && validateDates(endTF, h.getEnd())) {
+                        h.addTimeframe(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF));
+                    }
                 i++;
                 }
             }
@@ -117,10 +121,12 @@ public class Parser {
                     for (int j = 0; j < line.split(": ")[1].split(", Start:")[0].split(", ").length; j++) {
                         h.addUser(new User(line.split(": ")[1].split(", Start:")[0].split(", ")[j]));
                     }
-                    DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
-                    DateTime endTF = new DateTime(DateTime.stringToVals(line.split("End")[1]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
-
-                   timeframes.add(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF));
+                    DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line.split("End")[0]).get(1),DateTime.stringToVals(line.split("End")[0]).get(2),DateTime.stringToVals(line.split("End")[0]).get(3),DateTime.stringToVals(line.split("End")[0]).get(4));
+                    DateTime endTF = new DateTime(DateTime.stringToVals(line.split("End")[1]).get(0),DateTime.stringToVals(line.split("End")[1]).get(1),DateTime.stringToVals(line.split("End")[1]).get(2),DateTime.stringToVals(line.split("End")[1]).get(3),DateTime.stringToVals(line.split("End")[1]).get(4));
+                    if(validateDates(h.getStart(), startTF) && validateDates(endTF, h.getEnd())) {
+                        h.addTimeframe(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF));
+                    }
+                    timeframes.add(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF));
                     i++;
                 }
             }
