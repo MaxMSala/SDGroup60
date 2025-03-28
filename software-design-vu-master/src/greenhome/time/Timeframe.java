@@ -5,6 +5,7 @@ import greenhome.household.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.List;
 
@@ -17,19 +18,24 @@ public class Timeframe {
 
     private DateTime[] period = new DateTime[2];
 
+    private List<Integer> carbonIntensitiesByHour;
+
     public double averageCarbonIntensity;
     public double carbonFootprint;
 
     private double CarbonIntensity;
     private double tonnesCO2eq;
 
-    public Timeframe(Set<User> users, Appliance appliance, DateTime start, DateTime end, List<Integer> averageCarbonIntensity, double CarbonIntensity) {
+    public Timeframe(Set<User> users, Appliance appliance, DateTime start, DateTime end, List<Integer> carbonIntensitiesByHour, double averageCarbonIntensity) {
         this.users = users;
         this.appliance = appliance;
         this.period[0] = start;
         this.period[1] = end;
         this.averageCarbonIntensity = averageCarbonIntensity;
-        this.CarbonIntensity = CI.fetchCarbonIntensity();
+        this.carbonIntensitiesByHour = carbonIntensitiesByHour;
+
+
+        //this.CarbonIntensity = CI.fetchCarbonIntensity();
     }
 
     public Appliance getAppliance() {

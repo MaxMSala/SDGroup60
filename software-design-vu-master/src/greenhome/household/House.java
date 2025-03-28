@@ -31,9 +31,9 @@ public class House {
         this.electricityTariff = electricityTariff;
 
         // Compute derived values
-        this.costsGenerated = calcCost();
-        this.footPrintGenerated = sumFootPrint();
-        this.ecoScore = calcEcoScore();
+//        this.costsGenerated = calcCost();
+//        this.footPrintGenerated = sumFootPrint();
+//        this.ecoScore = calcEcoScore();
     }
 
     // Singleton constructor (with params on first call)
