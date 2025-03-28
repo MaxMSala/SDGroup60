@@ -18,6 +18,7 @@ public class DateTime {
         return vals;
     }
 
+
     public DateTime(int day, int month, int year, int hour, int minute) {
         this.day = day;
         this.month = month;
@@ -29,5 +30,17 @@ public class DateTime {
     public LocalDateTime toLocalDateTime() {
         return LocalDateTime.of(year, month, day, hour, minute);
     }
-
+    public String valsToString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(year);
+        sb.append("-");
+        sb.append(month);
+        sb.append("-");
+        sb.append(day);
+        sb.append(" ");
+        sb.append(hour);
+        sb.append(":");
+        sb.append(minute);
+        return sb.toString();
+    }
 }

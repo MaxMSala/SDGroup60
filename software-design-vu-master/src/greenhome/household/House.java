@@ -101,6 +101,9 @@ public class House {
     public double getElectricityTariff() {return electricityTariff;}
     public List<Timeframe> getTimeframes() {return timeframes;}
     public List<User> getResidents() {return residents;}
+    public String getRegion() {return region;}
+    public DateTime getStart() {return Start;}
+    public DateTime getEnd() {return End;}
 
     public void setStart(DateTime startDateTime) {
         this.Start = startDateTime;

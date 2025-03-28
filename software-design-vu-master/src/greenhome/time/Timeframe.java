@@ -64,4 +64,5 @@ public class Timeframe {
     public DateTime[] getPeriod() {
         return period;
     }
+
 }

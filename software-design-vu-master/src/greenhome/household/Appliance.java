@@ -73,4 +73,5 @@ public class Appliance {
     public double getGeneratedFootprint() {return generatedFootprint;}
     public String getName() {return this.name;}
     public double getPowerConsumption() { return powerConsumption; }
+    public double getEmbodiedEmissions() {return embodiedEmissions;}
 }
