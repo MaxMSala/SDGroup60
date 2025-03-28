@@ -10,23 +10,27 @@ import java.util.List;
 
 public class WhatIfScenarios {
     private static final House house = House.getInstance();
+    private static final Map<String, Double> simulatedChanges = new HashMap<>();
+    private static final Map<String, List<String>> applianceTimeframes = new HashMap<>();
+    private static String houseInfoString = null;
 
     public static void openWhatIfWindow() {
-
-        JDialog whatIfFrame = new JDialog((Frame) null, "What If Scenarios", true);        whatIfFrame.setSize(400, 200);
-        whatIfFrame.setLayout(new GridLayout(3, 1, 10, 10));
+        JDialog whatIfFrame = new JDialog((Frame) null, "What If Scenarios", true);
+        whatIfFrame.setSize(400, 250);
+        whatIfFrame.setLayout(new GridLayout(4, 1, 10, 10));
         whatIfFrame.setLocationRelativeTo(null);
 
         JLabel instruction = new JLabel("Choose a What-If scenario type:", SwingConstants.CENTER);
         JButton generalInfoButton = new JButton("Change General Info");
         JButton applianceButton = new JButton("Appliance-Specific Changes");
+        JButton submitAllButton = new JButton("Submit All to Parser");
 
         whatIfFrame.add(instruction);
         whatIfFrame.add(generalInfoButton);
         whatIfFrame.add(applianceButton);
+        whatIfFrame.add(submitAllButton);
 
         generalInfoButton.addActionListener(e -> {
-            ;
             whatIfFrame.dispose();
             openGeneralChangesWindow();
         });
@@ -35,6 +39,81 @@ public class WhatIfScenarios {
             whatIfFrame.dispose();
             openApplianceScenarioWindow();
         });
+
+        submitAllButton.addActionListener(e -> {
+            StringBuilder sb = new StringBuilder();
+            sb.append("----- GreenHome Data Report -----\n\n");
+
+            // HOUSE INFO
+            sb.append("HOUSE INFO\n");
+            sb.append(houseInfoString != null ? houseInfoString : "No house information provided.\n");
+
+            // USERS
+            sb.append("\nUSERS\n");
+            Set<String> users = new HashSet<>();
+            for (List<String> list : applianceTimeframes.values()) {
+                for (String tf : list) {
+                    int start = tf.indexOf("User: ") + 6;
+                    int end = tf.indexOf(",", start);
+                    if (start > 5 && end > start) {
+                        users.add(tf.substring(start, end).trim());
+                    }
+                }
+            }
+            if (users.isEmpty()) {
+                sb.append("No users added.\n");
+            } else {
+                for (String u : users) {
+                    sb.append("- ").append(u).append("\n");
+                }
+            }
+
+            // APPLIANCES
+            sb.append("\nAPPLIANCES\n");
+            List<Appliance> applianceList = new ArrayList<>(house.getAppliances());
+            if (applianceList.isEmpty()) {
+                sb.append("No appliances added.\n");
+            } else {
+                for (int i = 0; i < applianceList.size(); i++) {
+                    Appliance a = applianceList.get(i);
+                    String name = a.getName();
+                    sb.append("Appliance ").append(i + 1).append(":\n");
+                    sb.append("Name: ").append(name).append("\n");
+                    sb.append("Power Consumption: N/A\n");
+                    sb.append("Embodied Emission: N/A\n");
+
+                    if (simulatedChanges.containsKey(name)) {
+                        sb.append("What-If Emission: ").append(simulatedChanges.get(name)).append(" kg CO2\n");
+                    } else {
+                        sb.append("Original Emission: ").append(a.getGeneratedFootprint()).append(" kg CO2\n");
+                    }
+                }
+            }
+
+            // TIMEFRAMES PER APPLIANCE
+            sb.append("\nTIMEFRAMES PER APPLIANCE\n");
+            if (applianceTimeframes.isEmpty()) {
+                sb.append("No usage timeframes recorded.\n");
+            } else {
+                for (Map.Entry<String, List<String>> entry : applianceTimeframes.entrySet()) {
+                    sb.append("Appliance: ").append(entry.getKey()).append("\n");
+                    for (String tf : entry.getValue()) {
+                        sb.append("  - ").append(tf).append("\n");
+                    }
+                }
+            }
+
+            sb.append("\n----- End of Report -----");
+
+            String finalResult = sb.toString();
+            System.out.println("FINAL WHAT-IF SUBMISSION:\n" + finalResult);
+
+            JOptionPane.showMessageDialog(null, new JScrollPane(new JTextArea(finalResult)),
+                    "Final What-If Submission", JOptionPane.INFORMATION_MESSAGE);
+
+            // TODO: MyParser.parse(finalResult);
+        });
+
 
         whatIfFrame.setVisible(true);
     }
@@ -80,7 +159,6 @@ public class WhatIfScenarios {
         JPanel emissionPanel = new JPanel(new BorderLayout());
         emissionPanel.add(topPanel, BorderLayout.CENTER);
 
-        // Timeframe section
         DefaultListModel<String> timeframeModel = new DefaultListModel<>();
         JList<String> timeframeList = new JList<>(timeframeModel);
         JScrollPane timeframeScroll = new JScrollPane(timeframeList);
@@ -97,7 +175,6 @@ public class WhatIfScenarios {
         timeframePanel.add(timeframeScroll, BorderLayout.CENTER);
         timeframePanel.add(timeframeButtons, BorderLayout.EAST);
 
-        // Bottom preview and submit
         JTextArea previewArea = new JTextArea("Confirmed What-If Changes:\n");
         previewArea.setEditable(false);
         JScrollPane previewScroll = new JScrollPane(previewArea);
@@ -107,7 +184,6 @@ public class WhatIfScenarios {
         bottomPanel.add(previewScroll, BorderLayout.CENTER);
         bottomPanel.add(submitAll, BorderLayout.SOUTH);
 
-        // Dropdown behavior
         applianceDropdown.addActionListener(e -> {
             String selected = (String) applianceDropdown.getSelectedItem();
             for (Appliance a : appliances) {
@@ -127,7 +203,6 @@ public class WhatIfScenarios {
         applianceDropdown.setSelectedIndex(0);
 
 
-        // Add/Edit/Delete timeframe actions
         addTimeframe.addActionListener(e -> {
             String selected = (String) applianceDropdown.getSelectedItem();
             String tf = showTimeframeDialog(null);
@@ -164,40 +239,15 @@ public class WhatIfScenarios {
         });
 
         submitAll.addActionListener(e -> {
-            StringBuilder report = new StringBuilder("Final What-If Summary\n------------------------------\n");
-            double total = 0.0;
+            String selected = (String) applianceDropdown.getSelectedItem();
+            try {
+                double newEmission = Double.parseDouble(newEmissionField.getText().trim());
+                simulatedChanges.put(selected, newEmission);
+            } catch (NumberFormatException ignored) {}
 
-            for (Appliance a : appliances) {
-                String name = a.getName();
-                String selected = (String) applianceDropdown.getSelectedItem();
-                double emission = a.getGeneratedFootprint();
-                if (selected.equals(name)) {
-                    try {
-                        emission = Double.parseDouble(newEmissionField.getText().trim());
-                    } catch (Exception ignored) {}
-                }                report.append(name).append(" - ");
-                if (selected.equals(name) && !newEmissionField.getText().trim().isEmpty()) {
-                    report.append(String.format("%.2f kg CO2 (what-if)", emission));
-                } else {
-                    report.append(String.format("%.2f kg CO2", emission));
-                }
-                report.append("\n");
-                total += emission;
-
-                List<String> timeframes = applianceTimeframes.get(name);
-                if (timeframes != null && !timeframes.isEmpty()) {
-                    for (String tf : timeframes) {
-                        report.append("    - ").append(tf).append("\n");
-                    }
-                }
-            }
-
-            report.append("------------------------------\n");
-            report.append("Simulated Total CO2: ").append(String.format("%.2f", total)).append(" kg\n");
-
-            JTextArea area = new JTextArea(report.toString());
-            area.setEditable(false);
-            JOptionPane.showMessageDialog(frame, new JScrollPane(area), "Final Report", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Appliance changes saved temporarily.");
+            frame.dispose();
+            openWhatIfWindow();
         });
 
         frame.add(emissionPanel, BorderLayout.NORTH);
@@ -301,7 +351,7 @@ public class WhatIfScenarios {
                 tariffFieldObj.set(house, newTariff);
 
                 JOptionPane.showMessageDialog(dialog, "Changes saved:\nRegion: " + selectedRegion + "\nTariff: €" + newTariff);
-                dialog.dispose();                          // ✅ 4. Close General Info dialog
+                dialog.dispose();
                 openWhatIfWindow();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(dialog, "Please enter a valid number for the tariff.");

@@ -14,11 +14,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import com.toedter.calendar.JDateChooser;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerDateModel;
-import java.text.SimpleDateFormat;
-import java.util.List;
+
 
 class Report {
     private static final House house = House.getInstance();
@@ -45,7 +41,7 @@ class Report {
         JButton whatIfButton = new JButton("What If scenarios");
         whatIfButton.addActionListener(e -> {
             dialog.dispose();
-            WhatIfScenarios.openApplianceScenarioWindow();
+            WhatIfScenarios.openWhatIfWindow();
         });
         buttonPanel.add(whatIfButton);
 
@@ -252,12 +248,12 @@ class Report {
             DateTime end2 = new DateTime(2025, 3, 28, 16, 0);
 
 // Create timeframe objects
-            Timeframe tf1 = new Timeframe(usersAlice, fridge, start1, end1, 200.0, 300.0);
-            Timeframe tf2 = new Timeframe(usersBob, tv, start2, end2, 150.0, 250.0);
+         //   Timeframe tf1 = new Timeframe(usersAlice, fridge, start1, end1, 200.0, 300.0);
+        //    Timeframe tf2 = new Timeframe(usersBob, tv, start2, end2, 150.0, 250.0);
 
             Set<Timeframe> fakeTimeframes = new HashSet<>();
-            fakeTimeframes.add(tf1);
-            fakeTimeframes.add(tf2);
+           // fakeTimeframes.add(tf1);
+           // fakeTimeframes.add(tf2);
 
 // Set the 'timeframes' field via reflection
             java.lang.reflect.Field tfField = House.class.getDeclaredField("timeframes");
