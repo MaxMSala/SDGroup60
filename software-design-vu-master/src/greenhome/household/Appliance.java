@@ -2,6 +2,8 @@ package greenhome.household;
 
 import greenhome.datavalidation.*;
 import greenhome.time.Timeframe;
+
+import java.util.List;
 import java.util.Set;
 
 public class Appliance {
@@ -29,7 +31,7 @@ public class Appliance {
     public double sumFootPrint() {
         // to be implemented
         House house = House.getInstance();
-        Set<Timeframe> timeframes = house.getTimeframes();
+        List<Timeframe> timeframes = house.getTimeframes();
 
 
         return 0.0;

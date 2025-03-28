@@ -124,7 +124,7 @@ public class WhatIfScenarios {
         frame.setLocationRelativeTo(null);
 
         House house = House.getInstance();
-        Set<Appliance> appliances = house.getAppliances();
+        List<Appliance> appliances = house.getAppliances();
 
         if (appliances == null || appliances.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No appliances found.");

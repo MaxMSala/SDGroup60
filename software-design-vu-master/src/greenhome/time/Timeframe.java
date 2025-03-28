@@ -13,7 +13,7 @@ public class Timeframe {
     public static int count;
 
     // Associations
-    private Set<User> users;
+    private List<User> users = new ArrayList<>();
     private Appliance appliance;
 
     private DateTime[] period = new DateTime[2];
@@ -26,7 +26,7 @@ public class Timeframe {
     private double CarbonIntensity;
     private double tonnesCO2eq;
 
-    public Timeframe(Set<User> users, Appliance appliance, DateTime start, DateTime end, List<Integer> carbonIntensitiesByHour, double averageCarbonIntensity) {
+    public Timeframe(List<User> users, Appliance appliance, DateTime start, DateTime end, List<Integer> carbonIntensitiesByHour, double averageCarbonIntensity) {
         this.users = users;
         this.appliance = appliance;
         this.period[0] = start;
@@ -42,7 +42,7 @@ public class Timeframe {
         return appliance;
     }
 
-    public Set<User> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 

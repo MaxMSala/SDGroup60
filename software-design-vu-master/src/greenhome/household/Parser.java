@@ -1,25 +1,13 @@
 package greenhome.household;
-import greenhome.datavalidation.*;
 import greenhome.time.DateTime;
 import greenhome.time.Timeframe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
 public class Parser {
 
-    // Attributes
-    private DateTime[] period = new DateTime[2]; // Ordered, Unique — so List
-    private Set<String> userList;  // Unique, Unordered — Set
-    private Set<String> timeFrameList; // Unique, Unordered — Set
-    private List<String> applianceList; // NonUnique, Unordered — List
-    private double electricityTariff;
-    private String region;
-
-    // Association with House (1 to 1)
-    private House house;
 
     // Constructor
     public Parser() {
@@ -27,71 +15,123 @@ public class Parser {
     }
 
     // Methods
-    public static House parseHouseData(String data) {
+    public static void stringIntoHouse(String data) {
         String[] lines = data.split("\n");
-        House h = null;
-        List<User> users = new ArrayList<>();
-        List<Appliance> appliances = new ArrayList<>();
-        List<Timeframe> timeframes = new ArrayList<>();
-
-        String region = "";
-        double tariff = 0;
-        DateTime startDateTime;
-        DateTime endDateTime;
-
+        House h = House.getInstance();
+        boolean tfFlag = false;
         int i = 0;
         while (i < lines.length) {
 
             String line = lines[i].trim();
 
             if (line.startsWith("Region:")) {
-                region = line.split(": ")[1];
+                h.setRegion(line.split(": ")[1]);
             } else if (line.startsWith("Tariff:")) {
-                tariff = Double.parseDouble(line.split(": ")[1]);
+                h.setTariff(Double.parseDouble(line.split(": ")[1]));
             } else if (line.startsWith("Start DateTime:")) {
-                //startDateTime(line.split(": ")[1],line.split(": ")[2],line.split(": ")[3],line.split(": ")[1];)
-
+                DateTime start = new DateTime(DateTime.stringToVals(line).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
+                h.setStart(start);
             } else if (line.startsWith("End DateTime:")) {
-                //YEARGH
+                DateTime end = new DateTime(DateTime.stringToVals(line).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
+                h.setStart(end);
             } else if (line.startsWith("-")) {
-               // users.add(new User(line.split("- ")[1]);
-            } else if (line.startsWith("Appliance")) {
+               h.addUser(new User(line.split("- ")[1]));
+            } else if (line.startsWith("APPLIANCES")){
+                tfFlag = false;
+            } else if (line.startsWith("Appliance") && !tfFlag) {
                 String name = lines[++i].split(": ")[1];
                 int powerConsumption = Integer.parseInt(lines[++i].split(": ")[1]);
                 int embodiedEmission = Integer.parseInt(lines[++i].split(": ")[1]);
-               // appliances.add(new Appliance(name, powerConsumption, embodiedEmission));
-            } else if (line.startsWith("Timeframe ")) {
-                String userPart = lines[++i].split(": ")[1];
-                List<String> timeframeUsers = Arrays.asList(userPart.split(", "));
-                String start = lines[++i].split(": ")[1];
-                String end = lines[++i].split(": ")[1];
-              //  timeframes.add(new Timeframe(timeframeUsers, start, end));
+               h.addAppliance(new Appliance(name, powerConsumption, embodiedEmission));
+            } else if (line.startsWith("TIMEFRAMES")){
+                tfFlag = true;
+            } else if (line.startsWith("Appliance ") && tfFlag) {
+                Appliance chosenAppliance = new Appliance();
+                for (Appliance appliance : h.getAppliances()) {
+                    if (appliance.getName() == line.split(": ")[1]) {
+                        chosenAppliance = appliance;
+                    }
+                }
+
+                while(line.startsWith("- User:")) {
+                    List<User> timeframeUsers = new ArrayList<>();
+                    for (int j = 0; j < line.split(": ")[1].split(", Start:")[0].split(", ").length; i++) {
+                        h.addUser(new User(line.split(": ")[1].split(", Start:")[0].split(", ")[j]));
+                    }
+                    DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
+                    DateTime endTF = new DateTime(DateTime.stringToVals(line.split("End")[1]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
+
+                    h.addTimeframe(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF, 200.0/*placeholders till timeframe is fixed*/, 300/*placeholders till timeframe is fixed*/));
+                i++;
+                }
             }
             i++;
         }
 
-      //  DateTime[] period = new DateTime(startDateTime, endDateTime);
-
-       // h = new House(region, tariff, startDateTime, endDateTime);
-       // h.users.addAll(users);
-      //  h.appliances.addAll(appliances);
-       // h.timeframes.addAll(timeframes);
-
-        return h;
     }
 
+    public static void whatifStringModHouse(String data) {
+        String[] lines = data.split("\n");
+        House h = House.getInstance();
+        List<User> users = new ArrayList<>();
+        List<Appliance> appliances = new ArrayList<>();
+        List<Timeframe> timeframes = new ArrayList<>();
+        boolean tfFlag = false;
+        int i = 0;
+        while (i < lines.length) {
 
-    public String convertToJson() {
-        // to be implemented
-        return "";
+            String line = lines[i].trim();
+
+            if (line.startsWith("Region:")) {
+                h.setRegion(line.split(": ")[1]);
+            } else if (line.startsWith("Tariff:")) {
+                h.setTariff(Double.parseDouble(line.split(": ")[1]));
+            } else if (line.startsWith("Start DateTime:")) {
+                DateTime start = new DateTime(DateTime.stringToVals(line).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
+                h.setStart(start);
+            } else if (line.startsWith("End DateTime:")) {
+                DateTime end = new DateTime(DateTime.stringToVals(line).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
+                h.setStart(end);
+            } else if (line.startsWith("-")) {
+                users.add(new User(line.split("- ")[1]));
+            } else if (line.startsWith("APPLIANCES")){
+                tfFlag = false;
+            } else if (line.startsWith("Appliance") && !tfFlag) {
+                String name = lines[++i].split(": ")[1];
+                int powerConsumption = Integer.parseInt(lines[++i].split(": ")[1]);
+                int embodiedEmission = Integer.parseInt(lines[++i].split(": ")[1]);
+                appliances.add(new Appliance(name, powerConsumption, embodiedEmission));
+            } else if (line.startsWith("TIMEFRAMES")){
+                tfFlag = true;
+            } else if (line.startsWith("Appliance ") && tfFlag) {
+                Appliance chosenAppliance = new Appliance();
+                for (Appliance appliance : h.getAppliances()) {
+                    if (appliance.getName() == line.split(": ")[1]) {
+                        chosenAppliance = appliance;
+                    }
+                }
+
+                while(line.startsWith("- User:")) {
+                    List<User> timeframeUsers = new ArrayList<>();
+                    for (int j = 0; j < line.split(": ")[1].split(", Start:")[0].split(", ").length; i++) {
+                        h.addUser(new User(line.split(": ")[1].split(", Start:")[0].split(", ")[j]));
+                    }
+                    DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
+                    DateTime endTF = new DateTime(DateTime.stringToVals(line.split("End")[1]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
+
+                    timeframes.add(new Timeframe(timeframeUsers, chosenAppliance, startTF, endTF, 200.0/*placeholders till timeframe is fixed*/, 300/*placeholders till timeframe is fixed*/));
+                    i++;
+                }
+            }
+            i++;
+        }
+        h.modTimeframes(timeframes);
+        h.modUser(users);
+        h.modAppliances(appliances);
     }
 
-    // Optional getter/setter for house if needed
-    public House getHouse() {
-        return house;
+    public static void houseToString(){
+
     }
 
-    public void setHouse(House house) {
-        this.house = house;
-    }
 }

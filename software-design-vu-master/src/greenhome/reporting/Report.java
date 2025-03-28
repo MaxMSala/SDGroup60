@@ -79,7 +79,7 @@ class Report {
         report.append("Total CF: ").append(String.format("%.2f kg CO2", house.getFootPrint())).append("\n");
         report.append("--------------------------------\n");
 
-        Set<Appliance> appliances = house.getAppliances();
+        List<Appliance> appliances = house.getAppliances();
         if (appliances != null) {
             for (Appliance appliance : appliances) {
                 report.append(appliance.getName()).append(" - ")
