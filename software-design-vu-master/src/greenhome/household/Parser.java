@@ -56,7 +56,7 @@ public class Parser {
 
                 while(line.startsWith("- User:")) {
                     List<User> timeframeUsers = new ArrayList<>();
-                    for (int j = 0; j < line.split(": ")[1].split(", Start:")[0].split(", ").length; i++) {
+                    for (int j = 0; j < line.split(": ")[1].split(", Start:")[0].split(", ").length; j++) {
                         h.addUser(new User(line.split(": ")[1].split(", Start:")[0].split(", ")[j]));
                     }
                     DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
@@ -114,7 +114,7 @@ public class Parser {
 
                 while(line.startsWith("- User:")) {
                     List<User> timeframeUsers = new ArrayList<>();
-                    for (int j = 0; j < line.split(": ")[1].split(", Start:")[0].split(", ").length; i++) {
+                    for (int j = 0; j < line.split(": ")[1].split(", Start:")[0].split(", ").length; j++) {
                         h.addUser(new User(line.split(": ")[1].split(", Start:")[0].split(", ")[j]));
                     }
                     DateTime startTF = new DateTime(DateTime.stringToVals(line.split("End")[0]).get(0),DateTime.stringToVals(line).get(1),DateTime.stringToVals(line).get(2),DateTime.stringToVals(line).get(3),DateTime.stringToVals(line).get(4));
