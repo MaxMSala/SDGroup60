@@ -13,17 +13,17 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CI {
+public class CarbonIntensity {
 
-    private static CI instance;
+    private static CarbonIntensity instance;
 
-    private CI(DateTime[] period) {
+    private CarbonIntensity(DateTime[] period) {
         this.period = period;
     }
 
-    public static synchronized CI getInstance(DateTime[] period) {
+    public static synchronized CarbonIntensity getInstance(DateTime[] period) {
         if (instance == null) {
-            instance = new CI(period);
+            instance = new CarbonIntensity(period);
         }
         return instance;
     }
@@ -55,30 +55,6 @@ public class CI {
         updateCarbonIntensity();
         return carbonIntensity;
     }
-
-    //    public static int fetchCarbonIntensity() {
-//        try {
-//            URL url = new URL("https://api.electricitymap.org/v3/carbon-intensity/latest?zone=NL");
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//            conn.setRequestMethod("GET");
-//            conn.setRequestProperty("auth-token", "uywCbhuQ4tOOb0fyL8NI");
-//
-//            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//            String inputLine;
-//            StringBuilder response = new StringBuilder();
-//            while ((inputLine = in.readLine()) != null) {
-//                response.append(inputLine);
-//            }
-//            in.close();
-//
-//            JSONObject jsonResponse = new JSONObject(response.toString());
-//
-//            return jsonResponse.getInt("carbonIntensity");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return -1; // Error case
-//        }
-//    }
 
     // Represents one hour of carbon intensity data
     public static class CarbonHour {
@@ -167,20 +143,22 @@ public class CI {
         int wCI1 = w1.carbonIntensity, wCI2 = w2.carbonIntensity, wCI3 = w3.carbonIntensity;
         double worstAvg = (wCI1 + wCI2 + wCI3) / 3.0;
 
-        return String.format(
-                "\uD83D\uDCC9 Off-Peak Hours in \uD83C\uDDF3\uD83C\uDDF1:\n" +
-                "   •  Ideal time for using high-energy appliances is between %s and %s.\n" +
-                        "   •  Carbon intensity values: [%d, %d, %d] gCO2/kWh\n" +
-                        "   •  Average carbon intensity: %.2f gCO2/kWh.\n\n" +
+        return String.format("""
+        📉 Off-Peak Hours in 🇳🇱:
+           •  Ideal time for using high-energy appliances is between %s and %s.
+           •  Carbon intensity values: [%d, %d, %d] gCO2/kWh
+           •  Average carbon intensity: %.2f gCO2/kWh.
 
-                        "\uD83D\uDCC8 Peak Hours in \uD83C\uDDF3\uD83C\uDDF1:\n" +
-                        "   •  Worst time to use appliance is between %s and %s.\n" +
-                        "   •  Carbon intensity values: [%d, %d, %d] gCO2/kWh\n" +
-                        "   •  Average carbon intensity: %.2f gCO2/kWh.\n\n",
+        📈 Peak Hours in 🇳🇱:
+           •  Worst time to use appliance is between %s and %s.
+           •  Carbon intensity values: [%d, %d, %d] gCO2/kWh
+           •  Average carbon intensity: %.2f gCO2/kWh.
 
+        """,
                 bestStartTime, bestEndTime, bCI1, bCI2, bCI3, bestAvg,
                 worstStartTime, worstEndTime, wCI1, wCI2, wCI3, worstAvg
         );
+
     }
 
     // Format ISO time to readable local hour:minute

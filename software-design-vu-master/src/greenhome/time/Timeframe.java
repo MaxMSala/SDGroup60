@@ -25,7 +25,7 @@ public class Timeframe {
         this.period[0] = start;
         this.period[1] = end;
 
-        CI ci= CI.getInstance(period);
+        CarbonIntensity ci= CarbonIntensity.getInstance(period);
         this.carbonIntensity = ci.getCarbonIntensity();
     }
 
