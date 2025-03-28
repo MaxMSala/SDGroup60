@@ -23,7 +23,7 @@ public class Appliance {
 
     // Derived attributes ('/' prefix)
     private double generatedFootprint;
-    public double generatedCost;
+    private double generatedCost;
 
     // Methods
     private void sumFootPrint() {

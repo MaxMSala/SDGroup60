@@ -16,8 +16,8 @@ public class House {
     private List<Timeframe> timeframes;
     private String region;
     private double electricityTariff;
-    private DateTime Start;
-    private DateTime End;
+    private DateTime start;
+    private DateTime end;
 
     // Derived values
     private int ecoScore;
@@ -108,10 +108,10 @@ public class House {
     public List<Timeframe> getTimeframes() {return timeframes;}
     public List<User> getResidents() {return residents;}
     public String getRegion() {return region;}
-    public DateTime getStart() {return Start;}
-    public DateTime getEnd() {return End;}
+    public DateTime getStart() {return start;}
+    public DateTime getEnd() {return end;}
 
     public void setStart(DateTime startDateTime) {
-        this.Start = startDateTime;
+        this.start = startDateTime;
     }
 }
