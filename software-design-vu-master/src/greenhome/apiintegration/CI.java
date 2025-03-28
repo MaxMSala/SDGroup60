@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import greenhome.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,52 +14,71 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CI {
-    List<Integer> carbonIntensityByHour;
-    float averageCarbonIntensity;
-    int gramsCO2PerKiloWattHour;
 
-    public CI(List<Integer> carbonIntensityByHour, float averageCarbonIntensity, int gramsCO2PerKiloWattHour) {
-        this.carbonIntensityByHour = carbonIntensityByHour;
-        this.averageCarbonIntensity = averageCarbonIntensity;
-        this.gramsCO2PerKiloWattHour = gramsCO2PerKiloWattHour;
+    private static CI instance;
+
+    private CI(DateTime[] period) {
+        this.period = period;
     }
 
-    public int calcAverageCarbonIntensity(int hour) {
-        if (carbonIntensityByHour.isEmpty()) {
-            return 0;
+    public static synchronized CI getInstance(DateTime[] period) {
+        if (instance == null) {
+            instance = new CI(period);
         }
-
-        int sum = 0;
-        for (int intensity : carbonIntensityByHour) {
-            sum += intensity;
-        }
-
-        return sum / carbonIntensityByHour.size();
+        return instance;
     }
 
-    public static int fetchCarbonIntensity() {
-        try {
-            URL url = new URL("https://api.electricitymap.org/v3/carbon-intensity/latest?zone=NL");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("auth-token", "uywCbhuQ4tOOb0fyL8NI");
+    private DateTime[] period = new DateTime[2];
+    private double carbonIntensity;
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
 
-            JSONObject jsonResponse = new JSONObject(response.toString());
+    private void updateCarbonIntensity() {
+        List<CarbonHour> history = fetchCarbonIntensityHistory();
 
-            return jsonResponse.getInt("carbonIntensity");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1; // Error case
+        if (history.size() != 24) {
+            System.out.println(" Not enough data to fetch 24-hour carbon history.");
+            return;
         }
+
+        // Extract hours from the two DateTime objects
+        int startHour = this.period[0].toLocalDateTime().getHour();
+        int endHour = this.period[1].toLocalDateTime().getHour();
+
+        int startCI = history.get(startHour).carbonIntensity;
+        int endCI = history.get(endHour).carbonIntensity;
+
+        double avgCI = (startCI + endCI) / 2.0;
+        this.carbonIntensity = avgCI;
     }
+
+    public double getCarbonIntensity() {
+        updateCarbonIntensity();
+        return carbonIntensity;
+    }
+
+    //    public static int fetchCarbonIntensity() {
+//        try {
+//            URL url = new URL("https://api.electricitymap.org/v3/carbon-intensity/latest?zone=NL");
+//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//            conn.setRequestMethod("GET");
+//            conn.setRequestProperty("auth-token", "uywCbhuQ4tOOb0fyL8NI");
+//
+//            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//            String inputLine;
+//            StringBuilder response = new StringBuilder();
+//            while ((inputLine = in.readLine()) != null) {
+//                response.append(inputLine);
+//            }
+//            in.close();
+//
+//            JSONObject jsonResponse = new JSONObject(response.toString());
+//
+//            return jsonResponse.getInt("carbonIntensity");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return -1; // Error case
+//        }
+//    }
 
     // Represents one hour of carbon intensity data
     public static class CarbonHour {
@@ -90,7 +110,6 @@ public class CI {
 
             JSONObject json = new JSONObject(response.toString());
             JSONArray historyArr = json.getJSONArray("history");
-
 
             for (int i = 0; i < historyArr.length(); i++) {
                 JSONObject item = historyArr.getJSONObject(i);
@@ -163,8 +182,6 @@ public class CI {
                 worstStartTime, worstEndTime, wCI1, wCI2, wCI3, worstAvg
         );
     }
-
-
 
     // Format ISO time to readable local hour:minute
     private static String formatTime(String isoDatetime) {

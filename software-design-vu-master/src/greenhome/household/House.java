@@ -35,10 +35,6 @@ public class House {
         this.region = region;
         this.electricityTariff = electricityTariff;
 
-        // Compute derived values
-//        this.costsGenerated = calcCost();
-//        this.footPrintGenerated = sumFootPrint();
-//        this.ecoScore = calcEcoScore();
     }
 
     // Singleton constructor (with params on first call)
@@ -59,20 +55,32 @@ public class House {
 
     // === Derived calculations ===
 
-    public double calcCost() {
+    private void calcCost() {
         double totalCost = 0.0;
 
         for (Appliance appliance : appliances) {
-            totalCost += appliance.calcCost();
+            totalCost += appliance.getGeneratedCost();
         }
-
         this.costsGenerated = totalCost;
-        return totalCost;
     }
 
-    private double sumFootPrint() {
-        // to be implemented
-        return 0.0;
+    public double getCostsGenerated() {
+        calcCost();
+        return this.costsGenerated;
+    }
+
+    private void sumFootPrint() {
+        double totalFootPrint = 0.0;
+
+        for (Appliance appliance : appliances) {
+            totalFootPrint += appliance.getFootprint();
+        }
+        this.footPrintGenerated = totalFootPrint;
+    }
+
+    public double getFootPrintGenerated() {
+        sumFootPrint();
+        return this.footPrintGenerated;
     }
 
     private int calcEcoScore() {

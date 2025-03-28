@@ -28,26 +28,28 @@ public class Appliance {
     public double generatedCost;
 
     // Methods
-    public double sumFootPrint() {
+    private void sumFootPrint() {
         // to be implemented
         House house = House.getInstance();
         List<Timeframe> timeframes = house.getTimeframes();
 
-        double sum = 0.0;
-
+        double totalFootprint = 0.0;
         for (Timeframe timeframe : timeframes) {
-            if(timeframe.getAppliance().equals(this)) {
-                timeframe.calcFootPrint();
-                sum += timeframe.carbonFootprint;
+            if(timeframe.getAppliance().getName().equals(this.name)) {
+                totalFootprint  += timeframe.getCarbonFootprint();
             }
         }
 
-        double combinedFootprint = embodiedEmissions + sum;
-        generatedFootprint = combinedFootprint;
-        return combinedFootprint;
+        double combinedFootprint = embodiedEmissions + totalFootprint ;
+        this.generatedFootprint = combinedFootprint;
     }
 
-    public double calcCost() {
+    public double getFootprint() {
+        sumFootPrint();
+        return generatedFootprint;
+    }
+
+    private void calcCost() {
         double totalCost = 0.0;
         House house = House.getInstance();
 
@@ -60,7 +62,11 @@ public class Appliance {
             }
         }
         this.generatedCost = totalCost;
-        return totalCost;
+    }
+
+    public double getGeneratedCost() {
+        calcCost();
+        return generatedCost;
     }
 
     // setters

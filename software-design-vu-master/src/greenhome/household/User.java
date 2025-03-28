@@ -16,7 +16,7 @@ public class User {
         this.name = name;
     }
 
-    public double calcCost() {
+    private void calcCost() {
         double totalCost = 0.0;
         House house = House.getInstance();
 
@@ -32,16 +32,32 @@ public class User {
             }
         }
         this.costsGenerated = totalCost;
-        return totalCost;
+
     }
 
-    //public float getCarbonFootprint (TimeFrame[] timeFrames){
-    //    for (int i = 0; i < timeFrames.length; i++) {
-    //        if (timeFrames[i].User.getName() == this.name); {
-    //            this.carbonFootprint += timeFrames[i].carbonFootprint;
-    //        }
-    //    }
-    //}
+    public double getCostsGenerated(){
+        calcCost();
+        return costsGenerated;
+    }
+
+    private void sumFootPrint (){
+        double totalFootPrint = 0.0;
+        House house = House.getInstance();
+
+        for (Timeframe tf : house.getTimeframes()) {
+            for (User user : tf.getUsers()) {
+                if(user.getName().equals(this.name)) {
+                    totalFootPrint += (tf.getCarbonFootprint() / tf.getUsers().size());
+                }
+            }
+        }
+        this.carbonFootprint = totalFootPrint;
+    }
+
+    public double getCarbonFootprint() {
+        sumFootPrint();
+        return carbonFootprint;
+    }
 
     // getters
     public String getName() {return this.name;}
