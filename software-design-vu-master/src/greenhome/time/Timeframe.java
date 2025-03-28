@@ -24,18 +24,13 @@ public class Timeframe {
     public double carbonFootprint;
 
     private double CarbonIntensity;
-    private double tonnesCO2eq;
 
-    public Timeframe(List<User> users, Appliance appliance, DateTime start, DateTime end, List<Integer> carbonIntensitiesByHour, double averageCarbonIntensity) {
+    public Timeframe(List<User> users, Appliance appliance, DateTime start, DateTime end) {
         this.users = users;
         this.appliance = appliance;
         this.period[0] = start;
         this.period[1] = end;
-        this.averageCarbonIntensity = averageCarbonIntensity;
-        this.carbonIntensitiesByHour = carbonIntensitiesByHour;
-
-
-        //this.CarbonIntensity = CI.fetchCarbonIntensity();
+        this.averageCarbonIntensity = CI.fetchCarbonIntensity();
     }
 
     public Appliance getAppliance() {
@@ -58,7 +53,12 @@ public class Timeframe {
     }
 
     public void calcFootPrint() {
-        this.carbonFootprint = (appliance.getPowerConsumption() * this.averageCarbonIntensity / 1000);
+        double usageHours = getUsageDurationInHoursForAppliance();
+        double power = appliance.getPowerConsumption();
+        double energyUsed = power * usageHours;
+        this.carbonFootprint = energyUsed * averageCarbonIntensity;
+
+        //this.carbonFootprint = (appliance.getPowerConsumption() * this.averageCarbonIntensity / 1000);
     }
 
     public DateTime[] getPeriod() {

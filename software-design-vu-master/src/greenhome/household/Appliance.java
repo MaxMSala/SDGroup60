@@ -33,8 +33,18 @@ public class Appliance {
         House house = House.getInstance();
         List<Timeframe> timeframes = house.getTimeframes();
 
+        double sum = 0.0;
 
-        return 0.0;
+        for (Timeframe timeframe : timeframes) {
+            if(timeframe.getAppliance().equals(this)) {
+                timeframe.calcFootPrint();
+                sum += timeframe.carbonFootprint;
+            }
+        }
+
+        double combinedFootprint = embodiedEmissions + sum;
+        generatedFootprint = combinedFootprint;
+        return combinedFootprint;
     }
 
     public double calcCost() {
