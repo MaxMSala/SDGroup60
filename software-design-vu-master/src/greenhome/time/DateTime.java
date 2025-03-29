@@ -7,12 +7,24 @@ public class DateTime {
     int day, month, year, hour, minute;
 
     public static List<Integer> stringToVals(String string) {
+        //System.out.println(string);
+        string = string.split(": ")[string.split(": ").length-1];
         List<Integer> vals = new ArrayList<>(){{add(0);add(0);add(0);add(0);add(0);}};
-        vals.set(2, Integer.valueOf(string.split(": ")[1].split("-")[0]));
-        vals.set(1, Integer.valueOf(string.split(": ")[1].split("-")[1]));
-        vals.set(0, Integer.valueOf(string.split(": ")[1].split("-")[2].split(" ")[0]));
-        vals.set(3, Integer.valueOf(string.split(": ")[1].split("-")[2].split(" ")[1].split(":")[0]));
-        vals.set(4, Integer.valueOf(string.split(": ")[1].split("-")[2].split(" ")[1].split(":")[1]));
+        //System.out.println(string);
+        //System.out.println("\n");
+        //System.out.println(vals);
+
+        vals.set(2, Integer.valueOf(string.split("-")[0]));
+        //System.out.println(vals);
+        vals.set(1, Integer.valueOf(string.split("-")[1]));
+        //System.out.println(vals);
+        vals.set(0, Integer.valueOf(string.split("-")[2].split(" ")[0]));
+        //System.out.println(vals);
+        vals.set(3, Integer.valueOf(string.split("-")[2].split(" ")[1].split(":")[0]));
+        //System.out.println(vals);
+        //System.out.println(string.split("-")[2].split(" ")[1].split(":")[1]);
+        vals.set(4, Integer.valueOf(string.split("-")[2].split(" ")[1].split(":")[1].split("\n")[0].replace(",","")));
+        //System.out.println(vals);
         return vals;
     }
 
