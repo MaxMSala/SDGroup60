@@ -215,21 +215,24 @@ public class Form {
         userListArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(userListArea);
 
-        String user = userField.getText().trim();
-        if (!user.isEmpty()) {
-            if (!Validator.validateUser(user)) {
-                JOptionPane.showMessageDialog(userFrame, "Usernames cannot contain commas.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            form.addUser(user);
-            userListArea.append(user + "\n");
-            userField.setText("");
-        }
 
+
+        addUserButton.addActionListener(e -> {
+            String  user = userField.getText().trim();
+            if (!user.isEmpty()) {
+                if (!Validator.validateUser(user)) {
+                    JOptionPane.showMessageDialog(userFrame, "Usernames cannot contain commas.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                form.addUser(user);
+                userListArea.append(user + "\n");
+                userField.setText("");
+            }
+        });
 
         continueButton.addActionListener(e -> {
             userFrame.dispose();
-            showApplianceWindow(form); // now called only after adding users
+            showApplianceWindow(form);
         });
 
         userFrame.add(userPanel, BorderLayout.NORTH);
@@ -303,10 +306,18 @@ public class Form {
         List<String> timeframes = new ArrayList<>();
 
         addTimeframeButton.addActionListener(e -> {
-            String newTimeframe = addApplianceTimeframe(applianceFrame);
+            String newTimeframe = addApplianceTimeframe(applianceFrame, form);
             if (!newTimeframe.equals("None")) {
                 form.addTimeframe(nameField.getText(), newTimeframe);
                 timeframeArea.append("Timeframe " + timeframes.size() + ": " + newTimeframe + "\n");
+
+                // ✅ Debug output to terminal
+                System.out.println("✅ Timeframe added: " + newTimeframe);
+                System.out.println("📦 Appliance: " + nameField.getText());
+                System.out.println("👥 Current Users: " + form.getUsers());
+                System.out.println("🏠 House Info:\n" + form.getFormattedInput().split("USERS:")[0]);
+            } else {
+                System.out.println("❌ Timeframe rejected or validation failed.");
             }
         });
 
@@ -418,7 +429,7 @@ public class Form {
         applianceFrame.setVisible(true);
     }
 
-    private static String addApplianceTimeframe(JFrame parentFrame) {
+    private static String addApplianceTimeframe(JFrame parentFrame, Form form) {
         JPanel timeframePanel = new JPanel();
         timeframePanel.setLayout(new BoxLayout(timeframePanel, BoxLayout.Y_AXIS));
 
@@ -476,14 +487,33 @@ public class Form {
             String start = dateFormat.format(startDateChooser.getDate()) + " " + timeFormat.format(startTimeSpinner.getValue());
             String end = dateFormat.format(endDateChooser.getDate()) + " " + timeFormat.format(endTimeSpinner.getValue());
 
-            return "User: " + user + ", Start: " + start + ", End: " + end;
-        } else {
-            return "None";
+            String timeframe = "User: " + user + ", Start: " + start + ", End: " + end;
+
+            // Format user list into string (e.g., "- Alice\n- Bob\n")
+            StringBuilder usersString = new StringBuilder();
+            for (String u : form.getUsers()) {
+                usersString.append("- ").append(u).append("\n");
+            }
+
+            // Extract just the house block from formatted input
+            String houseData = form.getFormattedInput().split("USERS:")[0];
+
+            // ✅ VALIDATE THE TIMEFRAME!
+            if (!Validator.validateTimeframe(timeframe, usersString.toString(), houseData)) {
+                JOptionPane.showMessageDialog(parentFrame,
+                        "⛔ Invalid timeframe:\n- User not found in the list\n- Dates out of range\n- Start must be before End",
+                        "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return "None";
+            }
+
+            return timeframe;
         }
-    }
+        return "None";
+        }
 
 
-    private static void addPlaceholder(JTextField textField, String placeholder) {
+
+        private static void addPlaceholder(JTextField textField, String placeholder) {
         textField.setForeground(Color.GRAY);
         textField.setText(placeholder);
 
