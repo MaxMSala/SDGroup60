@@ -57,7 +57,7 @@ public class CarbonIntensity {
     }
 
     // Represents one hour of carbon intensity data
-    public static class CarbonHour {
+    private static class CarbonHour {
         public int carbonIntensity;
         public String datetime;
 
@@ -68,7 +68,7 @@ public class CarbonIntensity {
     }
 
     // Fetches the full 24-hour carbon intensity history
-    public static List<CarbonHour> fetchCarbonIntensityHistory() {
+    private static List<CarbonHour> fetchCarbonIntensityHistory() {
         List<CarbonHour> history = new ArrayList<>();
         try {
             URL url = new URL("https://api.electricitymap.org/v3/carbon-intensity/history?zone=NL");
