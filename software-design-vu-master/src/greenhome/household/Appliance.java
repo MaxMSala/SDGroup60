@@ -6,7 +6,14 @@ import java.util.List;
 
 public class Appliance {
 
+    // Internal attributes
+    private double powerConsumption;
+    private double embodiedEmissions;
     private String name;
+
+    // Derived attributes ('/' prefix)
+    private double generatedFootprint;
+    private double generatedCost;
 
     // constructor to be deleted later
     public Appliance() {}
@@ -17,15 +24,22 @@ public class Appliance {
         this.embodiedEmissions = embodiedEmissions;
     }
 
-    // Internal attributes
-    private double powerConsumption;
-    private double embodiedEmissions;
+    // interface getters and setters
+    // setters
+    // to delete later
+    public void setGeneratedFootprint(double generatedFootprint) {this.generatedFootprint = generatedFootprint;}
+    // to delete later
+    public void setName(String name) {this.name = name;}
 
-    // Derived attributes ('/' prefix)
-    private double generatedFootprint;
-    private double generatedCost;
+    // getters
+    public double getGeneratedCost() {calcCost(); return generatedCost;}
+    public double getGeneratedFootprint() {sumFootPrint(); return generatedFootprint;}
+    public String getName() {return this.name;}
+    public double getPowerConsumption() { return powerConsumption; }
+    public double getEmbodiedEmissions() {return embodiedEmissions;}
 
-    // Methods
+
+    // internal calculations
     private void sumFootPrint() {
         // to be implemented
         House house = House.getInstance();
@@ -42,10 +56,6 @@ public class Appliance {
         this.generatedFootprint = combinedFootprint;
     }
 
-    public double getFootprint() {
-        sumFootPrint();
-        return generatedFootprint;
-    }
 
     private void calcCost() {
         double totalCost = 0.0;
@@ -62,20 +72,4 @@ public class Appliance {
         this.generatedCost = totalCost;
     }
 
-    public double getGeneratedCost() {
-        calcCost();
-        return generatedCost;
-    }
-
-    // setters
-    // to delete later
-    public void setGeneratedFootprint(double generatedFootprint) {this.generatedFootprint = generatedFootprint;}
-    // to delete later
-    public void setName(String name) {this.name = name;}
-
-    // getters
-    public double getGeneratedFootprint() {return generatedFootprint;}
-    public String getName() {return this.name;}
-    public double getPowerConsumption() { return powerConsumption; }
-    public double getEmbodiedEmissions() {return embodiedEmissions;}
 }

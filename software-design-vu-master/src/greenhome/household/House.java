@@ -10,16 +10,15 @@ import java.util.List;
 
 public class House {
 
-    private static  House instance;
-
     // Core attributes (initialized on creation)
+    private static  House instance;
     private List<User> residents;
     private List<Appliance> appliances;
     private List<Timeframe> timeframes;
     private String region;
     private double electricityTariff;
-    private DateTime start;
-    private DateTime end;
+    private DateTime startDate;
+    private DateTime endDate;
 
     // Derived values
     private int ecoScore;
@@ -34,7 +33,6 @@ public class House {
         this.timeframes = timeframes;
         this.region = region;
         this.electricityTariff = electricityTariff;
-
     }
 
     // Singleton constructor (with params on first call)
@@ -53,8 +51,38 @@ public class House {
         return instance;
     }
 
-    // === Derived calculations ===
+    // interface methods
+    // derived getters
+    public double getFootPrint() { sumFootPrint(); return this.footPrintGenerated; }
+    public double getCosts() {calcCost(); return this.costsGenerated;}
+    public int getEcoScore() { calcEcoScore(); return this.ecoScore;}
 
+    // setters
+    public void setRegion(String region){ this.region = region;}
+    public void setTariff(Double tariff){this.electricityTariff = tariff;}
+    public void addUser(User user){this.residents.add(user);};
+    public void addAppliance(Appliance appliance){this.appliances.add(appliance);};
+    public void addTimeframe(Timeframe timeframe){this.timeframes.add(timeframe);};
+    public void modUser(List<User> newRes){this.residents = newRes;};
+    public void modAppliances(List<Appliance> newApps){this.appliances = newApps;};
+    public void modTimeframes(List<Timeframe> newFrames){this.timeframes = newFrames;}
+    public void setStart(DateTime startDateTime) {this.startDate = startDateTime;}
+    public void setEnd(DateTime endDate) {this.endDate = endDate;}
+    // public void setElectricityTariff(double tariff) { this.electricityTariff = tariff; }
+    // public void setEcoScore(int ecoScore) { this.ecoScore = ecoScore; }
+    // public void setFootPrint(double footprint) { this.footPrint = footprint; }
+
+    //getters
+    public List<Appliance> getAppliances() { return appliances;}
+    public double getElectricityTariff() {return electricityTariff;}
+    public List<Timeframe> getTimeframes() {return timeframes;}
+    public List<User> getResidents() {return residents;}
+    public String getRegion() {return region;}
+    public DateTime getStart() {return startDate;}
+    public DateTime getEnd() {return endDate;}
+
+
+    // internal private calculations
     private void calcCost() {
         double totalCost = 0.0;
 
@@ -64,67 +92,28 @@ public class House {
         this.costsGenerated = totalCost;
     }
 
-    public double getCostsGenerated() {
-        calcCost();
-        return this.costsGenerated;
-    }
-
     private void sumFootPrint() {
         double totalFootPrint = 0.0;
 
         for (Appliance appliance : appliances) {
-            totalFootPrint += appliance.getFootprint();
+            totalFootPrint += appliance.getGeneratedFootprint();
         }
         this.footPrintGenerated = totalFootPrint;
-    }
-
-    public double getFootPrintGenerated() {
-        sumFootPrint();
-        return this.footPrintGenerated;
     }
 
     private void calcEcoScore() {
         double totalFootPrint = 0.1;
 
         for (Appliance appliance : appliances) {
-            totalFootPrint += appliance.getFootprint();
+            totalFootPrint += appliance.getGeneratedFootprint();
         }
-        LocalDateTime start = this.start.toLocalDateTime();
-        LocalDateTime end = this.end.toLocalDateTime();
+        LocalDateTime start = this.startDate.toLocalDateTime();
+        LocalDateTime end = this.endDate.toLocalDateTime();
 
         Duration runTime = Duration.between(start, end);
         double ecoScore = 0.0;
         ecoScore = 100 / (1 + Math.exp(0.04 * ((totalFootPrint / runTime.toHours() ) - 1125)));
         this.ecoScore = (int) ecoScore;
-
     }
 
-    // Setters
-    public void setRegion(String region){ this.region = region;}
-    public void setTariff(Double tariff){this.electricityTariff = tariff;}
-    public void addUser(User user){this.residents.add(user);};
-    public void addAppliance(Appliance appliance){this.appliances.add(appliance);};
-    public void addTimeframe(Timeframe timeframe){this.timeframes.add(timeframe);};
-    public void modUser(List<User> newRes){this.residents = newRes;};
-    public void modAppliances(List<Appliance> newApps){this.appliances = newApps;};
-    public void modTimeframes(List<Timeframe> newFrames){this.timeframes = newFrames;}
-
-   // public void setElectricityTariff(double tariff) { this.electricityTariff = tariff; }
-   // public void setEcoScore(int ecoScore) { this.ecoScore = ecoScore; }
-   // public void setFootPrint(double footprint) { this.footPrint = footprint; }
-
-    // Getters
-    public List<Appliance> getAppliances() { return appliances;}
-    public double getFootPrint() { return footPrintGenerated; }
-    public int getEcoScore() { return ecoScore; }
-    public double getElectricityTariff() {return electricityTariff;}
-    public List<Timeframe> getTimeframes() {return timeframes;}
-    public List<User> getResidents() {return residents;}
-    public String getRegion() {return region;}
-    public DateTime getStart() {return start;}
-    public DateTime getEnd() {return end;}
-
-    public void setStart(DateTime startDateTime) {
-        this.start = startDateTime;
-    }
 }
