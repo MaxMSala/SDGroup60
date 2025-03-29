@@ -214,7 +214,7 @@ public class Report {
             washingMachine.setName("Washing Machine");
             washingMachine.setGeneratedFootprint(150.75);
 
-            Set<Appliance> fakeAppliances = new java.util.HashSet<>();
+            List<Appliance> fakeAppliances = new ArrayList<>();
             fakeAppliances.add(fridge);
             fakeAppliances.add(tv);
             fakeAppliances.add(washingMachine);

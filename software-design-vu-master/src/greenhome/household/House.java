@@ -33,6 +33,11 @@ public class House {
         this.timeframes = timeframes;
         this.region = region;
         this.electricityTariff = electricityTariff;
+        this.startDate = new DateTime(1,1,1,1,1);  // Set to null if no default
+        this.endDate = new DateTime(2,2,2,2,2);;    // Set to null if no default
+        this.ecoScore = 0;
+        this.footPrintGenerated = 0.0;
+        this.costsGenerated = 0.0;
     }
 
     // Singleton constructor (with params on first call)
