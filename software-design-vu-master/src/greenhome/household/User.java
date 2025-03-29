@@ -5,14 +5,24 @@ import greenhome.time.*;
 public class User {
 
     private String name;
+
+    // derived
     private int ecoScore;
-    private double carbonFootprint = 0;
+    private double carbonFootprint;
     private double costsGenerated;
 
     public User(String name) {
         this.name = name;
     }
 
+    // interface getters
+    public String getName() {return this.name;}
+    public double getCostsGenerated(){ calcCost(); return costsGenerated;}
+    public int getEcoScore() {calcEcoScore(); return ecoScore;}
+    public double getCarbonFootprint() {sumFootPrint(); return carbonFootprint;}
+
+
+    // internal calculations
     private void calcCost() {
         double totalCost = 0.0;
         House house = House.getInstance();
@@ -32,11 +42,6 @@ public class User {
 
     }
 
-    public double getCostsGenerated(){
-        calcCost();
-        return costsGenerated;
-    }
-
     private void sumFootPrint (){
         double totalFootPrint = 0.0;
         House house = House.getInstance();
@@ -49,11 +54,6 @@ public class User {
             }
         }
         this.carbonFootprint = totalFootPrint;
-    }
-
-    public double getCarbonFootprint() {
-        sumFootPrint();
-        return carbonFootprint;
     }
 
     private void calcEcoScore() {
@@ -75,11 +75,4 @@ public class User {
 
     }
 
-    public int getEcoScore() {
-        calcEcoScore();
-        return ecoScore;
-    }
-
-    // getters
-    public String getName() {return this.name;}
 }

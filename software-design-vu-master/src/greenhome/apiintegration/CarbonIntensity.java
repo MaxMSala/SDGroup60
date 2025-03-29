@@ -16,11 +16,16 @@ import java.util.List;
 public class CarbonIntensity {
 
     private static CarbonIntensity instance;
+    private DateTime[] period = new DateTime[2];
+
+    // derived
+    private double carbonIntensity;
 
     private CarbonIntensity(DateTime[] period) {
         this.period = period;
     }
 
+    // public interface
     public static synchronized CarbonIntensity getInstance(DateTime[] period) {
         if (instance == null) {
             instance = new CarbonIntensity(period);
@@ -28,78 +33,9 @@ public class CarbonIntensity {
         return instance;
     }
 
-    private DateTime[] period = new DateTime[2];
-    private double carbonIntensity;
+    public double getCarbonIntensity() {updateInternalCarbonIntensity(); return carbonIntensity;}
 
-
-    private void updateCarbonIntensity() {
-        List<CarbonHour> history = fetchCarbonIntensityHistory();
-
-        if (history.size() != 24) {
-            System.out.println(" Not enough data to fetch 24-hour carbon history.");
-            return;
-        }
-
-        // Extract hours from the two DateTime objects
-        int startHour = this.period[0].toLocalDateTime().getHour();
-        int endHour = this.period[1].toLocalDateTime().getHour();
-
-        int startCI = history.get(startHour).carbonIntensity;
-        int endCI = history.get(endHour).carbonIntensity;
-
-        double avgCI = (startCI + endCI) / 2.0;
-        this.carbonIntensity = avgCI;
-    }
-
-    public double getCarbonIntensity() {
-        updateCarbonIntensity();
-        return carbonIntensity;
-    }
-
-    // Represents one hour of carbon intensity data
-    private static class CarbonHour {
-        public int carbonIntensity;
-        public String datetime;
-
-        public CarbonHour(int intensity, String dt) {
-            this.carbonIntensity = intensity;
-            this.datetime = dt;
-        }
-    }
-
-    // Fetches the full 24-hour carbon intensity history
-    private static List<CarbonHour> fetchCarbonIntensityHistory() {
-        List<CarbonHour> history = new ArrayList<>();
-        try {
-            URL url = new URL("https://api.electricitymap.org/v3/carbon-intensity/history?zone=NL");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("auth-token", "uywCbhuQ4tOOb0fyL8NI");
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            JSONObject json = new JSONObject(response.toString());
-            JSONArray historyArr = json.getJSONArray("history");
-
-            for (int i = 0; i < historyArr.length(); i++) {
-                JSONObject item = historyArr.getJSONObject(i);
-                int ci = item.getInt("carbonIntensity");
-                String dt = item.getString("datetime");
-                history.add(new CarbonHour(ci, dt));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return history;
-    }
-
+    // for recommendations
     public static String findBestLowCarbonTimeRange() {
         List<CarbonHour> history = fetchCarbonIntensityHistory();
         if (history.size() < 3) return "Not enough data";
@@ -161,10 +97,75 @@ public class CarbonIntensity {
 
     }
 
+
+    // private calculations
+    private void updateInternalCarbonIntensity() {
+        List<CarbonHour> history = fetchCarbonIntensityHistory();
+
+        if (history.size() != 24) {
+            System.out.println(" Not enough data to fetch 24-hour carbon history.");
+            return;
+        }
+
+        // Extract hours from the two DateTime objects
+        int startHour = this.period[0].toLocalDateTime().getHour();
+        int endHour = this.period[1].toLocalDateTime().getHour();
+
+        int startCI = history.get(startHour).carbonIntensity;
+        int endCI = history.get(endHour).carbonIntensity;
+
+        double avgCI = (startCI + endCI) / 2.0;
+        this.carbonIntensity = avgCI;
+    }
+
     // Format ISO time to readable local hour:minute
     private static String formatTime(String isoDatetime) {
         ZonedDateTime zdt = ZonedDateTime.parse(isoDatetime);
         return zdt.toLocalTime().withSecond(0).withNano(0).toString();
+    }
+
+    // Fetches the full 24-hour carbon intensity history
+    private static List<CarbonHour> fetchCarbonIntensityHistory() {
+        List<CarbonHour> history = new ArrayList<>();
+        try {
+            URL url = new URL("https://api.electricitymap.org/v3/carbon-intensity/history?zone=NL");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("auth-token", "uywCbhuQ4tOOb0fyL8NI");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            JSONObject json = new JSONObject(response.toString());
+            JSONArray historyArr = json.getJSONArray("history");
+
+            for (int i = 0; i < historyArr.length(); i++) {
+                JSONObject item = historyArr.getJSONObject(i);
+                int ci = item.getInt("carbonIntensity");
+                String dt = item.getString("datetime");
+                history.add(new CarbonHour(ci, dt));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return history;
+    }
+
+    // Represents one hour of carbon intensity data
+    private static class CarbonHour {
+        public int carbonIntensity;
+        public String datetime;
+
+        public CarbonHour(int intensity, String dt) {
+            this.carbonIntensity = intensity;
+            this.datetime = dt;
+        }
     }
 
 }
