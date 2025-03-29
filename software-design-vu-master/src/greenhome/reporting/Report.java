@@ -55,7 +55,7 @@ public class Report {
         panel.add(buttonPanel, BorderLayout.SOUTH);
 
         String date = java.time.LocalDate.now().toString();
-        injectFakeData();
+        //injectFakeData();
         String report = generateReport(House.getInstance(), date);
         reportArea.setText(report);
     }
@@ -196,84 +196,84 @@ public class Report {
 
 
     //dummydata
-    private static void injectFakeData() {
-        try {
-
-            House house = House.getInstance();
-
-            // Create appliance objects using no-arg constructor
-            Appliance fridge = new Appliance();
-            fridge.setName("Fridge");
-            fridge.setGeneratedFootprint(120.5);
-
-            Appliance tv = new Appliance();
-            tv.setName("TV");
-            tv.setGeneratedFootprint(80.0);
-
-            Appliance washingMachine = new Appliance();
-            washingMachine.setName("Washing Machine");
-            washingMachine.setGeneratedFootprint(150.75);
-
-            List<Appliance> fakeAppliances = new ArrayList<>();
-            fakeAppliances.add(fridge);
-            fakeAppliances.add(tv);
-            fakeAppliances.add(washingMachine);
-
-            // Use reflection to set private 'appliances' field
-            java.lang.reflect.Field appliancesField = House.class.getDeclaredField("appliances");
-            appliancesField.setAccessible(true);
-            appliancesField.set(house, fakeAppliances);
-
-            // Also set other fields (footPrint, ecoScore, tariff)
-            java.lang.reflect.Field footPrintField = House.class.getDeclaredField("footPrint");
-            footPrintField.setAccessible(true);
-            footPrintField.set(house, 120.5 + 80 + 150.75);
-
-            java.lang.reflect.Field ecoScoreField = House.class.getDeclaredField("ecoScore");
-            ecoScoreField.setAccessible(true);
-            ecoScoreField.set(house, 78);
-
-            java.lang.reflect.Field tariffField = House.class.getDeclaredField("electricityTariff");
-            tariffField.setAccessible(true);
-            tariffField.set(house, 95.60);
-
-            User alice = new User("Alice");
-            User bob = new User("Bob");
-            Set<User> usersAlice = new HashSet<>();
-            Set<User> usersBob = new HashSet<>();
-            usersAlice.add(alice);
-            usersBob.add(bob);
-
-// Create DateTime start/end
-            DateTime start1 = new DateTime(2025, 3, 27, 10, 0);
-            DateTime end1 = new DateTime(2025, 3, 27, 12, 0);
-
-            DateTime start2 = new DateTime(2025, 3, 28, 14, 0);
-            DateTime end2 = new DateTime(2025, 3, 28, 16, 0);
-
-// Create timeframe objects
-         //   Timeframe tf1 = new Timeframe(usersAlice, fridge, start1, end1, 200.0, 300.0);
-        //    Timeframe tf2 = new Timeframe(usersBob, tv, start2, end2, 150.0, 250.0);
-
-            Set<Timeframe> fakeTimeframes = new HashSet<>();
-           // fakeTimeframes.add(tf1);
-           // fakeTimeframes.add(tf2);
-
-// Set the 'timeframes' field via reflection
-            java.lang.reflect.Field tfField = House.class.getDeclaredField("timeframes");
-            tfField.setAccessible(true);
-            tfField.set(house, fakeTimeframes);
-
-// Also set residents (optional but recommended if you use User logic elsewhere)
-            Set<User> fakeUsers = new HashSet<>();
-            fakeUsers.add(alice);
-            fakeUsers.add(bob);
-            java.lang.reflect.Field userField = House.class.getDeclaredField("residents");
-            userField.setAccessible(true);
-            userField.set(house, fakeUsers);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+ //private static void injectFakeData() {
+ //    try {
+ //
+ //        House house = House.getInstance();
+ //
+ //        // Create appliance objects using no-arg constructor
+ //        Appliance fridge = new Appliance();
+ //        fridge.setName("Fridge");
+ //        fridge.setGeneratedFootprint(120.5);
+ //
+ //        Appliance tv = new Appliance();
+ //        tv.setName("TV");
+ //        tv.setGeneratedFootprint(80.0);
+ //
+ //        Appliance washingMachine = new Appliance();
+ //        washingMachine.setName("Washing Machine");
+ //        washingMachine.setGeneratedFootprint(150.75);
+ //
+ //        Set<Appliance> fakeAppliances = new java.util.HashSet<>();
+ //        fakeAppliances.add(fridge);
+ //        fakeAppliances.add(tv);
+ //        fakeAppliances.add(washingMachine);
+ //
+ //        // Use reflection to set private 'appliances' field
+ //        java.lang.reflect.Field appliancesField = House.class.getDeclaredField("appliances");
+ //        appliancesField.setAccessible(true);
+ //        appliancesField.set(house, fakeAppliances);
+ //
+ //        // Also set other fields (footPrint, ecoScore, tariff)
+ //        java.lang.reflect.Field footPrintField = House.class.getDeclaredField("footPrint");
+ //        footPrintField.setAccessible(true);
+ //        footPrintField.set(house, 120.5 + 80 + 150.75);
+ //
+ //        java.lang.reflect.Field ecoScoreField = House.class.getDeclaredField("ecoScore");
+ //        ecoScoreField.setAccessible(true);
+ //        ecoScoreField.set(house, 78);
+ //
+ //        java.lang.reflect.Field tariffField = House.class.getDeclaredField("electricityTariff");
+ //        tariffField.setAccessible(true);
+ //        tariffField.set(house, 95.60);
+ //
+ //        User alice = new User("Alice");
+ //        User bob = new User("Bob");
+ //        Set<User> usersAlice = new HashSet<>();
+ //        Set<User> usersBob = new HashSet<>();
+ //        usersAlice.add(alice);
+ //        usersBob.add(bob);
+ //
+///reate DateTime start/end
+ //        DateTime start1 = new DateTime(2025, 3, 27, 10, 0);
+ //        DateTime end1 = new DateTime(2025, 3, 27, 12, 0);
+ //
+ //        DateTime start2 = new DateTime(2025, 3, 28, 14, 0);
+ //        DateTime end2 = new DateTime(2025, 3, 28, 16, 0);
+ //
+///reate timeframe objects
+ //     //   Timeframe tf1 = new Timeframe(usersAlice, fridge, start1, end1, 200.0, 300.0);
+ //    //    Timeframe tf2 = new Timeframe(usersBob, tv, start2, end2, 150.0, 250.0);
+ //
+ //        Set<Timeframe> fakeTimeframes = new HashSet<>();
+ //       // fakeTimeframes.add(tf1);
+ //       // fakeTimeframes.add(tf2);
+ //
+///et the 'timeframes' field via reflection
+ //        java.lang.reflect.Field tfField = House.class.getDeclaredField("timeframes");
+ //        tfField.setAccessible(true);
+ //        tfField.set(house, fakeTimeframes);
+ //
+///lso set residents (optional but recommended if you use User logic elsewhere)
+ //        Set<User> fakeUsers = new HashSet<>();
+ //        fakeUsers.add(alice);
+ //        fakeUsers.add(bob);
+ //        java.lang.reflect.Field userField = House.class.getDeclaredField("residents");
+ //        userField.setAccessible(true);
+ //        userField.set(house, fakeUsers);
+ //
+ //    } catch (Exception e) {
+ //        e.printStackTrace();
+ //    }
+ //}
 }
