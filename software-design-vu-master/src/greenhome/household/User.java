@@ -56,6 +56,30 @@ public class User {
         return carbonFootprint;
     }
 
+    private void calcEcoScore() {
+        double ecoScore = 0.0;
+        House h = House.getInstance();
+        double totalHours = 0.0;
+        for (Timeframe tf : h.getTimeframes()) {
+            for (User user : tf.getUsers()) {
+                if(user.getName().equals(this.name)) {
+                    double usageHours = tf.getUsageDurationInHoursForAppliance();
+                    double usageHoursAdjusted = usageHours / tf.getUsers().size();
+
+                    totalHours += usageHoursAdjusted;
+                }
+            }
+        }
+        ecoScore = 100 / (1 + Math.exp(0.04 * ((getCarbonFootprint() / totalHours) - 180)));
+        this.ecoScore = (int) ecoScore;
+
+    }
+
+    public int getEcoScore() {
+        calcEcoScore();
+        return ecoScore;
+    }
+
     // getters
     public String getName() {return this.name;}
 }

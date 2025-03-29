@@ -3,6 +3,8 @@ package greenhome.household;
 import greenhome.time.DateTime;
 import greenhome.time.Timeframe;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -81,9 +83,20 @@ public class House {
         return this.footPrintGenerated;
     }
 
-    private int calcEcoScore() {
-        // to be implemented
-        return 0;
+    private void calcEcoScore() {
+        double totalFootPrint = 0.1;
+
+        for (Appliance appliance : appliances) {
+            totalFootPrint += appliance.getFootprint();
+        }
+        LocalDateTime start = this.start.toLocalDateTime();
+        LocalDateTime end = this.end.toLocalDateTime();
+
+        Duration runTime = Duration.between(start, end);
+        double ecoScore = 0.0;
+        ecoScore = 100 / (1 + Math.exp(0.04 * ((totalFootPrint / runTime.toHours() ) - 1125)));
+        this.ecoScore = (int) ecoScore;
+
     }
 
     // Setters
