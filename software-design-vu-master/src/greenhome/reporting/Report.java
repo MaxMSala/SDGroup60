@@ -18,7 +18,7 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 
-class Report {
+public class Report {
 
     private static final House house = House.getInstance();
 
