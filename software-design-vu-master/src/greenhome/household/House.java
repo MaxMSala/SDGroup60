@@ -17,8 +17,8 @@ public class House {
     private List<Timeframe> timeframes;
     private String region;
     private double electricityTariff;
-    private DateTime start;
-    private DateTime end;
+    private DateTime startDate;
+    private DateTime endDate;
 
     // Derived values
     private int ecoScore;
@@ -66,8 +66,8 @@ public class House {
     public void modUser(List<User> newRes){this.residents = newRes;};
     public void modAppliances(List<Appliance> newApps){this.appliances = newApps;};
     public void modTimeframes(List<Timeframe> newFrames){this.timeframes = newFrames;}
-    public void setStart(DateTime startDateTime) {this.start = startDateTime;}
-    public void setEnd(DateTime endDate) {this.end = endDate;}
+    public void setStart(DateTime startDateTime) {this.startDate = startDateTime;}
+    public void setEnd(DateTime endDate) {this.endDate = endDate;}
     // public void setElectricityTariff(double tariff) { this.electricityTariff = tariff; }
     // public void setEcoScore(int ecoScore) { this.ecoScore = ecoScore; }
     // public void setFootPrint(double footprint) { this.footPrint = footprint; }
@@ -78,8 +78,8 @@ public class House {
     public List<Timeframe> getTimeframes() {return timeframes;}
     public List<User> getResidents() {return residents;}
     public String getRegion() {return region;}
-    public DateTime getStart() {return start;}
-    public DateTime getEnd() {return end;}
+    public DateTime getStart() {return startDate;}
+    public DateTime getEnd() {return endDate;}
 
 
     // internal private calculations
@@ -107,8 +107,8 @@ public class House {
         for (Appliance appliance : appliances) {
             totalFootPrint += appliance.getGeneratedFootprint();
         }
-        LocalDateTime start = this.start.toLocalDateTime();
-        LocalDateTime end = this.end.toLocalDateTime();
+        LocalDateTime start = this.startDate.toLocalDateTime();
+        LocalDateTime end = this.endDate.toLocalDateTime();
 
         Duration runTime = Duration.between(start, end);
         double ecoScore = 0.0;
