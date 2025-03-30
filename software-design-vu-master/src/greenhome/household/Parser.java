@@ -112,7 +112,7 @@ public class Parser {
 
                     Appliance chosenAppliance = new Appliance();
                     for (Appliance appliance : h.getAppliances()) {
-                        if (appliance.getName() == applianceName) {
+                        if (appliance.getName().equals( applianceName)) {
                             chosenAppliance = appliance;
                         }
                     }
@@ -205,7 +205,7 @@ public class Parser {
 
                     Appliance chosenAppliance = new Appliance();
                     for (Appliance appliance : applianceListToReplace) {
-                        if (appliance.getName() == applianceName) {
+                        if (appliance.getName().equals( applianceName)) {
                             chosenAppliance = appliance;
                         }
                     }
@@ -252,7 +252,7 @@ public class Parser {
             stringB.append(appliance.getName());
             System.out.println("timeframe user 1: "+ h.getTimeframes().getFirst().getUsers().getFirst().getName());
             for (Timeframe timeframe : h.getTimeframes()){
-                if (appliance == timeframe.getAppliance()){
+                if (appliance.equals(timeframe.getAppliance())){
                     stringB.append("\n - User: ");
                     for (User user : timeframe.getUsers()){
                         stringB.append(user.getName());
