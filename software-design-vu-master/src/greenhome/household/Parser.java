@@ -226,6 +226,7 @@ public class Parser {
 
     public static String houseToString() {
         System.out.println("houseToString");
+        System.out.println("1");
         StringBuilder stringB = new StringBuilder();
         House h = House.getInstance();
         stringB.append("HOUSE INFO: \nRegion: " + h.getRegion() + "\nTariff: "+ h.getElectricityTariff()+"\nStart DateTime: "+ h.getStart().valsToString()+"\nEnd DateTime: "+ h.getEnd().valsToString()+ "\n");
@@ -234,6 +235,7 @@ public class Parser {
             stringB.append("\n- ");
             stringB.append(user.getName());
         }
+        System.out.println("2");
         stringB.append("\n");
         stringB.append("\nAPPLIANCES:");
         for (Appliance appliance : h.getAppliances()){
@@ -246,6 +248,7 @@ public class Parser {
             stringB.append("\n");
         }
         stringB.append("\nTIMEFRAMES:");
+        System.out.println("3");
         for (Appliance appliance : h.getAppliances()){
             stringB.append("\nAppliance: ");
             stringB.append(appliance.getName());
@@ -478,7 +481,13 @@ public class Parser {
 
         try {
             JSONObject json = new JSONObject(jsonData.toString());
-            String houseData = json.getString("houseData");
+            String houseData;
+            if(json.has("houseData")) {
+                houseData = json.getString("houseData");
+            }else{
+                saveHouse();
+                houseData = json.getString("houseData");
+            }
             stringIntoHouse(houseData);
         } catch (JSONException e) {
             e.printStackTrace();

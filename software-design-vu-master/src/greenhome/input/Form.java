@@ -575,6 +575,7 @@ public class Form {
         House h = House.getInstance();
         Parser.stringIntoHouse(finalInput);
         System.out.println("flag");
+        System.out.println(House.getInstance());
         System.out.println(House.getInstance().getTimeframes().getFirst().getCarbonFootprint());
         Parser.saveHouse();}
 }
