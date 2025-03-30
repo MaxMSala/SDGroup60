@@ -49,10 +49,11 @@ public class Parser {
         while (i < lines.length)  {
             String line = lines[i].trim();
             if (line.startsWith("Region")){
-                line.replaceFirst("Region: ","");
+                line = line.replaceFirst("Region: ","");
                 h.setRegion(line);
+                System.out.println(line);
             } else if (line.startsWith("Tariff")) {
-                line.replaceFirst("Tariff: ","");
+                line = line.replaceFirst("Tariff: ","");
                 h.setTariff(Double.parseDouble(line));
             } else if (line.startsWith("Start DateTime")) {
                 String startString = line.replaceFirst("Start DateTime: ","");
@@ -122,13 +123,15 @@ public class Parser {
                     newLine = lines[++i].trim();
                 }
             }
+            i++;
         }
 
     }
 
     public static void whatifStringModHouse(String data) {
         System.out.println("\n\nSTRING TO HOUSE \n\n");
-        System.out.println(data);
+        int l = 0;
+        System.out.println("flag" + ++l);
         String[] lines = data.split("\n");
         List<User> userListToReplace = null;
         List<Appliance> applianceListToReplace = null;
@@ -136,12 +139,13 @@ public class Parser {
         int i = 0;
         House h = House.getInstance();
         while (i < lines.length)  {
+            System.out.println("looping");
             String line = lines[i].trim();
             if (line.startsWith("Region")){
-                line.replaceFirst("Region: ","");
+                line = line.replaceFirst("Region: ","");
                 h.setRegion(line);
             } else if (line.startsWith("Tariff")) {
-                line.replaceFirst("Tariff: ","");
+                line = line.replaceFirst("Tariff: ","");
                 h.setTariff(Double.parseDouble(line));
             } else if (line.startsWith("Start DateTime")) {
                 String startString = line.replaceFirst("Start DateTime: ","");
@@ -212,10 +216,12 @@ public class Parser {
                     line = lines[++i].trim();
                 }
             }
+            i++;
         }
         h.modTimeframes(tfListToReplace);
         h.modUser(userListToReplace);
         h.modAppliances(applianceListToReplace);
+
     }
 
     public static String houseToString() {
@@ -257,6 +263,7 @@ public class Parser {
 
             }
         }
+
         return stringB.toString();
     }
 
