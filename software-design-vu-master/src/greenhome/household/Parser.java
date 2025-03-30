@@ -1,12 +1,10 @@
 package greenhome.household;
 import greenhome.time.DateTime;
-import greenhome.time.Timeframe;
-import greenhome.validation.*;
+
 import java.io.*;
 import org.json.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static greenhome.validation.Validator.validateDates;
 
@@ -180,7 +178,8 @@ public class Parser {
                 }
             }
         }
-
+        System.out.println("Home to String");
+        System.out.println(sb.toString());
         return sb.toString();
     }
 

@@ -1,6 +1,6 @@
-package greenhome.time;
+package greenhome.household;
 import greenhome.apiintegration.*;
-import greenhome.household.*;
+import greenhome.time.DateTime;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

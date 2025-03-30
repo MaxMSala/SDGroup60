@@ -1,7 +1,5 @@
 package greenhome.household;
 
-import greenhome.time.*;
-
 public class User {
 
     private String name;
