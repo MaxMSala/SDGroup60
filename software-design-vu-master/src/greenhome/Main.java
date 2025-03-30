@@ -14,7 +14,7 @@ public class Main {
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.println("Welcome to GreenHome!");
         House.constructInstance(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", 0.0);
-        Parser.loadHouse();
+        //Parser.loadHouse();
         Form.main(new String[]{});
         System.out.println("saveHouse");
         //System.out.println(CI.fetchCarbonIntensity());
