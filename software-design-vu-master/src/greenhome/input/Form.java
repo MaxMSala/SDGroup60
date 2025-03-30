@@ -55,8 +55,6 @@ public class Form {
         applianceTimeframes.get(applianceName).add(timeframe);
     }
 
-
-    // All data combined for display
     public String getFormattedInput() {
         StringBuilder sb = new StringBuilder();
 
@@ -100,7 +98,6 @@ public class Form {
         SwingUtilities.invokeLater(Form::createAndShowGUI);
     }
 
-    // first window
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Energy Consumption Form");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -170,10 +167,9 @@ public class Form {
             String output = form.getFormattedInput();
 
             // Print to console to verify correctness
-            System.out.println(output);
+          //  System.out.println(output);
 
-            // Display in GUI
-            JOptionPane.showMessageDialog(frame, output);
+            //JOptionPane.showMessageDialog(frame, output);
         });
 
         panel.add(regionLabel);
@@ -365,14 +361,14 @@ public class Form {
             applianceInfo.append("Power Consumption: ").append(power).append("\n");
             applianceInfo.append("Embodied Emission: ").append(emissions).append("\n");
 
-            if (!timeframes.isEmpty()) {
-                applianceInfo.append("Timeframes:\n");
-                for (String tf : timeframes) {
-                    applianceInfo.append(" - ").append(tf).append("\n");
-                }
-            } else {
-                applianceInfo.append("Timeframes: None\n");
-            }
+          //  if (!timeframes.isEmpty()) {
+          //      applianceInfo.append("Timeframes:\n");
+          //      for (String tf : timeframes) {
+          //          applianceInfo.append(" - ").append(tf).append("\n");
+          //      }
+          //  } else {
+          //      applianceInfo.append("Timeframes: None\n");
+          //  }
 
             form.addAppliance(applianceInfo.toString());
             JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
@@ -407,15 +403,16 @@ public class Form {
             // Bottom panel with "Show Report" only
             JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             JButton finalReportButton = new JButton("Show Report");
-            JButton whatIfButton = new JButton("What If scenarios");
+            //JButton whatIfButton = new JButton("What If scenarios");
             bottomPanel.add(finalReportButton);
-            bottomPanel.add(whatIfButton);
+            //bottomPanel.add(whatIfButton);
 
             confirmFrame.add(bottomPanel, BorderLayout.SOUTH);
 
             finalReportButton.addActionListener(ev -> {
-                JOptionPane.showMessageDialog(confirmFrame, summary, "Final Report", JOptionPane.INFORMATION_MESSAGE);
                 form.mergeAllData();
+                JOptionPane.showMessageDialog(confirmFrame, summary, "Final Report", JOptionPane.INFORMATION_MESSAGE);
+
             });
 
             confirmFrame.setLocationRelativeTo(null);
