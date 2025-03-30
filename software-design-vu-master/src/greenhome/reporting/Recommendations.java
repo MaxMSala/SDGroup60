@@ -4,28 +4,44 @@ import java.util.*;
 import greenhome.apiintegration.CarbonIntensity;
 import greenhome.household.*;
 import greenhome.household.Timeframe;
+import greenhome.time.DateTime;
 
 
 public class Recommendations {
 
-    public static String generate(House house) {
+    public static String generate() {
         StringBuilder recs = new StringBuilder();
 
         recs.append("---------------------------------------------------------------------------------------------\n");
-        recs.append("\uD83C\uDFAE Household Eco-Score: ");
+        recs.append("Household Eco-Score: ");
+
+        House house = House.getInstance();
 
         // EcoScore feedback
-        if (house.getEcoScore() < 50) {
-            recs.append("⚠\uFE0FLOW! Look at recommendations below how can you do better!.\n");
+        System.out.println(house.getEcoScore());
+        if (house.getEcoScore() < 75) {
+            recs.append("LOW! Look at recommendations below how can you do better!.\n");
         } else {
-            recs.append("\uD83C\uDFC6STRONG! Keep optimizing your energy habits. Look below at recommendations!\n");
+            recs.append("STRONG! Keep optimizing your energy habits. Look below at recommendations!\n");
         }
-        recs.append("---------------------------------------------------------------------------------------------\n\n");
-
-        recs.append("\uD83C\uDFE0 Household Recommendations:\n");
         recs.append("---------------------------------------------------------------------------------------------\n");
 
-        // 👤 Recommend user-specific behavior change based on highest carbon footprint appliance
+        //  Individual User Eco-Scores (sorted)
+        recs.append("User Eco-Scores:\n");
+
+        house.getResidents().stream()
+                .sorted((u1, u2) -> Integer.compare(u2.getEcoScore(), u1.getEcoScore())) // descending
+                .forEach(user -> recs.append(
+                        String.format("   • %s – Eco-Score: %d\n", user.getName(), user.getEcoScore())
+                ));
+
+        recs.append("---------------------------------------------------------------------------------------------\n\n");
+
+
+        recs.append("Household Recommendations:\n");
+        recs.append("---------------------------------------------------------------------------------------------\n");
+
+        // Recommend user-specific behavior change based on highest carbon footprint appliance
         Appliance worstAppliance = house.getAppliances().stream()
                 .max(Comparator.comparingDouble(Appliance::getGeneratedFootprint))
                 .orElse(null);
@@ -59,7 +75,7 @@ public class Recommendations {
 
             if (worstUser != null) {
                 recs.append(
-                        "\uD83D\uDC64 User-Specific Tip:\n"
+                        "User-Specific Tip:\n"
 
                 );
                 recs.append(String.format(
@@ -71,7 +87,7 @@ public class Recommendations {
         }
 
         // Top carbon footprint appliances
-        recs.append("🔋 Appliances generating the most carbon footprint:\n");
+        recs.append("Appliances generating the most carbon footprint:\n");
 
         List<Appliance> topCarbon = house.getAppliances().stream()
                 .sorted((a1, a2) -> Double.compare(a2.getGeneratedFootprint(), a1.getGeneratedFootprint()))
@@ -82,14 +98,14 @@ public class Recommendations {
             recs.append(String.format("   • %s – %.2f gCO₂ emitted\n", appliance.getName(), appliance.getGeneratedFootprint()));
         }
 
-        recs.append("   ⏱️ Tip: Use these appliances during off-peak low-carbon hours shown below.\n\n");
+        recs.append("  ️ Tip: Use these appliances during off-peak low-carbon hours shown below.\n\n");
 
         recs.append(CarbonIntensity.findBestLowCarbonTimeRange());
 
 
 
         //  Suggest replacing inefficient appliances
-        recs.append("♻️ Appliance Efficiency Tips:\n");
+        recs.append("Appliance Efficiency Tips:\n");
         house.getAppliances().stream()
                 .filter(a -> a.getPowerConsumption() > 2.0)
                 .forEach(a -> recs.append(String.format(
@@ -103,7 +119,7 @@ public class Recommendations {
                 .orElse(null);
 
         if (mostCostly != null) {
-            recs.append("💰 Cost-Saving Insight:\n");
+            recs.append("Cost-Saving Insight:\n");
             recs.append(String.format(
                     "   • '%s' generates the highest electricity cost. Reduce usage or shift to more energy efficient model.\n\n",
                     mostCostly.getName()
@@ -119,13 +135,13 @@ public class Recommendations {
 //
 //            User user1 = new User("Alice");
 //            User user2 = new User("Bob");
-//            // 👤 List with only Alice
+//            // List with only Alice
 //            List<User> onlyAlice = new ArrayList<>(List.of(user1));
 //
-//            // 👤 List with only Bob
+//            // List with only Bob
 //            List<User> onlyBob = new ArrayList<>(List.of(user2));
 //
-//            // 👥 List with both
+//            // List with both
 //            List<User> bothUsers = new ArrayList<>(List.of(user1, user2));
 //
 //            Appliance fridge = new Appliance("Fridge", 10, 10.0);
@@ -136,9 +152,9 @@ public class Recommendations {
 //
 //            // Create manual DateTime instances
 //            DateTime start1 = new DateTime(27, 3, 2025, 8, 0);
-//            DateTime end1 = new DateTime(27, 3, 2025, 10, 0);
+//            DateTime end1 = new DateTime(30, 3, 2025, 10, 0);
 //            DateTime start2 = new DateTime(27, 3, 2025, 14, 0);
-//            DateTime end2 = new DateTime(27, 3, 2025, 16, 0);
+//            DateTime end2 = new DateTime(31, 3, 2025, 16, 0);
 //
 //            List<Integer> carbonIntensities = Arrays.asList(200, 220, 180);
 //
@@ -153,7 +169,7 @@ public class Recommendations {
 //            mockHouse.setStart(startDate);
 //            mockHouse.setEnd(endDate);
 //
-//
+//            System.out.println("Alice CF: " + user1.getCarbonFootprint());
 //            // === Generate & print recommendations ===
 //            String output = generate(mockHouse);
 //            System.out.println(output);

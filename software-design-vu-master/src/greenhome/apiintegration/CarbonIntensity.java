@@ -80,12 +80,12 @@ public class CarbonIntensity {
         double worstAvg = (wCI1 + wCI2 + wCI3) / 3.0;
 
         return String.format("""
-        📉 Off-Peak Hours in 🇳🇱:
+        Off-Peak Hours in NL:
            •  Ideal time for using high-energy appliances is between %s and %s.
            •  Carbon intensity values: [%d, %d, %d] gCO2/kWh
            •  Average carbon intensity: %.2f gCO2/kWh.
 
-        📈 Peak Hours in 🇳🇱:
+        Peak Hours in NL:
            •  Worst time to use appliance is between %s and %s.
            •  Carbon intensity values: [%d, %d, %d] gCO2/kWh
            •  Average carbon intensity: %.2f gCO2/kWh.
