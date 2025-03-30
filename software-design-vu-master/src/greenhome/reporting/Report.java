@@ -42,7 +42,7 @@ public class Report {
         JButton whatIfButton = new JButton("What If scenarios");
         whatIfButton.addActionListener(e -> {
             dialog.dispose();
-            WhatIfScenarios.openWhatIfWindow();
+            WhatIfScenarios.openApplianceScenarioWindow();
         });
         buttonPanel.add(whatIfButton);
 
@@ -111,7 +111,7 @@ public class Report {
 
         report.append("--------------------------------\n");
         report.append("Recommendations:\n\n");
-            report.append(Recommendations.generate(house));
+            report.append(Recommendations.generate());
         return report.toString();
     }
     private static void openChartWindow(Runnable onClose) {
