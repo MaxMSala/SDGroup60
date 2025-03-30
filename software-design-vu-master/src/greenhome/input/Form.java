@@ -16,31 +16,21 @@ public class Form {
     private String houseInfo = "";
     private final List<String> appliances;
     private final List<String> users;
-    private Map<String, List<String>> applianceTimeframes = new HashMap<>();
+    private final Map<String, List<String>> applianceTimeframes = new HashMap<>();
 
     public Form() {
         appliances = new ArrayList<>();
         users = new ArrayList<>();
     }
 
-    // House info
     public void setHouseInfo(String info) {
         this.houseInfo = info;
     }
 
-
-
-
-
-    // Appliances
     public void addAppliance(String applianceInfo) {
         appliances.add(applianceInfo);
     }
 
-
-
-
-    // Users
     public void addUser(String user) {
         if (!users.contains(user)) {
             users.add(user);
@@ -160,12 +150,12 @@ public class Form {
             houseDetails.append("End DateTime: ").append(endDate);
             form.setHouseInfo(houseDetails.toString());
 
-            JOptionPane.showMessageDialog(frame, form.getFormattedInput());
+           // JOptionPane.showMessageDialog(frame, form.getFormattedInput());
 
             frame.dispose();
             showUserInputWindow(form);
 
-            String output = form.getFormattedInput();
+            //String output = form.getFormattedInput();
 
             // Print to console to verify correctness
           //  System.out.println(output);
@@ -187,7 +177,6 @@ public class Form {
         panel.add(endTimeSpinner);
         panel.add(new JLabel());
         panel.add(submitButton);
-
         frame.add(panel);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
@@ -265,7 +254,7 @@ public class Form {
         addAppliance(form);
     }
 
-    private static void addAppliance(Form form) {
+    public static void addAppliance(Form form) {
         JFrame applianceFrame = new JFrame("Add Appliance");
         applianceFrame.setSize(500, 500);
         applianceFrame.setLayout(new BorderLayout(10, 10));
