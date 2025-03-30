@@ -45,7 +45,7 @@ public class Parser {
             } else if (line.startsWith("Appliance") && !tfFlag) {
                 String name = lines[++i].split(": ")[1];
                 int powerConsumption = Integer.parseInt(lines[++i].split(": ")[1]);
-                int embodiedEmission = Integer.parseInt(lines[++i].split(": ")[1]);
+                double embodiedEmission = Double.parseDouble(lines[++i].split(": ")[1]);
                h.addAppliance(new Appliance(name, powerConsumption, embodiedEmission));
             } else if (line.startsWith("TIMEFRAMES")){
                 tfFlag = true;
@@ -104,7 +104,7 @@ public class Parser {
             } else if (line.startsWith("Appliance") && !tfFlag) {
                 String name = lines[++i].split(": ")[1];
                 int powerConsumption = Integer.parseInt(lines[++i].split(": ")[1]);
-                int embodiedEmission = Integer.parseInt(lines[++i].split(": ")[1]);
+                double embodiedEmission = Double.parseDouble(lines[++i].split(": ")[1]);
                 appliances.add(new Appliance(name, powerConsumption, embodiedEmission));
             } else if (line.startsWith("TIMEFRAMES")){
                 tfFlag = true;
@@ -138,49 +138,67 @@ public class Parser {
     }
 
     public static String houseToString() {
+        System.out.println("✅ New houseToString() called");
+
         StringBuilder sb = new StringBuilder();
         House h = House.getInstance();
+
+        // --- House Info ---
         sb.append("HOUSE INFO\n");
         sb.append("Region: ").append(h.getRegion()).append("\n");
         sb.append("Tariff: ").append(h.getElectricityTariff()).append("\n");
         sb.append("Start DateTime: ").append(h.getStart().valsToString()).append("\n");
         sb.append("End DateTime: ").append(h.getEnd().valsToString()).append("\n\n");
 
+        // --- Users ---
         sb.append("USERS\n");
-        for (User user : h.getResidents()) {
+        for (User  user : h.getResidents()) {
             sb.append("- ").append(user.getName()).append("\n");
         }
         sb.append("\n");
 
-        sb.append("APPLIANCES:\n");
+        // --- Appliances ---
+        sb.append("APPLIANCES\n");
+        int counter = 1;
         for (Appliance appliance : h.getAppliances()) {
+            sb.append("Appliance ").append(counter++).append(":\n");
             sb.append("Name: ").append(appliance.getName()).append("\n");
             sb.append("Power Consumption: ").append(appliance.getPowerConsumption()).append("\n");
             sb.append("Embodied Emission: ").append(appliance.getEmbodiedEmissions()).append("\n\n");
         }
-        sb.append("\n");
-        sb.append("TIMEFRAMES:\n");
+
+        // --- Timeframes per Appliance ---
+        sb.append("TIMEFRAMES PER APPLIANCE\n");
         for (Appliance appliance : h.getAppliances()) {
-            boolean hasTimeframes = false;
-            for (Timeframe tf : h.getTimeframes()) {
+            List<Timeframe> allTFs = h.getTimeframes();
+            boolean hasPrinted = false;
+            for (Timeframe tf : allTFs) {
                 if (tf.getAppliance().getName().equals(appliance.getName())) {
-                    if (!hasTimeframes) {
+                    if (!hasPrinted) {
                         sb.append("Appliance: ").append(appliance.getName()).append("\n");
-                        hasTimeframes = true;
+                        hasPrinted = true;
                     }
-                    sb.append("  - User: ");
-                    for (int i = 0; i < tf.getUsers().size(); i++) {
-                        sb.append(tf.getUsers().get(i).getName());
-                        if (i < tf.getUsers().size() - 1) {
-                            sb.append(", ");
-                        }
+                    for (User  user : tf.getUsers()) {
+                        sb.append("- User: ").append(user.getName())
+                                .append(", From: ").append(tf.getPeriod()[0].valsToString())
+                                .append(" → ").append(tf.getPeriod()[1].valsToString()).append("\n");
                     }
-                    sb.append(", Start: ").append(tf.getPeriod()[0].valsToString());
-                    sb.append(", End: ").append(tf.getPeriod()[1].valsToString()).append("\n");
                 }
             }
         }
 
+        // Debug output to check timeframes
+        System.out.println("🔍 DEBUG: Timeframes for appliances:");
+        for (Appliance appliance : h.getAppliances()) {
+            List<Timeframe> timeframes = h.getTimeframes();
+            for (Timeframe tf : timeframes) {
+                if (tf.getAppliance().getName().equals(appliance.getName())) {
+                    System.out.println("Appliance: " + appliance.getName() + ", Timeframe: " + tf);
+                }
+            }
+        }
+
+        sb.append("\n----- End of Report -----\n");
         return sb.toString();
     }
 

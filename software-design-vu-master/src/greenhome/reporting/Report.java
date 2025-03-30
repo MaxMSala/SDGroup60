@@ -27,6 +27,7 @@ public class Report {
     }
 
     private static void displayReport(JPanel panel, JDialog dialog) {
+        
         JTextArea reportArea = new JTextArea();
         reportArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(reportArea);
@@ -113,7 +114,7 @@ public class Report {
 
         report.append("--------------------------------\n");
         report.append("Recommendations:\n\n");
-        //report.append(Recommendations.generate(house));
+            report.append(Recommendations.generate(house));
         return report.toString();
     }
     private static void openChartWindow(Runnable onClose) {

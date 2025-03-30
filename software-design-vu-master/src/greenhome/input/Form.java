@@ -581,5 +581,7 @@ public class Form {
 
         String finalInput = sb.toString();
         System.out.println("✅ Final submission to parser:\n" + finalInput);
-        Parser.stringIntoHouse(finalInput);    }
+        Parser.stringIntoHouse(finalInput);
+        Parser.saveHouse();
+    }
 }
