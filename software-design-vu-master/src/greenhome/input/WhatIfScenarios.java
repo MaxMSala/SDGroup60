@@ -4,6 +4,8 @@ import com.toedter.calendar.JDateChooser;
 import greenhome.household.Appliance;
 import greenhome.household.House;
 import greenhome.household.Parser;
+import greenhome.time.DateTime;
+import greenhome.validation.Validator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -244,7 +246,17 @@ public class WhatIfScenarios {
         submitAll.addActionListener(e -> {
             String selected = (String) applianceDropdown.getSelectedItem();
             try {
-                double newEmission = Double.parseDouble(newEmissionField.getText().trim());
+                String input = newEmissionField.getText().trim();
+                if (!Validator.validateDouble(input)) {
+                    JOptionPane.showMessageDialog(frame, "Emission must be a decimal number.");
+                    return;
+                }
+
+                double newEmission = Double.parseDouble(input);
+                if (!Validator.validateEmbodiedEmissions(newEmission)) {
+                    JOptionPane.showMessageDialog(frame, "Emission must be between 10 and 500 kg CO₂e.");
+                    return;
+                }
                 simulatedChanges.put(selected, newEmission);
             } catch (NumberFormatException ignored) {}
 
@@ -281,8 +293,34 @@ public class WhatIfScenarios {
         panel.add(new JLabel("End Time:"));
         panel.add(endTime);
 
-        if (existing != null) {
-            userField.setText("Edited User");
+        if (existing != null && existing.startsWith("User: ")) {
+            try {
+                // Extract username
+                int startIdx = existing.indexOf("User: ") + 6;
+                int endIdx = existing.indexOf(",", startIdx);
+                String extractedUser = existing.substring(startIdx, endIdx).trim();
+                userField.setText(extractedUser);
+
+                // Extract start and end datetime
+                int fromIdx = existing.indexOf("From: ") + 6;
+                int arrowIdx = existing.indexOf("→", fromIdx);
+                int endTimeStartIdx = arrowIdx + 2;
+
+                String startStr = existing.substring(fromIdx, arrowIdx).trim();
+                String endStr = existing.substring(endTimeStartIdx).trim();
+
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Date startParsed = df.parse(startStr);
+                Date endParsed = df.parse(endStr);
+
+                startDate.setDate(startParsed);
+                startTime.setValue(startParsed);
+                endDate.setDate(endParsed);
+                endTime.setValue(endParsed);
+
+            } catch (Exception e) {
+                System.out.println("Warning: Could not parse existing timeframe string.");
+            }
         }
 
         int result = JOptionPane.showConfirmDialog(null, panel, existing == null ? "Add Timeframe" : "Edit Timeframe",
@@ -290,7 +328,21 @@ public class WhatIfScenarios {
 
         if (result == JOptionPane.OK_OPTION) {
             try {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                String username = userField.getText().trim();
+
+                // Validate username
+                if (!Validator.validateUser(username)) {
+                    JOptionPane.showMessageDialog(null, "Username cannot contain commas.");
+                    return "None";
+                }
+
+                // Ensure dates are selected
+                if (startDate.getDate() == null || endDate.getDate() == null) {
+                    JOptionPane.showMessageDialog(null, "Please select both start and end dates.");
+                    return "None";
+                }
+
+                // Combine dates + times
                 Calendar start = Calendar.getInstance();
                 start.setTime(startDate.getDate());
                 Calendar startTimeCal = Calendar.getInstance();
@@ -305,8 +357,32 @@ public class WhatIfScenarios {
                 end.set(Calendar.HOUR_OF_DAY, endTimeCal.get(Calendar.HOUR_OF_DAY));
                 end.set(Calendar.MINUTE, endTimeCal.get(Calendar.MINUTE));
 
-                return "User: " + userField.getText() + ", From: " + df.format(start.getTime())
-                        + " → " + df.format(end.getTime());
+                // Convert to custom DateTime class
+                DateTime startTF = new DateTime(
+                        start.get(Calendar.YEAR),
+                        start.get(Calendar.MONTH) + 1,
+                        start.get(Calendar.DAY_OF_MONTH),
+                        start.get(Calendar.HOUR_OF_DAY),
+                        start.get(Calendar.MINUTE)
+                );
+                DateTime endTF = new DateTime(
+                        end.get(Calendar.YEAR),
+                        end.get(Calendar.MONTH) + 1,
+                        end.get(Calendar.DAY_OF_MONTH),
+                        end.get(Calendar.HOUR_OF_DAY),
+                        end.get(Calendar.MINUTE)
+                );
+
+                // Validate date order
+                if (!Validator.validateDates(startTF, endTF)) {
+                    JOptionPane.showMessageDialog(null, "End time must be after start time.");
+                    return "None";
+                }
+
+                // Format valid timeframe string
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                return "User: " + username + ", From: " + df.format(start.getTime()) + " → " + df.format(end.getTime());
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Invalid date/time input.");
             }
@@ -314,6 +390,7 @@ public class WhatIfScenarios {
 
         return "None";
     }
+
     private static void openGeneralChangesWindow() {
         JDialog dialog = new JDialog((Frame) null, "General Info Changes", true);
         dialog.setSize(400, 250);
@@ -343,7 +420,16 @@ public class WhatIfScenarios {
 
 
             try {
+                if (!Validator.validateDouble(tariffInput)) {
+                    JOptionPane.showMessageDialog(dialog, "Tariff must be a decimal number.");
+                    return;
+                }
+
                 double newTariff = Double.parseDouble(tariffInput);
+                if (!Validator.validateElectricityTariff(newTariff)) {
+                    JOptionPane.showMessageDialog(dialog, "Tariff must be between 0.05 and 0.50 €/kWh.");
+                    return;
+                }
 
 
 
