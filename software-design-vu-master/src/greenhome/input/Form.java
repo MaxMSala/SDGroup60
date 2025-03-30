@@ -524,7 +524,7 @@ public class Form {
 
     public void mergeAllData() {
         StringBuilder sb = new StringBuilder();
-        House h = House.getInstance();
+
         if (!houseInfo.isEmpty()) {
             sb.append(houseInfo).append("\n\n");
         } else {
@@ -572,8 +572,9 @@ public class Form {
 
         String finalInput = sb.toString();
         System.out.println("✅ Final submission to parser:\n" + finalInput);
+        House h = House.getInstance();
         Parser.stringIntoHouse(finalInput);
         System.out.println("flag");
-        System.out.println(h.getTimeframes().getFirst().getCarbonFootprint());
+        System.out.println(House.getInstance().getTimeframes().getFirst().getCarbonFootprint());
         Parser.saveHouse();}
 }
