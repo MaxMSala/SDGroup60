@@ -16,7 +16,7 @@ public class Main {
         House.constructInstance(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", 0.0);
         Parser.loadHouse();
         Form.main(new String[]{});
-        Parser.saveHouse();
+        System.out.println("saveHouse");
         //System.out.println(CI.fetchCarbonIntensity());
     }
 }
