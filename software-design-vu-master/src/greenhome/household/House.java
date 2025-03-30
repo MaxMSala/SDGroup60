@@ -1,7 +1,6 @@
 package greenhome.household;
 
 import greenhome.time.DateTime;
-import greenhome.time.Timeframe;
 
 import java.time.Duration;
 import java.time.LocalDateTime;

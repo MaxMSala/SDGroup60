@@ -3,9 +3,7 @@ import java.util.*;
 
 import greenhome.apiintegration.CarbonIntensity;
 import greenhome.household.*;
-import greenhome.time.DateTime;
-import greenhome.time.Timeframe;
-import java.time.LocalTime;
+import greenhome.household.Timeframe;
 
 
 public class Recommendations {

@@ -1,7 +1,5 @@
 package greenhome.household;
 
-import greenhome.time.Timeframe;
-
 import java.util.List;
 
 public class Appliance {
