@@ -250,7 +250,7 @@ public class Parser {
         for (Appliance appliance : h.getAppliances()){
             stringB.append("\nAppliance: ");
             stringB.append(appliance.getName());
-            System.out.println(h.getTimeframes());
+            System.out.println("timeframe user 1: "+ h.getTimeframes().getFirst().getUsers().getFirst().getName());
             for (Timeframe timeframe : h.getTimeframes()){
                 if (appliance == timeframe.getAppliance()){
                     stringB.append("\n - User: ");
