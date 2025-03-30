@@ -16,8 +16,21 @@ public class Parser {
         // default constructor or overload as needed
     }
 
+    public static void stringIntoHouse (String data) {
+        System.out.println(data);
+    }
+
+    public static void whatifStringModHouse(String data) {
+        System.out.println(data);
+    }
+
+    public static String houseToString() {
+        System.out.println("lick em and weep");
+        return null;
+    }
+
     // Methods
-    public static void stringIntoHouse(String data) {
+   /* public static void stringIntoHouse(String data) {
         String[] lines = data.split("\n");
         House h = House.getInstance();
         boolean tfFlag = false;
@@ -42,8 +55,8 @@ public class Parser {
                 tfFlag = false;
             } else if (line.startsWith("Appliance") && !tfFlag) {
                 String name = lines[++i].split(": ")[line.split(": ").length-1];
-                int powerConsumption = Integer.parseInt(lines[++i].split(": ")[line.split(": ").length]);
-                double embodiedEmission = Double.parseDouble(lines[++i].split(": ")[line.split(": ").length]);
+                double powerConsumption = Double.parseDouble(lines[++i].split(": ")[line.split(": ").length-1]);
+                double embodiedEmission = Double.parseDouble(lines[++i].split(": ")[line.split(": ").length-1])/10;
                h.addAppliance(new Appliance(name, powerConsumption, embodiedEmission));
             } else if (line.startsWith("TIMEFRAMES")){
                 tfFlag = true;
@@ -101,8 +114,8 @@ public class Parser {
                 tfFlag = false;
             } else if (line.startsWith("Appliance") && !tfFlag) {
                 String name = lines[++i].split(": ")[line.split(": ").length-1];
-                int powerConsumption = Integer.parseInt(lines[++i].split(": ")[line.split(": ").length-1]);
-                double embodiedEmission = Double.parseDouble(lines[++i].split(": ")[line.split(": ").length-1]);
+                double powerConsumption = Double.parseDouble(lines[++i].split(": ")[line.split(": ").length-1]);
+                double embodiedEmission = Double.parseDouble(lines[++i].split(": ")[line.split(": ").length-1])/10;
                 appliances.add(new Appliance(name, powerConsumption, embodiedEmission));
             } else if (line.startsWith("TIMEFRAMES")){
                 tfFlag = true;
@@ -133,6 +146,10 @@ public class Parser {
         h.modTimeframes(timeframes);
         h.modUser(users);
         h.modAppliances(appliances);
+        System.out.println("HOUSE VALUES");
+        System.out.println(h.getTimeframes().toString());
+        System.out.println(h.getResidents().toString());
+        System.out.println(h.getAppliances().toString());
     }
 
     public static String houseToString() {
@@ -181,7 +198,7 @@ public class Parser {
         System.out.println("Home to String");
         System.out.println(stringB.toString());
         return stringB.toString();
-    }
+    } */
 
 
     public static void saveHouse() {
