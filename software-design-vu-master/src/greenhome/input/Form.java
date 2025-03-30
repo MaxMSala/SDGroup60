@@ -485,7 +485,7 @@ public class Form {
             String start = dateFormat.format(startDateChooser.getDate()) + " " + timeFormat.format(startTimeSpinner.getValue());
             String end = dateFormat.format(endDateChooser.getDate()) + " " + timeFormat.format(endTimeSpinner.getValue());
 
-            String timeframe = "User: " + user + ", Start: " + start + ", End: " + end;
+            String timeframe = "User: " + user + "\n Start: " + start + "\n End: " + end;
 
             // Format user list into string (e.g., "- Alice\n- Bob\n")
             StringBuilder usersString = new StringBuilder();

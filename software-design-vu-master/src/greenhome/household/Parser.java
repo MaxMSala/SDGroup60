@@ -4,6 +4,7 @@ import greenhome.time.DateTime;
 import java.io.*;
 import org.json.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static greenhome.validation.Validator.validateDates;
@@ -16,18 +17,249 @@ public class Parser {
         // default constructor or overload as needed
     }
 
+    /**
+     HOUSE INFO:
+     Region: Andorra
+     Tariff: 0.34
+     Start DateTime: 2025-03-01 21:17
+     End DateTime: 2025-03-31 21:17
+
+     USERS:
+     - Steve
+     - Bob
+
+     APPLIANCES:
+     Name: Fridge
+     Power Consumption: 99
+     Embodied Emission: 99.0
+
+
+     TIMEFRAMES:
+     Appliance: Fridge
+     - User: Steve
+     Start: 2025-03-04 21:17
+     End: 2025-03-06 21:17
+     */
     public static void stringIntoHouse (String data) {
+        System.out.println("\n\nSTRING TO HOUSE \n\n");
         System.out.println(data);
+        String[] lines = data.split("\n");
+        int i = 0;
+        House h = House.getInstance();
+        while (i < lines.length)  {
+            String line = lines[i].trim();
+            if (line.startsWith("Region")){
+                line.replaceFirst("Region: ","");
+                h.setRegion(line);
+            } else if (line.startsWith("Tariff")) {
+                line.replaceFirst("Tariff: ","");
+                h.setTariff(Double.parseDouble(line));
+            } else if (line.startsWith("Start DateTime")) {
+                String startString = line.replaceFirst("Start DateTime: ","");
+                List<Integer> startFVals = DateTime.stringToVals(startString);
+                DateTime startF = new DateTime(startFVals.get(0),startFVals.get(1),startFVals.get(2),startFVals.get(3),startFVals.get(4));
+                h.setStart(startF);
+            } else if (line.startsWith("End DateTime")) {
+                String endString = line.replaceFirst("End DateTime: ","");
+                List<Integer> endFVals = DateTime.stringToVals(endString);
+                DateTime endF = new DateTime(endFVals.get(0),endFVals.get(1),endFVals.get(2),endFVals.get(3),endFVals.get(4));
+                h.setEnd(endF);
+            } else if (line.startsWith("USERS")) {
+                String newLine = lines[++i].trim();
+                while (newLine.startsWith("- ")){
+                    newLine = newLine.replaceFirst("- ", "");
+                    User placeHUser = new User(newLine);
+                    h.addUser(placeHUser);
+                    newLine = lines[++i].trim();
+                }
+            } else if (line.startsWith("APPLIANCES")) {
+                String newLine = lines[++i].trim();
+                while (newLine.startsWith("Appliance")){
+                    newLine = lines[++i].trim();
+                    String name = newLine.replaceFirst("Name: ","");
+                    newLine = lines[++i].trim();
+                    String power = newLine.replaceFirst("Power Consumption: ","");
+                    newLine = lines[++i].trim();
+                    String emissions = newLine.replaceFirst("Embodied Emission: ","");
+                    newLine = lines[++i].trim();
+                    Appliance placeHAppliance = new Appliance(name, Double.parseDouble(power), Double.parseDouble(emissions)/10);
+                    h.addAppliance(placeHAppliance);
+                    newLine = lines[++i].trim();
+                }
+
+            } else if (line.startsWith("TIMEFRAMES PER APPLIANCE")) {
+                String newLine = lines[++i].trim();
+                while (newLine.startsWith("Appliance")){
+                    String applianceName = newLine.replaceFirst("Appliance: ","");
+
+                    newLine = lines[++i].trim();
+
+                    List<String> usernameList = new ArrayList<String>(Arrays.asList(newLine.replaceFirst(" - User:","").split(", ")));
+                    List<User> usersList = null;
+                    for (int x = 0; x < usernameList.size(); x++){
+                        usersList.add(new User(usernameList.get(x)));
+                    }
+                    newLine = lines[++i].trim();
+                    String startString = newLine.replaceFirst(" Start: ","");
+                    newLine = lines[++i].trim();
+                    String endString = newLine.replaceFirst(" End: ","");
+
+                    List<Integer> startTFVals = DateTime.stringToVals(startString);
+                    List<Integer> endTFVals = DateTime.stringToVals(endString);
+                    DateTime startTF = new DateTime(startTFVals.get(0),startTFVals.get(1),startTFVals.get(2),startTFVals.get(3),startTFVals.get(4));
+                    DateTime endTF = new DateTime(endTFVals.get(0),endTFVals.get(1),endTFVals.get(2),endTFVals.get(3),endTFVals.get(4));
+
+                    Appliance chosenAppliance = new Appliance();
+                    for (Appliance appliance : h.getAppliances()) {
+                        if (appliance.getName() == applianceName) {
+                            chosenAppliance = appliance;
+                        }
+                    }
+
+                    if(validateDates(h.getStart(), startTF) && validateDates(endTF, h.getEnd())) {
+                        h.addTimeframe(new Timeframe(usersList, chosenAppliance, startTF, endTF));
+                    }
+                    newLine = lines[++i].trim();
+                }
+            }
+        }
+
     }
 
     public static void whatifStringModHouse(String data) {
+        System.out.println("\n\nSTRING TO HOUSE \n\n");
         System.out.println(data);
+        String[] lines = data.split("\n");
+        List<User> userListToReplace = null;
+        List<Appliance> applianceListToReplace = null;
+        List<Timeframe> tfListToReplace = null;
+        int i = 0;
+        House h = House.getInstance();
+        while (i < lines.length)  {
+            String line = lines[i].trim();
+            if (line.startsWith("Region")){
+                line.replaceFirst("Region: ","");
+                h.setRegion(line);
+            } else if (line.startsWith("Tariff")) {
+                line.replaceFirst("Tariff: ","");
+                h.setTariff(Double.parseDouble(line));
+            } else if (line.startsWith("Start DateTime")) {
+                String startString = line.replaceFirst("Start DateTime: ","");
+                List<Integer> startFVals = DateTime.stringToVals(startString);
+                DateTime startF = new DateTime(startFVals.get(0),startFVals.get(1),startFVals.get(2),startFVals.get(3),startFVals.get(4));
+                h.setStart(startF);
+            } else if (line.startsWith("End DateTime")) {
+                String endString = line.replaceFirst("End DateTime: ","");
+                List<Integer> endFVals = DateTime.stringToVals(endString);
+                DateTime endF = new DateTime(endFVals.get(0),endFVals.get(1),endFVals.get(2),endFVals.get(3),endFVals.get(4));
+                h.setEnd(endF);
+            } else if (line.startsWith("USERS")) {
+                String newLine = lines[++i].trim();
+                while (newLine.startsWith("- ")){
+                    newLine = newLine.replaceFirst("- ", "");
+                    User placeHUser = new User(newLine);
+                    userListToReplace.add(placeHUser);
+                    newLine = lines[++i].trim();
+                }
+            } else if (line.startsWith("APPLIANCES")) {
+                String newLine = lines[++i].trim();
+                while (newLine.startsWith("Appliance")){
+                    newLine = lines[++i].trim();
+                    String name = newLine.replaceFirst("Name: ","");
+                    newLine = lines[++i].trim();
+                    String power = newLine.replaceFirst("Power Consumption: ","");
+                    newLine = lines[++i].trim();
+                    String emissions = newLine.replaceFirst("Embodied Emission: ","");
+                    newLine = lines[++i].trim();
+                    Appliance placeHAppliance = new Appliance(name, Double.parseDouble(power), Double.parseDouble(emissions)/10);
+                    applianceListToReplace.add(placeHAppliance);
+                    newLine = lines[++i].trim();
+                }
+
+            } else if (line.startsWith("TIMEFRAMES PER APPLIANCE")) {
+                String newLine = lines[++i].trim();
+                while (line.startsWith("Appliance")){
+                    System.out.println("looping");
+                    String applianceName = newLine.replaceFirst("Appliance: ","");
+
+                    newLine = lines[++i].trim();
+
+                    List<String> usernameList = new ArrayList<String>(Arrays.asList(newLine.replaceFirst(" - User:","").split(", ")));
+                    List<User> usersList = null;
+                    for (int x = 0; x < usernameList.size(); x++){
+                        usersList.add(new User(usernameList.get(x)));
+                    }
+                    newLine = lines[++i].trim();
+                    String startString = newLine.replaceFirst(" Start: ","");
+                    newLine = lines[++i].trim();
+                    String endString = newLine.replaceFirst(" End: ","");
+
+                    List<Integer> startTFVals = DateTime.stringToVals(startString);
+                    List<Integer> endTFVals = DateTime.stringToVals(endString);
+                    DateTime startTF = new DateTime(startTFVals.get(0),startTFVals.get(1),startTFVals.get(2),startTFVals.get(3),startTFVals.get(4));
+                    DateTime endTF = new DateTime(endTFVals.get(0),endTFVals.get(1),endTFVals.get(2),endTFVals.get(3),endTFVals.get(4));
+
+                    Appliance chosenAppliance = new Appliance();
+                    for (Appliance appliance : applianceListToReplace) {
+                        if (appliance.getName() == applianceName) {
+                            chosenAppliance = appliance;
+                        }
+                    }
+
+                    if(validateDates(h.getStart(), startTF) && validateDates(endTF, h.getEnd())) {
+                        tfListToReplace.add(new Timeframe(usersList, chosenAppliance, startTF, endTF));
+                    }
+                    line = lines[++i].trim();
+                }
+            }
+        }
+        h.modTimeframes(tfListToReplace);
+        h.modUser(userListToReplace);
+        h.modAppliances(applianceListToReplace);
     }
 
     public static String houseToString() {
-        System.out.println("lick em and weep");
-        return null;
+        System.out.println("houseToString");
+        StringBuilder stringB = new StringBuilder();
+        House h = House.getInstance();
+        stringB.append("HOUSE INFO: \nRegion: " + h.getRegion() + "\nTariff: "+ h.getElectricityTariff()+"\nStart DateTime: "+ h.getStart().valsToString()+"\nEnd DateTime: "+ h.getEnd().valsToString()+ "\n");
+        stringB.append("USERS: ");
+        for (User user : h.getResidents()){
+            stringB.append("\n- ");
+            stringB.append(user.getName());
+        }
+        stringB.append("\n");
+        stringB.append("\nAPPLIANCES:");
+        for (Appliance appliance : h.getAppliances()){
+            stringB.append("\nName: ");
+            stringB.append(appliance.getName());
+            stringB.append("\nPower Consumption: ");
+            stringB.append(appliance.getPowerConsumption());
+            stringB.append("\nEmbodied Emission: ");
+            stringB.append(appliance.getEmbodiedEmissions());
+            stringB.append("\n");
+        }
+        stringB.append("\nTIMEFRAMES:");
+        for (Appliance appliance : h.getAppliances()){
+            stringB.append("\nAppliance: ");
+            stringB.append(appliance.getName());
+            for (Timeframe timeframe : h.getTimeframes()){
+                if (appliance == timeframe.getAppliance()){
+                    stringB.append("\n - User: ");
+                    for (User user : timeframe.getUsers()){
+                        stringB.append(user.getName());
+                        stringB.append(", ");
+                    }
+                    stringB.setLength(stringB.length() - 2);
+                }
+                stringB.append("\n Start:" + timeframe.getPeriod()[0].valsToString());
+                stringB.append("\n End:" + timeframe.getPeriod()[1].valsToString());
+
+            }
+        }
+        return stringB.toString();
     }
+
 
     // Methods
    /* public static void stringIntoHouse(String data) {

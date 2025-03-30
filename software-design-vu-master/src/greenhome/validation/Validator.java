@@ -11,16 +11,16 @@ public class Validator {
         //System.out.println("flag:StartValidate\n");
         //System.out.println(Arrays.toString(timeframe.split(": ")[1].split(", Start:")[0].split(", ")));
         //System.out.println(timeframe.split(": ")[1].split(", Start:")[0].split(", ").length);
-        for (int j = 0; j < timeframe.split(": ")[1].split(", Start:")[0].split(", ").length-1; j++) {
+        for (int j = 0; j < timeframe.split("\n")[1].replaceFirst("- User: ","").split(", ").length; j++) {
             //System.out.println("flag:ForLoop1\n");
             for (int k = 0; k < users.split("\n").length; k++){
                 //System.out.println("flag:ForLoop2\n");
                 //System.out.println(users.split("\n")[k].replaceFirst("- ",""));
                 //System.out.println(timeframe.split(": ")[1]);
                 //System.out.println(timeframe.split(": ")[1].split(", Start")[0]);
-                //System.out.println(j);
-                //System.out.println(timeframe.split(": ")[1].split(", Start")[0].split(", ")[j]);
-                if (users.split("\n")[k].replaceFirst("- ", "").equals(timeframe.split(": ")[1].split(", Start")[0].split(", ")[j])) {
+                System.out.println(j);
+                System.out.println(timeframe.split("\n")[1].replaceFirst("- User: ","").split(", ")[j]);
+                if (users.split("\n")[k].replaceFirst("- ", "").equals(timeframe.split("\n")[1].replaceFirst("- User: ","").split(", ")[j])) {
                     //System.out.println("match");
                     foundNum++;
                }
