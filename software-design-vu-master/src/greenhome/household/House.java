@@ -105,7 +105,7 @@ public class House {
         this.footPrintGenerated = totalFootPrint;
     }
 
-    private void calcEcoScore() {
+    private void calcEcoScore()     {
         double totalFootPrint = 0.1;
 
         for (Appliance appliance : appliances) {
@@ -117,6 +117,11 @@ public class House {
         Duration runTime = Duration.between(start, end);
         double ecoScore = 0.0;
         ecoScore = 100 / (1 + Math.exp(0.04 * ((totalFootPrint / runTime.toHours() ) - 1125)));
+        System.out.println((totalFootPrint / runTime.toHours() ));
+        System.out.println(Math.exp(0.04 * ((totalFootPrint / runTime.toHours() ) - 1125)));
+
+        System.out.println(ecoScore);
+
         this.ecoScore = (int) ecoScore;
     }
 

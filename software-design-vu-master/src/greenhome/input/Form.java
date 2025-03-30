@@ -427,7 +427,7 @@ public class Form {
         applianceFrame.setVisible(true);
     }
 
-    private static String addApplianceTimeframe(JFrame parentFrame, Form form) {
+    public static String addApplianceTimeframe(JFrame parentFrame, Form form) {
         JPanel timeframePanel = new JPanel();
         timeframePanel.setLayout(new BoxLayout(timeframePanel, BoxLayout.Y_AXIS));
 
@@ -543,6 +543,7 @@ public class Form {
             sb.append("Start DateTime: 0000-00-00 00:00\n");
             sb.append("End DateTime: 0000-00-00 00:00\n\n");
         }
+        sb.append("\nUSERS\n");
 
         for (String user : users) {
             sb.append("- ").append(user).append("\n");
@@ -577,9 +578,10 @@ public class Form {
             }
         }
 
-        sb.append("\n----- End of Report -----");
+        //sb.append("\n----- End of Report -----");
 
         String finalInput = sb.toString();
         System.out.println("✅ Final submission to parser:\n" + finalInput);
-        Parser.stringIntoHouse(finalInput);    }
+        Parser.stringIntoHouse(finalInput);
+        Parser.saveHouse();}
 }
