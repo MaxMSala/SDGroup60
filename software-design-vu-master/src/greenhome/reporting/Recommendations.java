@@ -9,20 +9,26 @@ import greenhome.time.DateTime;
 
 public class Recommendations {
 
-    public static String generate() {
+    public static String generate(House house) {
         StringBuilder recs = new StringBuilder();
 
         recs.append("---------------------------------------------------------------------------------------------\n");
         recs.append("Household Eco-Score: ");
 
-        House house = House.getInstance();
+        //House house = House.getInstance();
 
         // EcoScore feedback
-        System.out.println(house.getEcoScore());
-        if (house.getEcoScore() < 75) {
-            recs.append("LOW! Look at recommendations below how can you do better!.\n");
+        System.out.println("House eco score: " + house.getEcoScore());
+        if (house.getEcoScore() >= 75) {
+            String formatted = String.format("STRONG (%d)! Keep optimizing your energy habits. Look below at recommendations!\n", house.getEcoScore());
+            recs.append(formatted);
+
+        } else if (house.getEcoScore() >= 50) {
+            String formatted = String.format("DECENT (%d)! Keep optimizing your energy habits. Look below at recommendations!\n", house.getEcoScore());
+            recs.append(formatted);
         } else {
-            recs.append("STRONG! Keep optimizing your energy habits. Look below at recommendations!\n");
+            String formatted = String.format("WEAK (%d)! Keep optimizing your energy habits. Look below at recommendations!\n", house.getEcoScore());
+            recs.append(formatted);
         }
         recs.append("---------------------------------------------------------------------------------------------\n");
 
@@ -129,54 +135,55 @@ public class Recommendations {
         return recs.toString();
     }
 
-//    public static void main(String[] args) {
-//        try {
-//            // === Create Mock Data ===
-//
-//            User user1 = new User("Alice");
-//            User user2 = new User("Bob");
-//            // List with only Alice
-//            List<User> onlyAlice = new ArrayList<>(List.of(user1));
-//
-//            // List with only Bob
-//            List<User> onlyBob = new ArrayList<>(List.of(user2));
-//
-//            // List with both
-//            List<User> bothUsers = new ArrayList<>(List.of(user1, user2));
-//
-//            Appliance fridge = new Appliance("Fridge", 10, 10.0);
-//            Appliance heater = new Appliance("Heater", 2.5, 50.0);
-//            List<Appliance> appliances = new ArrayList<>(List.of(fridge, heater));
-//            fridge.setGeneratedFootprint(20);
-//            heater.setGeneratedFootprint(7);
-//
-//            // Create manual DateTime instances
-//            DateTime start1 = new DateTime(27, 3, 2025, 8, 0);
-//            DateTime end1 = new DateTime(30, 3, 2025, 10, 0);
-//            DateTime start2 = new DateTime(27, 3, 2025, 14, 0);
-//            DateTime end2 = new DateTime(31, 3, 2025, 16, 0);
-//
-//            List<Integer> carbonIntensities = Arrays.asList(200, 220, 180);
-//
-//            Timeframe tf1 = new Timeframe(onlyBob, heater, start1, end1);
-//            Timeframe tf2 = new Timeframe(onlyAlice, fridge, start2, end2);
-//            List<Timeframe> timeframes = new ArrayList<>(List.of(tf1, tf2));
-//
-//            DateTime startDate = new DateTime(27, 3, 2025, 8, 0);
-//            DateTime endDate = new DateTime(30, 3, 2025, 8, 0);
-//
-//            House mockHouse = House.constructInstance(bothUsers, appliances, timeframes, "NL", 0.25);
-//            mockHouse.setStart(startDate);
-//            mockHouse.setEnd(endDate);
-//
-//            System.out.println("Alice CF: " + user1.getCarbonFootprint());
-//            // === Generate & print recommendations ===
-//            String output = generate(mockHouse);
-//            System.out.println(output);
-//
-//        } catch (Exception e) {
-//            System.out.println("⚠️ Error during mock execution: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
+    public static void main(String[] args) {
+        try {
+            // === Create Mock Data ===
+
+            User user1 = new User("Alice");
+            User user2 = new User("Bob");
+            // List with only Alice
+            List<User> onlyAlice = new ArrayList<>(List.of(user1));
+
+            // List with only Bob
+            List<User> onlyBob = new ArrayList<>(List.of(user2));
+
+            // List with both
+            List<User> bothUsers = new ArrayList<>(List.of(user1, user2));
+
+            Appliance fridge = new Appliance("Fridge", 10, 10.0);
+            Appliance heater = new Appliance("Heater", 2.5, 50.0);
+            List<Appliance> appliances = new ArrayList<>(List.of(fridge, heater));
+            fridge.setGeneratedFootprint(20);
+            heater.setGeneratedFootprint(7);
+
+            // Create manual DateTime instances
+            DateTime start1 = new DateTime(27, 3, 2025, 8, 0);
+            DateTime end1 = new DateTime(30, 3, 2025, 10, 0);
+            DateTime start2 = new DateTime(27, 3, 2025, 14, 0);
+            DateTime end2 = new DateTime(31, 3, 2025, 16, 0);
+
+            List<Integer> carbonIntensities = Arrays.asList(200, 220, 180);
+
+            Timeframe tf1 = new Timeframe(onlyBob, heater, start1, end1);
+            Timeframe tf2 = new Timeframe(onlyAlice, fridge, start2, end2);
+            List<Timeframe> timeframes = new ArrayList<>(List.of(tf1, tf2));
+
+            DateTime startDate = new DateTime(27, 3, 2025, 8, 0);
+            DateTime endDate = new DateTime(30, 3, 2025, 8, 0);
+
+            House mockHouse = House.constructInstance(bothUsers, appliances, timeframes, "NL", 0.25);
+            mockHouse.setStart(startDate);
+            mockHouse.setEnd(endDate);
+
+            System.out.println("Alice CF: " + user1.getCarbonFootprint());
+            System.out.println("Bob CF: " + user2.getCarbonFootprint());
+            // === Generate & print recommendations ===
+            String output = generate(mockHouse);
+            System.out.println(output);
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Error during mock execution: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

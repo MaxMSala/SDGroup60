@@ -68,7 +68,10 @@ public class User {
                 }
             }
         }
-        ecoScore = 100 / (1 + Math.exp(0.04 * ((getCarbonFootprint() / totalHours) - 180)));
+        double normalized = getCarbonFootprint() / totalHours;
+        ecoScore = 100 - Math.min(100, Math.log1p(normalized) * 10);
+
+
         this.ecoScore = (int) ecoScore;
 
     }
