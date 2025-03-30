@@ -64,7 +64,8 @@ public class WhatIfScenarios {
     }
       //right one !!!!!
     public static void openApplianceScenarioWindow() {
-            String original = Parser.houseToString();
+        System.out.println(house.getTimeframes());
+        String original = Parser.houseToString();
 
         JDialog dialog = new JDialog((Frame) null, "Edit Entire House (What-If)", true);
             dialog.setSize(800, 600);

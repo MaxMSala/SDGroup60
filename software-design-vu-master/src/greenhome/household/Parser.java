@@ -130,8 +130,7 @@ public class Parser {
 
     public static void whatifStringModHouse(String data) {
         System.out.println("\n\nSTRING TO HOUSE \n\n");
-        int l = 0;
-        System.out.println("flag" + ++l);
+        System.out.println("flag 123" );
         String[] lines = data.split("\n");
         List<User> userListToReplace = null;
         List<Appliance> applianceListToReplace = null;

@@ -2,6 +2,7 @@ package greenhome.input;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+import greenhome.household.House;
 import greenhome.household.Parser;
 import greenhome.reporting.Report;
 import greenhome.validation.Validator;
@@ -523,7 +524,7 @@ public class Form {
 
     public void mergeAllData() {
         StringBuilder sb = new StringBuilder();
-
+        House h = House.getInstance();
         if (!houseInfo.isEmpty()) {
             sb.append(houseInfo).append("\n\n");
         } else {
@@ -573,5 +574,6 @@ public class Form {
         System.out.println("✅ Final submission to parser:\n" + finalInput);
         Parser.stringIntoHouse(finalInput);
         System.out.println("flag");
+        System.out.println(h.getTimeframes().getFirst().getCarbonFootprint());
         Parser.saveHouse();}
 }
