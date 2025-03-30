@@ -427,7 +427,7 @@ public class Form {
         applianceFrame.setVisible(true);
     }
 
-    private static String addApplianceTimeframe(JFrame parentFrame, Form form) {
+    public static String addApplianceTimeframe(JFrame parentFrame, Form form) {
         JPanel timeframePanel = new JPanel();
         timeframePanel.setLayout(new BoxLayout(timeframePanel, BoxLayout.Y_AXIS));
 
@@ -543,6 +543,7 @@ public class Form {
             sb.append("Start DateTime: 0000-00-00 00:00\n");
             sb.append("End DateTime: 0000-00-00 00:00\n\n");
         }
+        sb.append("\nUSERS\n");
 
         for (String user : users) {
             sb.append("- ").append(user).append("\n");
