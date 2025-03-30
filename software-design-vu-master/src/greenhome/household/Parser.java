@@ -218,6 +218,7 @@ public class Parser {
             }
             i++;
         }
+
         h.modTimeframes(tfListToReplace);
         h.modUser(userListToReplace);
         h.modAppliances(applianceListToReplace);
@@ -249,6 +250,7 @@ public class Parser {
         for (Appliance appliance : h.getAppliances()){
             stringB.append("\nAppliance: ");
             stringB.append(appliance.getName());
+            System.out.println(h.getTimeframes());
             for (Timeframe timeframe : h.getTimeframes()){
                 if (appliance == timeframe.getAppliance()){
                     stringB.append("\n - User: ");
@@ -263,7 +265,7 @@ public class Parser {
 
             }
         }
-
+        System.out.println(stringB.toString());
         return stringB.toString();
     }
 
