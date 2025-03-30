@@ -13,8 +13,8 @@ public class Main {
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
         System.out.println("Welcome to GreenHome!");
-        Parser.loadHouse();
         House.constructInstance(new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", 0.0);
+        Parser.loadHouse();
         Form.main(new String[]{});
         Parser.saveHouse();
         //System.out.println(CI.fetchCarbonIntensity());
