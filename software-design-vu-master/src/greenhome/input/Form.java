@@ -3,6 +3,7 @@ package greenhome.input;
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 import greenhome.household.Parser;
+import greenhome.reporting.Report;
 import greenhome.validation.Validator;
 
 import java.awt.*;
@@ -412,7 +413,7 @@ public class Form {
             finalReportButton.addActionListener(ev -> {
                 form.mergeAllData();
                 JOptionPane.showMessageDialog(confirmFrame, summary, "Final Report", JOptionPane.INFORMATION_MESSAGE);
-
+                Report.main(new String[]{});
             });
 
             confirmFrame.setLocationRelativeTo(null);
