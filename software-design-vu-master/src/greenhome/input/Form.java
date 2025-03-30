@@ -577,7 +577,7 @@ public class Form {
             }
         }
 
-        sb.append("\n----- End of Report -----");
+        //sb.append("\n----- End of Report -----");
 
         String finalInput = sb.toString();
         System.out.println("✅ Final submission to parser:\n" + finalInput);
