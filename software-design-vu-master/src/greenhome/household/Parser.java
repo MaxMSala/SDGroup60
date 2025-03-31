@@ -46,6 +46,7 @@ public class Parser {
         String[] lines = data.split("\n");
         int i = 0;
         House h = House.getInstance();
+        System.out.println("\n\nBEFORE WHILE LOOP \n\n");
         while (i < lines.length)  {
             String line = lines[i].trim();
             if (line.startsWith("Region")){
@@ -74,6 +75,7 @@ public class Parser {
                     newLine = lines[++i].trim();
                 }
             } else if (line.startsWith("APPLIANCES")) {
+                System.out.println("\n\nBEFORE NESTED WHILE LOOP 1\n\n");
                 String newLine = lines[++i].trim();
                 while (newLine.startsWith("Appliance")){
                     newLine = lines[++i].trim();
@@ -82,13 +84,14 @@ public class Parser {
                     String power = newLine.replaceFirst("Power Consumption: ","");
                     newLine = lines[++i].trim();
                     String emissions = newLine.replaceFirst("Embodied Emission: ","");
-                    newLine = lines[++i].trim();
+                    //newLine = lines[++i].trim();
                     Appliance placeHAppliance = new Appliance(name, Double.parseDouble(power), Double.parseDouble(emissions)/10);
                     h.addAppliance(placeHAppliance);
                     newLine = lines[++i].trim();
                 }
 
             } else if (line.startsWith("TIMEFRAMES PER APPLIANCE")) {
+                System.out.println("\n\nBEFORE NESTED WHILE LOOP 2\n\n");
                 String newLine = lines[++i].trim();
                 while (newLine.startsWith("Appliance")){
                     String applianceName = newLine.replaceFirst("Appliance: ","");
@@ -96,10 +99,11 @@ public class Parser {
                     newLine = lines[++i].trim();
 
                     List<String> usernameList = new ArrayList<String>(Arrays.asList(newLine.replaceFirst(" - User:","").split(", ")));
-                    List<User> usersList = null;
-                    for (int x = 0; x < usernameList.size(); x++){
-                        usersList.add(new User(usernameList.get(x)));
+                    List<User> usersList = new ArrayList<>();
+                    for (String username : usernameList) {
+                        usersList.add(new User(username));
                     }
+                    System.out.println("after adding users");
                     newLine = lines[++i].trim();
                     String startString = newLine.replaceFirst(" Start: ","");
                     newLine = lines[++i].trim();
@@ -116,11 +120,15 @@ public class Parser {
                             chosenAppliance = appliance;
                         }
                     }
-
+                    System.out.println("before if timeframe insert");
                     if(validateDates(h.getStart(), startTF) && validateDates(endTF, h.getEnd())) {
                         h.addTimeframe(new Timeframe(usersList, chosenAppliance, startTF, endTF));
+                        System.out.println("within if timeframe insert");
+                        System.out.println(h.getTimeframes().getFirst());
                     }
-                    newLine = lines[++i].trim();
+                    if(i+1 < lines.length-1) {
+                        newLine = lines[++i].trim();
+                    }
                 }
             }
             i++;
@@ -485,6 +493,7 @@ public class Parser {
             if(json.has("houseData")) {
                 houseData = json.getString("houseData");
             }else{
+                System.out.println("JSON IS EMPTY, WRITING DEFAULT DATA");
                 saveHouse();
                 houseData = json.getString("houseData");
             }
