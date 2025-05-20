@@ -288,6 +288,6 @@ public class WhatIfScenarios {
         System.out.println("✅ Final What-If Submission:\n" + finalString);
 
         // Send to parser
-        Parser.whatifStringModHouse(finalString);
+        //Parser.whatifStringModHouse(finalString);
     }
 }

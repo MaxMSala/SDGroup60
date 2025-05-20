@@ -8,6 +8,7 @@ import greenhome.reporting.Report;
 import greenhome.validation.Validator;
 
 import java.awt.*;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -573,9 +574,12 @@ public class Form {
         String finalInput = sb.toString();
         System.out.println("✅ Final submission to parser:\n" + finalInput);
         House h = House.getInstance();
-        Parser.stringIntoHouse(finalInput);
+        Parser.populateHouseFromForm(finalInput);
         System.out.println("flag");
-        System.out.println(House.getInstance());
-        System.out.println(House.getInstance().getTimeframes().getFirst().getCarbonFootprint());
-        Parser.saveHouse();}
+        try {
+            Parser.saveHouse("json.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

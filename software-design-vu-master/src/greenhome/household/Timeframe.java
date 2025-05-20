@@ -51,7 +51,12 @@ public class    Timeframe {
         return period;
     }
 
-
+    public DateTime getStart(){
+        return period[0];
+    }
+    public DateTime getEnd(){
+        return period[1];
+    }
     // private calculations
     private void calcFootPrint() {
         double usageHours = getUsageDurationInHoursForAppliance();

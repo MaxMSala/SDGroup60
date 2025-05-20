@@ -12,5 +12,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="toedter.jcalendar" level="project" />
     <orderEntry type="library" name="json" level="project" />
+    <orderEntry type="library" name="google.code.gson" level="project" />
   </component>
 </module>

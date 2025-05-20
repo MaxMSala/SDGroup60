@@ -28,6 +28,19 @@ public class DateTime {
         return vals;
     }
 
+    public static DateTime parseDate(String string) {
+        System.out.println(string);
+        System.out.println(string.split(" "));
+        String string1 = new String(string.split(" ")[0]);
+        String string2 = new String(string.split(" ")[1]);
+        System.out.println(Integer.valueOf(string1.split("-")[0]));
+        System.out.println(Integer.valueOf(string1.split("-")[1]));
+        System.out.println(Integer.valueOf(string1.split("-")[2]));
+        System.out.println(Integer.valueOf(string2.split(":")[0]));
+        System.out.println(Integer.valueOf(string2.split(":")[1]));
+        DateTime date = new DateTime(Integer.valueOf(string1.split("-")[2]),Integer.valueOf(string1.split("-")[1]),Integer.valueOf(string1.split("-")[0]),Integer.valueOf(string2.split(":")[0]),Integer.valueOf(string2.split(":")[1]));
+        return date;
+    }
 
     public DateTime(int day, int month, int year, int hour, int minute) {
         this.day = day;

@@ -10,7 +10,7 @@ import java.util.List;
 public class House {
 
     // Core attributes (initialized on creation)
-    private static  House instance;
+    private static House instance;
     private List<User> residents;
     private List<Appliance> appliances;
     private List<Timeframe> timeframes;
@@ -33,7 +33,7 @@ public class House {
         this.region = region;
         this.electricityTariff = electricityTariff;
         this.startDate = new DateTime(1,1,1,1,1);  // Set to null if no default
-        this.endDate = new DateTime(2,2,2,2,2);;    // Set to null if no default
+        this.endDate = new DateTime(2,2,2,2,2);    // Set to null if no default
         this.ecoScore = 0;
         this.footPrintGenerated = 0.0;
         this.costsGenerated = 0.0;
@@ -41,20 +41,27 @@ public class House {
 
     // Singleton constructor (with params on first call)
     public static synchronized House constructInstance(List<User> residents,
-                                                 List<Appliance> appliances,
-                                                 List<Timeframe> timeframes,
-                                                 String region,
-                                                 double electricityTariff) {
+                                                       List<Appliance> appliances,
+                                                       List<Timeframe> timeframes,
+                                                       String region,
+                                                       double electricityTariff) {
         if (instance == null) {instance = new House(residents, appliances, timeframes, region, electricityTariff);}
         return instance;
     }
 
     // Singleton accessor (after the upper constructor has been already called)
     public static House getInstance() {
-        if (instance == null) {throw new IllegalStateException("House not initialized yet. Use getInstance(...) first.");}
         return instance;
     }
 
+    // Allow external code to overwrite the singleton (e.g., from deserialized data)
+    public static void overwriteInstance(House newHouse) {
+        if (newHouse != null) {
+            instance = newHouse;
+        } else {
+            System.err.println("Warning: Attempted to overwrite House instance with null.");
+        }
+    }
     // interface methods
     // derived getters
     public double getFootPrint() { sumFootPrint(); return this.footPrintGenerated; }
@@ -64,7 +71,11 @@ public class House {
     // setters
     public void setRegion(String region){ this.region = region;}
     public void setTariff(Double tariff){this.electricityTariff = tariff;}
-    public void addUser(User user){this.residents.add(user);};
+    public void addUser(User user){
+        System.out.println(user);
+        System.out.println("flaguser");
+
+        this.residents.add(user);};
     public void addAppliance(Appliance appliance){this.appliances.add(appliance);};
     public void addTimeframe(Timeframe timeframe){this.timeframes.add(timeframe);};
     public void modUser(List<User> newRes){this.residents = newRes;};
