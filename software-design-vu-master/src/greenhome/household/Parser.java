@@ -1,9 +1,7 @@
 package greenhome.household;
 
 import com.google.gson.*;
-import greenhome.household.*;
 import greenhome.time.DateTime;
-
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,263 +9,324 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class Parser {
 
+    // 🔧 MAIN FIX: Always get a valid House instance
     public static void populateHouseFromForm(String finalInput) {
+        System.out.println("🔧 Parser: Starting to populate house from form data");
+
+        // Get or create House instance - NEVER null
         House house = House.getInstance();
-        System.out.println("flag");
-        // Extract HOUSE INFO
-        Pattern houseInfoPattern = Pattern.compile(
-                "Region:\\s*(.*?)\\n\\s*Tariff:\\s*(.*?)\\n\\s*Start DateTime:\\s*(.*?)\\n\\s*End DateTime:\\s*(.*?)\\n",
-                Pattern.DOTALL);
-        Matcher houseInfoMatcher = houseInfoPattern.matcher(finalInput);
-        System.out.println(houseInfoMatcher.toString());
-        if (houseInfoMatcher.find()) {
-            house.setRegion(houseInfoMatcher.group(1).trim());
-            house.setTariff(Double.parseDouble(houseInfoMatcher.group(2).trim()));
-            house.setStart(DateTime.parseDate(houseInfoMatcher.group(3).trim()));
-            house.setEnd(DateTime.parseDate(houseInfoMatcher.group(4).trim()));
-        }
+        System.out.println("✅ Parser: Got House instance: " + house);
 
-        // Extract USERS
-        Map<String, User> userMap = new HashMap<>();
-        Pattern usersPattern = Pattern.compile("USERS\\s*((?:- .*\\n)+)");
-        Matcher usersMatcher = usersPattern.matcher(finalInput);
-        if (usersMatcher.find()) {
-            String[] userLines = usersMatcher.group(1).split("\\n");
-            System.out.println(userLines);
-            for (String line : userLines) {
+        try {
+            // Extract HOUSE INFO
+            Pattern houseInfoPattern = Pattern.compile(
+                    "Region:\\s*(.*?)\\n\\s*Tariff:\\s*(.*?)\\n\\s*Start DateTime:\\s*(.*?)\\n\\s*End DateTime:\\s*(.*?)\\n",
+                    Pattern.DOTALL);
+            Matcher houseInfoMatcher = houseInfoPattern.matcher(finalInput);
 
-                String name = line.replace("-", "").trim();
-                System.out.println(name);
-                if (!name.isEmpty()) {
-                    User user = new User(name);
-                    userMap.put(name, user);
-                    house.addUser(user);
+            if (houseInfoMatcher.find()) {
+                String region = houseInfoMatcher.group(1).trim();
+                String tariffStr = houseInfoMatcher.group(2).trim();
+                String startStr = houseInfoMatcher.group(3).trim();
+                String endStr = houseInfoMatcher.group(4).trim();
+
+                house.setRegion(region);
+                house.setTariff(Double.parseDouble(tariffStr));
+                house.setStart(DateTime.parseDate(startStr));
+                house.setEnd(DateTime.parseDate(endStr));
+
+                System.out.println("✅ House info updated: " + region + ", " + tariffStr);
+            } else {
+                System.out.println("⚠️ No house info found in input, keeping defaults");
+            }
+
+            // Extract USERS
+            Map<String, User> userMap = new HashMap<>();
+            Pattern usersPattern = Pattern.compile("USERS\\s*((?:- .*\\n)+)");
+            Matcher usersMatcher = usersPattern.matcher(finalInput);
+
+            if (usersMatcher.find()) {
+                String[] userLines = usersMatcher.group(1).split("\\n");
+                for (String line : userLines) {
+                    String name = line.replace("-", "").trim();
+                    if (!name.isEmpty()) {
+                        User user = new User(name);
+                        userMap.put(name, user);
+                        house.addUser(user);
+                    }
+                }
+                System.out.println("✅ Added " + userMap.size() + " users");
+            }
+
+            // Extract APPLIANCES
+            Map<String, Appliance> applianceMap = new HashMap<>();
+            Pattern applianceBlockPattern = Pattern.compile(
+                    "Appliance \\d+:\\s*\\n\\s*Name:\\s*(.*?)\\n\\s*Power Consumption:\\s*(.*?)\\n\\s*Embodied Emission:\\s*(.*?)(?:\\n|$)",
+                    Pattern.DOTALL);
+            Matcher applianceMatcher = applianceBlockPattern.matcher(finalInput);
+
+            while (applianceMatcher.find()) {
+                try {
+                    String name = applianceMatcher.group(1).trim();
+                    double consumption = Double.parseDouble(applianceMatcher.group(2).trim());
+                    double emission = Double.parseDouble(applianceMatcher.group(3).trim());
+
+                    Appliance appliance = new Appliance(name, consumption, emission);
+                    applianceMap.put(name, appliance);
+                    house.addAppliance(appliance);
+                } catch (NumberFormatException e) {
+                    System.err.println("⚠️ Error parsing appliance data: " + e.getMessage());
                 }
             }
-        }
+            System.out.println("✅ Added " + applianceMap.size() + " appliances");
 
-        // Extract APPLIANCES
-        Map<String, Appliance> applianceMap = new HashMap<>();
-        Pattern applianceBlockPattern = Pattern.compile(
-                "Appliance \\d+:\\s*\\n\\s*Name:\\s*(.*?)\\n\\s*Power Consumption:\\s*(.*?)\\n\\s*Embodied Emission:\\s*(.*?)(?:\\n|$)",
-                Pattern.DOTALL);
-        Matcher applianceMatcher = applianceBlockPattern.matcher(finalInput);
-        while (applianceMatcher.find()) {
-            String name = applianceMatcher.group(1).trim();
-            System.out.println(name);
-            double consumption = Double.parseDouble(applianceMatcher.group(2).trim());
-            double emission = Double.parseDouble(applianceMatcher.group(3).trim());
-            Appliance appliance = new Appliance(name, consumption, emission);
-            applianceMap.put(name, appliance);
-            house.addAppliance(appliance);
-        }
+            // Extract TIMEFRAMES PER APPLIANCE
+            Pattern timeframeSectionPattern = Pattern.compile(
+                    "TIMEFRAMES PER APPLIANCE(.*)",
+                    Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+            Matcher tfSectionMatcher = timeframeSectionPattern.matcher(finalInput);
 
-        // Extract TIMEFRAMES PER APPLIANCE
-        Pattern timeframeSectionPattern = Pattern.compile(
-                "TIMEFRAMES PER APPLIANCE(.*)",
-                Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-        Matcher tfSectionMatcher = timeframeSectionPattern.matcher(finalInput);
-
-        if (tfSectionMatcher.find()) {
-            String timeframesBlock = tfSectionMatcher.group(1).trim();
-            Pattern applianceTfPattern = Pattern.compile(
-                    "Appliance:\\s*(.*?)\\n((?:\\s*-\\s*User:.*?\\n\\s*Start:.*?\\n\\s*End:.*?(?:\\n|$))+)",
-                    Pattern.DOTALL);
-            Matcher applianceTfMatcher = applianceTfPattern.matcher(timeframesBlock);
-
-            while (applianceTfMatcher.find()) {
-                String applianceName = applianceTfMatcher.group(1).trim();
-                String usageBlock = applianceTfMatcher.group(2);
-
-                Appliance appliance = applianceMap.get(applianceName);
-                if (appliance == null) continue;
-
-                Pattern entryPattern = Pattern.compile(
-                        "-\\s*User:\\s*(.*?)\\n\\s*Start:\\s*(.*?)\\n\\s*End:\\s*(.*?)(?:\\n|$)",
+            if (tfSectionMatcher.find()) {
+                String timeframesBlock = tfSectionMatcher.group(1).trim();
+                Pattern applianceTfPattern = Pattern.compile(
+                        "Appliance:\\s*(.*?)\\n((?:\\s*-\\s*User:.*?\\n\\s*Start:.*?\\n\\s*End:.*?(?:\\n|$))+)",
                         Pattern.DOTALL);
-                Matcher entryMatcher = entryPattern.matcher(usageBlock);
+                Matcher applianceTfMatcher = applianceTfPattern.matcher(timeframesBlock);
 
-                while (entryMatcher.find()) {
-                    System.out.println("flagging");
-                    System.out.println(entryMatcher.group(0));
-                    System.out.println(entryMatcher.group(1));
-                    System.out.println(entryMatcher.group(2));
-                    System.out.println(entryMatcher.group(3));
-                    System.out.println("flaggingstyle");
-                    String usersStr = entryMatcher.group(1).trim();
-                    String startStr = entryMatcher.group(2).trim();
-                    String endStr = entryMatcher.group(3).trim();
+                while (applianceTfMatcher.find()) {
+                    String applianceName = applianceTfMatcher.group(1).trim();
+                    String usageBlock = applianceTfMatcher.group(2);
 
-                    System.out.println(startStr);
-                    DateTime start = DateTime.parseDate(startStr);
-                    System.out.println(endStr);
-                    DateTime end = DateTime.parseDate(endStr);
-
-                    List<User> matchedUsers = new ArrayList<>();
-                    for (String uname : usersStr.split(",")) {
-                        uname = uname.trim();
-                        matchedUsers.add(userMap.get(uname)); // No validation
+                    Appliance appliance = applianceMap.get(applianceName);
+                    if (appliance == null) {
+                        System.err.println("⚠️ Appliance not found: " + applianceName);
+                        continue;
                     }
 
-                    Timeframe tf = new Timeframe(matchedUsers, appliance, start, end);
-                    house.addTimeframe(tf);
+                    Pattern entryPattern = Pattern.compile(
+                            "-\\s*User:\\s*(.*?)\\n\\s*Start:\\s*(.*?)\\n\\s*End:\\s*(.*?)(?:\\n|$)",
+                            Pattern.DOTALL);
+                    Matcher entryMatcher = entryPattern.matcher(usageBlock);
+
+                    while (entryMatcher.find()) {
+                        try {
+                            String usersStr = entryMatcher.group(1).trim();
+                            String startStr = entryMatcher.group(2).trim();
+                            String endStr = entryMatcher.group(3).trim();
+
+                            DateTime start = DateTime.parseDate(startStr);
+                            DateTime end = DateTime.parseDate(endStr);
+
+                            List<User> matchedUsers = new ArrayList<>();
+                            for (String uname : usersStr.split(",")) {
+                                uname = uname.trim();
+                                User user = userMap.get(uname);
+                                if (user != null) {
+                                    matchedUsers.add(user);
+                                } else {
+                                    System.err.println("⚠️ User not found: " + uname);
+                                }
+                            }
+
+                            if (!matchedUsers.isEmpty()) {
+                                Timeframe tf = new Timeframe(matchedUsers, appliance, start, end);
+                                house.addTimeframe(tf);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("⚠️ Error parsing timeframe: " + e.getMessage());
+                        }
+                    }
                 }
             }
+
+            System.out.println("✅ Parser: Successfully populated house with all data");
+
+        } catch (Exception e) {
+            System.err.println("🚨 Parser: Error during population: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
+    // 🔧 IMPROVED: whatif with better error handling
     public static void whatifStringModHouse(String finalInput) {
+        System.out.println("🔄 Parser: Starting what-if scenario modification");
+
         House house = House.getInstance();
-        System.out.println("flag");
-        // Extract HOUSE INFO
-        Pattern houseInfoPattern = Pattern.compile(
-                "Region:\\s*(.*?)\\n\\s*Tariff:\\s*(.*?)\\n\\s*Start DateTime:\\s*(.*?)\\n\\s*End DateTime:\\s*(.*?)\\n",
-                Pattern.DOTALL);
-        Matcher houseInfoMatcher = houseInfoPattern.matcher(finalInput);
-        System.out.println(houseInfoMatcher.toString());
-        if (houseInfoMatcher.find()) {
-            house.setRegion(houseInfoMatcher.group(1).trim());
-            house.setTariff(Double.parseDouble(houseInfoMatcher.group(2).trim()));
-            house.setStart(DateTime.parseDate(houseInfoMatcher.group(3).trim()));
-            house.setEnd(DateTime.parseDate(houseInfoMatcher.group(4).trim()));
-        }
 
-        // Extract USERS
-        List<User> userlist = null;
-
-        Map<String, User> userMap = new HashMap<>();
-        Pattern usersPattern = Pattern.compile("USERS\\s*((?:- .*\\n)+)");
-        Matcher usersMatcher = usersPattern.matcher(finalInput);
-        if (usersMatcher.find()) {
-            String[] userLines = usersMatcher.group(1).split("\\n");
-            System.out.println(userLines);
-            for (String line : userLines) {
-
-                String name = line.replace("-", "").trim();
-                System.out.println(name);
-                if (!name.isEmpty()) {
-                    User user = new User(name);
-                    userMap.put(name, user);
-                    userlist.add(user);
-                }
-            }
-        }
-        house.modUser(userlist);
-
-        // Extract APPLIANCES
-        List<Appliance> appliancelist = null;
-        Map<String, Appliance> applianceMap = new HashMap<>();
-        Pattern applianceBlockPattern = Pattern.compile(
-                "Appliance \\d+:\\s*\\n\\s*Name:\\s*(.*?)\\n\\s*Power Consumption:\\s*(.*?)\\n\\s*Embodied Emission:\\s*(.*?)(?:\\n|$)",
-                Pattern.DOTALL);
-        Matcher applianceMatcher = applianceBlockPattern.matcher(finalInput);
-        while (applianceMatcher.find()) {
-            String name = applianceMatcher.group(1).trim();
-            System.out.println(name);
-            double consumption = Double.parseDouble(applianceMatcher.group(2).trim());
-            double emission = Double.parseDouble(applianceMatcher.group(3).trim());
-            Appliance appliance = new Appliance(name, consumption, emission);
-            applianceMap.put(name, appliance);
-           appliancelist.add(appliance);
-        }
-        house.modAppliances(appliancelist);
-
-        // Extract TIMEFRAMES PER APPLIANCE
-        List<Timeframe> timeframelist = null;
-        Pattern timeframeSectionPattern = Pattern.compile(
-                "TIMEFRAMES PER APPLIANCE(.*)",
-                Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
-        Matcher tfSectionMatcher = timeframeSectionPattern.matcher(finalInput);
-
-        if (tfSectionMatcher.find()) {
-            String timeframesBlock = tfSectionMatcher.group(1).trim();
-            Pattern applianceTfPattern = Pattern.compile(
-                    "Appliance:\\s*(.*?)\\n((?:\\s*-\\s*User:.*?\\n\\s*Start:.*?\\n\\s*End:.*?(?:\\n|$))+)",
+        try {
+            // Extract HOUSE INFO
+            Pattern houseInfoPattern = Pattern.compile(
+                    "Region:\\s*(.*?)\\n\\s*Tariff:\\s*(.*?)\\n\\s*Start DateTime:\\s*(.*?)\\n\\s*End DateTime:\\s*(.*?)\\n",
                     Pattern.DOTALL);
-            Matcher applianceTfMatcher = applianceTfPattern.matcher(timeframesBlock);
+            Matcher houseInfoMatcher = houseInfoPattern.matcher(finalInput);
 
-            while (applianceTfMatcher.find()) {
-                String applianceName = applianceTfMatcher.group(1).trim();
-                String usageBlock = applianceTfMatcher.group(2);
+            if (houseInfoMatcher.find()) {
+                house.setRegion(houseInfoMatcher.group(1).trim());
+                house.setTariff(Double.parseDouble(houseInfoMatcher.group(2).trim()));
+                house.setStart(DateTime.parseDate(houseInfoMatcher.group(3).trim()));
+                house.setEnd(DateTime.parseDate(houseInfoMatcher.group(4).trim()));
+            }
 
-                Appliance appliance = applianceMap.get(applianceName);
-                if (appliance == null) continue;
+            // Extract USERS
+            List<User> userList = new ArrayList<>();
+            Map<String, User> userMap = new HashMap<>();
+            Pattern usersPattern = Pattern.compile("USERS\\s*((?:- .*\\n)+)");
+            Matcher usersMatcher = usersPattern.matcher(finalInput);
 
-                Pattern entryPattern = Pattern.compile(
-                        "-\\s*User:\\s*(.*?)\\n\\s*Start:\\s*(.*?)\\n\\s*End:\\s*(.*?)(?:\\n|$)",
-                        Pattern.DOTALL);
-                Matcher entryMatcher = entryPattern.matcher(usageBlock);
-
-                while (entryMatcher.find()) {
-                    System.out.println("flagging");
-                    System.out.println(entryMatcher.group(0));
-                    System.out.println(entryMatcher.group(1));
-                    System.out.println(entryMatcher.group(2));
-                    System.out.println(entryMatcher.group(3));
-                    System.out.println("flaggingstyle");
-                    String usersStr = entryMatcher.group(1).trim();
-                    String startStr = entryMatcher.group(2).trim();
-                    String endStr = entryMatcher.group(3).trim();
-
-                    System.out.println(startStr);
-                    DateTime start = DateTime.parseDate(startStr);
-                    System.out.println(endStr);
-                    DateTime end = DateTime.parseDate(endStr);
-
-                    List<User> matchedUsers = new ArrayList<>();
-                    for (String uname : usersStr.split(",")) {
-                        uname = uname.trim();
-                        matchedUsers.add(userMap.get(uname)); // No validation
+            if (usersMatcher.find()) {
+                String[] userLines = usersMatcher.group(1).split("\\n");
+                for (String line : userLines) {
+                    String name = line.replace("-", "").trim();
+                    if (!name.isEmpty()) {
+                        User user = new User(name);
+                        userMap.put(name, user);
+                        userList.add(user);
                     }
-
-                    Timeframe tf = new Timeframe(matchedUsers, appliance, start, end);
-                    timeframelist.add(tf);
                 }
             }
-        }
+            house.modUser(userList);
 
-        house.modTimeframes(timeframelist);
+            // Extract APPLIANCES
+            List<Appliance> applianceList = new ArrayList<>();
+            Map<String, Appliance> applianceMap = new HashMap<>();
+            Pattern applianceBlockPattern = Pattern.compile(
+                    "Appliance \\d+:\\s*\\n\\s*Name:\\s*(.*?)\\n\\s*Power Consumption:\\s*(.*?)\\n\\s*Embodied Emission:\\s*(.*?)(?:\\n|$)",
+                    Pattern.DOTALL);
+            Matcher applianceMatcher = applianceBlockPattern.matcher(finalInput);
+
+            while (applianceMatcher.find()) {
+                try {
+                    String name = applianceMatcher.group(1).trim();
+                    double consumption = Double.parseDouble(applianceMatcher.group(2).trim());
+                    double emission = Double.parseDouble(applianceMatcher.group(3).trim());
+
+                    Appliance appliance = new Appliance(name, consumption, emission);
+                    applianceMap.put(name, appliance);
+                    applianceList.add(appliance);
+                } catch (NumberFormatException e) {
+                    System.err.println("⚠️ Error parsing appliance in what-if: " + e.getMessage());
+                }
+            }
+            house.modAppliances(applianceList);
+
+            // Extract TIMEFRAMES PER APPLIANCE
+            List<Timeframe> timeframeList = new ArrayList<>();
+            Pattern timeframeSectionPattern = Pattern.compile(
+                    "TIMEFRAMES PER APPLIANCE(.*)",
+                    Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+            Matcher tfSectionMatcher = timeframeSectionPattern.matcher(finalInput);
+
+            if (tfSectionMatcher.find()) {
+                String timeframesBlock = tfSectionMatcher.group(1).trim();
+                Pattern applianceTfPattern = Pattern.compile(
+                        "Appliance:\\s*(.*?)\\n((?:\\s*-\\s*User:.*?\\n\\s*Start:.*?\\n\\s*End:.*?(?:\\n|$))+)",
+                        Pattern.DOTALL);
+                Matcher applianceTfMatcher = applianceTfPattern.matcher(timeframesBlock);
+
+                while (applianceTfMatcher.find()) {
+                    String applianceName = applianceTfMatcher.group(1).trim();
+                    String usageBlock = applianceTfMatcher.group(2);
+
+                    Appliance appliance = applianceMap.get(applianceName);
+                    if (appliance == null) continue;
+
+                    Pattern entryPattern = Pattern.compile(
+                            "-\\s*User:\\s*(.*?)\\n\\s*Start:\\s*(.*?)\\n\\s*End:\\s*(.*?)(?:\\n|$)",
+                            Pattern.DOTALL);
+                    Matcher entryMatcher = entryPattern.matcher(usageBlock);
+
+                    while (entryMatcher.find()) {
+                        try {
+                            String usersStr = entryMatcher.group(1).trim();
+                            String startStr = entryMatcher.group(2).trim();
+                            String endStr = entryMatcher.group(3).trim();
+
+                            DateTime start = DateTime.parseDate(startStr);
+                            DateTime end = DateTime.parseDate(endStr);
+
+                            List<User> matchedUsers = new ArrayList<>();
+                            for (String uname : usersStr.split(",")) {
+                                uname = uname.trim();
+                                User user = userMap.get(uname);
+                                if (user != null) {
+                                    matchedUsers.add(user);
+                                }
+                            }
+
+                            if (!matchedUsers.isEmpty()) {
+                                Timeframe tf = new Timeframe(matchedUsers, appliance, start, end);
+                                timeframeList.add(tf);
+                            }
+                        } catch (Exception e) {
+                            System.err.println("⚠️ Error parsing timeframe in what-if: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+            house.modTimeframes(timeframeList);
+
+            System.out.println("✅ What-if scenario applied successfully");
+
+        } catch (Exception e) {
+            System.err.println("🚨 Parser: Error during what-if modification: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
+    // 🔧 IMPROVED: Save with error handling
     public static void saveHouse(String filename) throws IOException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter(filename)) {
-            gson.toJson(House.getInstance(), writer);
+        try {
+            House house = House.getInstance();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            try (FileWriter writer = new FileWriter(filename)) {
+                gson.toJson(house, writer);
+                System.out.println("✅ House saved to: " + filename);
+            }
+        } catch (Exception e) {
+            System.err.println("🚨 Error saving house: " + e.getMessage());
+            throw new IOException("Failed to save house", e);
         }
     }
 
+    // 🔧 IMPROVED: Load with better error handling
     public static void loadHouse(String filename) throws IOException {
-        Gson gson = new Gson();
-        try (FileReader reader = new FileReader(filename)) {
-            House loadedHouse = gson.fromJson(reader, House.class);
-            House.overwriteInstance(loadedHouse); // you’ll need to implement this or a similar setter
+        try {
+            Gson gson = new Gson();
+            try (FileReader reader = new FileReader(filename)) {
+                House loadedHouse = gson.fromJson(reader, House.class);
+                if (loadedHouse != null) {
+                    House.overwriteInstance(loadedHouse);
+                    System.out.println("✅ House loaded from: " + filename);
+                } else {
+                    System.out.println("⚠️ Loaded house was null, keeping current instance");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("⚠️ Could not load house from " + filename + ": " + e.getMessage());
+            // Don't throw exception - let the system continue with default house
+            House.getInstance(); // Ensure we have a default house
         }
     }
 
-
-
+    // UNCHANGED: houseToString method
     public static String houseToString() {
         House house = House.getInstance();
         StringBuilder sb = new StringBuilder();
 
-        // HOUSE INFO
         sb.append("HOUSE INFO:\n");
         sb.append("     Region: ").append(house.getRegion()).append("\n");
         sb.append("     Tariff: ").append(house.getElectricityTariff()).append("\n");
         sb.append("     Start DateTime: ").append(house.getStart().toString()).append("\n");
         sb.append("     End DateTime: ").append(house.getEnd().toString()).append("\n\n");
 
-        // USERS
         sb.append("     USERS:\n");
         for (User user : house.getResidents()) {
             sb.append("     - ").append(user.getName()).append("\n");
         }
         sb.append("\n");
 
-        // APPLIANCES
         sb.append("     APPLIANCES:\n");
         for (Appliance appliance : house.getAppliances()) {
             sb.append("     Name: ").append(appliance.getName()).append("\n");
@@ -275,7 +334,6 @@ public class Parser {
             sb.append("     Embodied Emission: ").append(appliance.getEmbodiedEmissions()).append("\n\n");
         }
 
-        // TIMEFRAMES
         sb.append("     TIMEFRAMES:\n");
         for (Timeframe tf : house.getTimeframes()) {
             sb.append("     Appliance: ").append(tf.getAppliance().getName()).append("\n");
@@ -292,7 +350,4 @@ public class Parser {
 
         return sb.toString();
     }
-
 }
-
-
