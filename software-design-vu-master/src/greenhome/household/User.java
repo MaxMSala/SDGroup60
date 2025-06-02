@@ -1,4 +1,5 @@
 package greenhome.household;
+import java.util.Objects;
 
 public class User {
 
@@ -8,7 +9,14 @@ public class User {
     private int ecoScore;
     private double carbonFootprint;
     private double costsGenerated;
-
+    @Override
+    public boolean equals (Object obj) {
+        return obj instanceof User && Objects.equals(name, ((User) obj) .name) ;
+    }
+    @Override
+    public int hashCode () {
+        return Objects.hash(name);
+    }
     public User(String name) {
         this.name = name;
     }
