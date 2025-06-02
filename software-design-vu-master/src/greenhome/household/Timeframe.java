@@ -61,7 +61,7 @@ public class    Timeframe {
     private void calcFootPrint() {
         double usageHours = getUsageDurationInHoursForAppliance();
         double power = appliance.getPowerConsumption();
-        double energyUsed = power * usageHours;
+        double energyUsed = (power * usageHours)/1000;
         this.carbonFootprint = energyUsed * carbonIntensity;
     }
 

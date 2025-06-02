@@ -86,7 +86,6 @@ public class Form {
         return sb.toString();
     }
 
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Form::createAndShowGUI);
     }
@@ -103,12 +102,11 @@ public class Form {
         JLabel regionLabel = new JLabel("Region:");
         JComboBox<String> regionDropdown = new JComboBox<>(new String[]{
                 "Andorra", "United Arab Emirates", "Afghanistan", "Antigua and Barbuda", "Albania", "Armenia", "Angola", "Argentina", "Austria", "Australia", "Lord Howe Island", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Cape Barren Island", "Flinders Island", "King Island", "Victoria", "Western Australia", "Rottnest Island", "Aruba", "Åland Islands", "Azerbaijan", "Bosnia and Herzegovina", "Barbados", "Bangladesh", "Belgium", "Burkina Faso", "Bulgaria", "Bahrain", "Burundi", "Benin", "Bermuda", "Brunei", "Bolivia", "Brazil", "Central Brazil", "North Brazil", "North-East Brazil", "South Brazil", "Bahamas", "Bhutan", "Botswana", "Belarus", "Belize", "Canada", "Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "Prince Edward Island", "Québec", "Saskatchewan", "Yukon", "Democratic Republic of the Congo", "Central African Republic", "Congo", "Switzerland", "Ivory Coast", "Easter Island", "Sistema Eléctrico de Aysén", "Sistema Eléctrico de Magallanes", "Sistema Eléctrico Nacional", "Cameroon", "China", "Colombia", "Costa Rica", "Cuba", "Cabo Verde", "Curaçao", "Cyprus", "Czechia", "Germany", "Djibouti", "Denmark", "Bornholm", "West Denmark", "East Denmark", "Dominica", "Dominican Republic", "Algeria", "Ecuador", "Estonia", "Egypt", "Western Sahara", "Eritrea", "Spain", "Ceuta", "Fuerteventura", "Gran Canaria", "El Hierro", "Isla de la Gomera", "La Palma", "Lanzarote", "Tenerife", "Formentera", "Ibiza", "Mallorca", "Menorca", "Melilla", "Ethiopia", "Finland", "Fiji", "Falkland Islands", "Micronesia", "Faroe Islands", "Main Islands", "South Island", "France", "Corsica", "Gabon", "Great Britain", "Northern Ireland", "Orkney Islands", "Shetland Islands", "Georgia", "French Guiana", "Guernsey", "Ghana", "Gibraltar", "Greenland", "Gambia", "Guinea", "Guadeloupe", "Equatorial Guinea", "Greece", "South Georgia and the South Sandwich Islands", "Guatemala", "Guam", "Guinea-Bissau", "Guyana", "Hong Kong", "Heard Island and McDonald Islands", "Honduras", "Croatia", "Haiti", "Hungary", "Indonesia", "Ireland", "Israel", "Isle of Man", "Mainland India", "Andaman and Nicobar Islands", "Eastern India", "Himachal Pradesh", "North Eastern India", "Northern India", "Southern India", "Uttar Pradesh", "Uttarakhand", "Western India", "Iraq", "Iran", "Iceland", "Italy", "Central North Italy", "Central South Italy", "North Italy", "Sardinia", "Sicily", "South Italy", "Jersey", "Jamaica", "Jordan", "Japan", "Chūbu", "Chūgoku", "Hokkaidō", "Hokuriku", "Kansai", "Kyūshū", "Okinawa", "Shikoku", "Tōhoku", "Tōkyō", "Kenya", "Kyrgyzstan", "Cambodia", "Comoros", "North Korea", "South Korea", "Kuwait", "Cayman Islands", "Kazakhstan", "Laos", "Lebanon", "Saint Lucia", "Liechtenstein", "Sri Lanka", "Liberia", "Lesotho", "Lithuania", "Luxembourg", "Latvia", "Libya", "Morocco", "Monaco", "Moldova", "Montenegro", "Madagascar", "North Macedonia", "Mali", "Myanmar", "Mongolia", "Macao", "Martinique", "Mauritania", "Malta", "Mauritius", "Maldives", "Malawi", "Mexico", "Malaysia", "Borneo", "Peninsula", "Mozambique", "Namibia", "New Caledonia", "Niger", "Nigeria", "Nicaragua", "Netherlands", "Norway", "Southeast Norway", "Southwest Norway", "Middle Norway", "North Central Sweden", "South Central Sweden", "South Sweden", "Singapore", "Slovenia", "Svalbard and Jan Mayen", "Slovakia", "Sierra Leone", "Senegal", "Somalia", "Suriname", "South Sudan", "São Tomé and Príncipe", "El Salvador", "Syria", "Eswatini", "Chad", "French Southern Territories", "Togo", "Thailand", "Tajikistan", "Timor-Leste", "Turkmenistan", "Tunisia", "Tonga", "Turkey", "Trinidad and Tobago", "Taiwan", "Tanzania", "Ukraine", "Crimea", "Uganda", "Contiguous United States", "Alaska", "Southeast Alaska Power Agency", "Balancing Authority of Northern California", "CAISO", "Imperial Irrigation District", "Los Angeles Department of Water and Power", "Turlock Irrigation District", "Duke Energy Progress East", "Duke Energy Progress West", "Duke Energy Carolinas", "South Carolina Public Service Authority", "South Carolina Electric & Gas Company", "Alcoa Power Generating, Inc. Yadkin Division", "Southwestern Power Administration", "Southwest Power Pool"
-
         });
 
         JLabel tariffLabel = new JLabel("Tariff:");
         JTextField tariffField = new JTextField();
-        addPlaceholder(tariffField, "e.g., 0.25 USD/kWh");
+        addPlaceholder(tariffField, "e.g., 0.25 EUR/kWh");
 
         JLabel startDateLabel = new JLabel("Start Date:");
         JDateChooser startDateChooser = new JDateChooser();
@@ -152,17 +150,8 @@ public class Form {
             houseDetails.append("End DateTime: ").append(endDate);
             form.setHouseInfo(houseDetails.toString());
 
-           // JOptionPane.showMessageDialog(frame, form.getFormattedInput());
-
             frame.dispose();
             showUserInputWindow(form);
-
-            //String output = form.getFormattedInput();
-
-            // Print to console to verify correctness
-          //  System.out.println(output);
-
-            //JOptionPane.showMessageDialog(frame, output);
         });
 
         panel.add(regionLabel);
@@ -183,10 +172,12 @@ public class Form {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
     private static void showUserInputWindow(Form form) {
         JFrame userFrame = new JFrame("Add Users");
         userFrame.setSize(400, 300);
         userFrame.setLayout(new BorderLayout(10, 10));
+        userFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         JPanel userPanel = new JPanel(new BorderLayout(10, 10));
         JTextField userField = new JTextField();
@@ -203,10 +194,8 @@ public class Form {
         userListArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(userListArea);
 
-
-
         addUserButton.addActionListener(e -> {
-            String  user = userField.getText().trim();
+            String user = userField.getText().trim();
             if (!user.isEmpty()) {
                 if (!Validator.validateUser(user)) {
                     JOptionPane.showMessageDialog(userFrame, "Usernames cannot contain commas.", "Validation Error", JOptionPane.ERROR_MESSAGE);
@@ -219,8 +208,13 @@ public class Form {
         });
 
         continueButton.addActionListener(e -> {
+            if (form.getUsers().isEmpty()) {
+                JOptionPane.showMessageDialog(userFrame, "Please add at least one user before continuing.");
+                return;
+            }
             userFrame.dispose();
-            showApplianceWindow(form);
+            addAppliance(form);
+            //showApplianceWindow(form);
         });
 
         userFrame.add(userPanel, BorderLayout.NORTH);
@@ -229,37 +223,37 @@ public class Form {
         userFrame.setLocationRelativeTo(null);
         userFrame.setVisible(true);
     }
-    private static void showApplianceWindow(Form form) {
-        JFrame applianceFrame = new JFrame("Add Appliance");
-        applianceFrame.setSize(400, 300);
-        applianceFrame.setLayout(new GridLayout(6, 2, 10, 10));
 
-        JTextField nameField = new JTextField();
-        addPlaceholder(nameField, "e.g., Fridge");
-        JTextField powerField = new JTextField();
-        addPlaceholder(powerField, "e.g., 150W");
-        JTextField embodiedEmission = new JTextField();
-        addPlaceholder(embodiedEmission, "e.g., Fridge");
-
-        JButton addButton = new JButton("Add Appliance");
-        JButton showReport = new JButton("show report"); // here for the future report button
-        addButton.addActionListener(e -> {
-            String applianceInfo = "Name: " + nameField.getText() + "\n" +
-                    "Power Consumption: " + powerField.getText() + "\n" +
-                    "Embodied Emmsion: " + embodiedEmission.getText();
-
-            form.addAppliance(applianceInfo);
-            JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
-
-        });
-
-        addAppliance(form);
-    }
+ //   private static void showApplianceWindow(Form form) {
+ //       JFrame applianceFrame = new JFrame("Add Appliance");
+ //       applianceFrame.setSize(400, 300);
+ //       applianceFrame.setLayout(new GridLayout(6, 2, 10, 10));
+ //
+ //       JTextField nameField = new JTextField();
+ //       addPlaceholder(nameField, "e.g., Fridge");
+ //       JTextField powerField = new JTextField();
+ //       addPlaceholder(powerField, "e.g., 150W");
+ //       JTextField embodiedEmission = new JTextField();
+ //       addPlaceholder(embodiedEmission, "e.g., Fridge");
+ //
+ //       JButton addButton = new JButton("Add Appliance");
+ //       addButton.addActionListener(e -> {
+ //           String applianceInfo = "Name: " + nameField.getText() + "\n" +
+ //                   "Power Consumption: " + powerField.getText() + "\n" +
+ //                   "Embodied Emmsion: " + embodiedEmission.getText();
+ //
+ //           form.addAppliance(applianceInfo);
+ //           JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
+ //       });
+ //
+ //       addAppliance(form);
+ //   }
 
     public static void addAppliance(Form form) {
         JFrame applianceFrame = new JFrame("Add Appliance");
         applianceFrame.setSize(500, 500);
         applianceFrame.setLayout(new BorderLayout(10, 10));
+        applianceFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         JPanel fieldsPanel = new JPanel(new GridLayout(6, 2, 10, 10));
 
@@ -272,14 +266,12 @@ public class Form {
         JTextField embodiedEmissions = new JTextField();
         addPlaceholder(embodiedEmissions, "e.g., 2.4 kg CO2");
 
-
         fieldsPanel.add(new JLabel("Name:"));
         fieldsPanel.add(nameField);
         fieldsPanel.add(new JLabel("Power Consumption:"));
         fieldsPanel.add(powerField);
         fieldsPanel.add(new JLabel("Embodied Emissions:"));
         fieldsPanel.add(embodiedEmissions);
-
 
         JButton addTimeframeButton = new JButton("Add Timeframe");
         fieldsPanel.add(addTimeframeButton);
@@ -298,12 +290,9 @@ public class Form {
             if (!newTimeframe.equals("None")) {
                 form.addTimeframe(nameField.getText(), newTimeframe);
                 timeframeArea.append("Timeframe " + timeframes.size() + ": " + newTimeframe + "\n");
-
-                // ✅ Debug output to terminal
                 System.out.println("✅ Timeframe added: " + newTimeframe);
                 System.out.println("📦 Appliance: " + nameField.getText());
                 System.out.println("👥 Current Users: " + form.getUsers());
-                System.out.println("🏠 House Info:\n" + form.getFormattedInput().split("USERS:")[0]);
             } else {
                 System.out.println("❌ Timeframe rejected or validation failed.");
             }
@@ -312,10 +301,8 @@ public class Form {
         JPanel bottomButtons = new JPanel(new GridLayout(1, 3, 10, 10));
         JButton addButton = new JButton("Add Appliance");
         JButton confirmButton = new JButton("Confirm All Information");
-        //JButton showReportButton = new JButton("Show Report");
         bottomButtons.add(addButton);
         bottomButtons.add(confirmButton);
-        // bottomButtons.add(showReportButton);
 
         addButton.addActionListener(e -> {
             String name = nameField.getText().trim();
@@ -347,20 +334,10 @@ public class Form {
                 return;
             }
 
-
             StringBuilder applianceInfo = new StringBuilder();
             applianceInfo.append("Name: ").append(name).append("\n");
             applianceInfo.append("Power Consumption: ").append(power).append("\n");
             applianceInfo.append("Embodied Emission: ").append(emissions).append("\n");
-
-          //  if (!timeframes.isEmpty()) {
-          //      applianceInfo.append("Timeframes:\n");
-          //      for (String tf : timeframes) {
-          //          applianceInfo.append(" - ").append(tf).append("\n");
-          //      }
-          //  } else {
-          //      applianceInfo.append("Timeframes: None\n");
-          //  }
 
             form.addAppliance(applianceInfo.toString());
             JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
@@ -372,16 +349,7 @@ public class Form {
             timeframes.clear();
         });
 
-
-        //addUserButton.addActionListener(e -> {
-       //    String newUser = JOptionPane.showInputDialog(applianceFrame, "Add new user:");
-       //    if (newUser != null && !newUser.trim().isEmpty()) {
-       //        form.addUser(newUser);
-       //        JOptionPane.showMessageDialog(applianceFrame, "New user '" + newUser + "' added successfully!");
-       //    }
-       //});
         confirmButton.addActionListener(e -> {
-            // Create a new confirmation window
             JFrame confirmFrame = new JFrame("Confirmation Summary");
             confirmFrame.setSize(500, 500);
             confirmFrame.setLayout(new BorderLayout(10, 10));
@@ -392,18 +360,17 @@ public class Form {
 
             confirmFrame.add(scrollPane, BorderLayout.CENTER);
 
-            // Bottom panel with "Show Report" only
             JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             JButton finalReportButton = new JButton("Show Report");
-            //JButton whatIfButton = new JButton("What If scenarios");
             bottomPanel.add(finalReportButton);
-            //bottomPanel.add(whatIfButton);
 
             confirmFrame.add(bottomPanel, BorderLayout.SOUTH);
 
             finalReportButton.addActionListener(ev -> {
                 form.mergeAllData();
                 JOptionPane.showMessageDialog(confirmFrame, summary, "Final Report", JOptionPane.INFORMATION_MESSAGE);
+                confirmFrame.dispose();
+                applianceFrame.dispose();
                 Report.main(new String[]{});
             });
 
@@ -411,23 +378,47 @@ public class Form {
             confirmFrame.setVisible(true);
         });
 
-        // showReportButton.addActionListener(e -> JOptionPane.showMessageDialog(applianceFrame, form.getFormattedInput()));
-
         applianceFrame.add(bottomButtons, BorderLayout.SOUTH);
         applianceFrame.setLocationRelativeTo(null);
         applianceFrame.setVisible(true);
     }
 
+    // 🔧 IMPROVED: User dropdown with ALL users (existing + new)
     public static String addApplianceTimeframe(JFrame parentFrame, Form form) {
         JPanel timeframePanel = new JPanel();
         timeframePanel.setLayout(new BoxLayout(timeframePanel, BoxLayout.Y_AXIS));
 
+        // 🎯 GET ALL AVAILABLE USERS (from form + existing house)
+        Set<String> allUsers = new HashSet<>();
+
+        // Add users from current form
+        allUsers.addAll(form.getUsers());
+
+        // Add users from existing house data
+        try {
+            House existingHouse = House.getInstance();
+            if (existingHouse != null && existingHouse.getResidents() != null) {
+                for (greenhome.household.User user : existingHouse.getResidents()) {
+                    allUsers.add(user.getName());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Could not load existing users: " + e.getMessage());
+        }
+
+        if (allUsers.isEmpty()) {
+            JOptionPane.showMessageDialog(parentFrame,
+                    "No users available. Please add users first.",
+                    "No Users", JOptionPane.WARNING_MESSAGE);
+            return "None";
+        }
+
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         userPanel.add(new JLabel("User:"));
-        JTextField userField = new JTextField();
-        userPanel.add(userField);
+
+        JComboBox<String> userDropdown = new JComboBox<>(allUsers.toArray(new String[0]));
+        userPanel.add(userDropdown);
         timeframePanel.add(userPanel);
-        addPlaceholder(userField, "e.g., John Doe");
 
         JDateChooser startDateChooser = new JDateChooser();
         JSpinner startTimeSpinner = new JSpinner(new SpinnerDateModel());
@@ -449,23 +440,12 @@ public class Form {
         endPanel.add(endTimeSpinner);
         timeframePanel.add(endPanel);
 
-      //  timeframePanel.add(new JLabel("User:"));
-      //  timeframePanel.add(userField);
-      //  timeframePanel.add(new JLabel("Start Date:"));
-      //  timeframePanel.add(startDateChooser);
-      //  timeframePanel.add(new JLabel("Start Time:"));
-      //  timeframePanel.add(startTimeSpinner);
-      //  timeframePanel.add(new JLabel("End Date:"));
-      //  timeframePanel.add(endDateChooser);
-      //  timeframePanel.add(new JLabel("End Time:"));
-      //  timeframePanel.add(endTimeSpinner);
-
         int result = JOptionPane.showConfirmDialog(parentFrame, timeframePanel,
                 "Add Timeframe", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (result == JOptionPane.OK_OPTION) {
-            String user = userField.getText().trim();
-            if (user.isEmpty() || startDateChooser.getDate() == null || endDateChooser.getDate() == null) {
+            String selectedUser = (String) userDropdown.getSelectedItem();
+            if (startDateChooser.getDate() == null || endDateChooser.getDate() == null) {
                 JOptionPane.showMessageDialog(parentFrame, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
                 return "None";
             }
@@ -476,21 +456,21 @@ public class Form {
             String start = dateFormat.format(startDateChooser.getDate()) + " " + timeFormat.format(startTimeSpinner.getValue());
             String end = dateFormat.format(endDateChooser.getDate()) + " " + timeFormat.format(endTimeSpinner.getValue());
 
-            String timeframe = "User: " + user + "\n Start: " + start + "\n End: " + end;
+            String timeframe = "User: " + selectedUser + "\n Start: " + start + "\n End: " + end;
 
-            // Format user list into string (e.g., "- Alice\n- Bob\n")
+            // Create combined user list for validation
             StringBuilder usersString = new StringBuilder();
-            for (String u : form.getUsers()) {
+            for (String u : allUsers) {
                 usersString.append("- ").append(u).append("\n");
             }
 
-            // Extract just the house block from formatted input
+            // Extract house block for validation
             String houseData = form.getFormattedInput().split("USERS:")[0];
 
-            // ✅ VALIDATE THE TIMEFRAME!
+            // Validate the timeframe
             if (!Validator.validateTimeframe(timeframe, usersString.toString(), houseData)) {
                 JOptionPane.showMessageDialog(parentFrame,
-                        "⛔ Invalid timeframe:\n- User not found in the list\n- Dates out of range\n- Start must be before End",
+                        "⛔ Invalid timeframe:\n- Dates out of range\n- Start must be before End",
                         "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return "None";
             }
@@ -498,11 +478,9 @@ public class Form {
             return timeframe;
         }
         return "None";
-        }
+    }
 
-
-
-        private static void addPlaceholder(JTextField textField, String placeholder) {
+    private static void addPlaceholder(JTextField textField, String placeholder) {
         textField.setForeground(Color.GRAY);
         textField.setText(placeholder);
 
@@ -536,7 +514,25 @@ public class Form {
         }
         sb.append("\nUSERS\n");
 
-        for (String user : users) {
+        // 🔧 COMBINE existing users with new users (no flushing)
+        Set<String> allUsers = new HashSet<>();
+
+        // Add existing users from house
+        try {
+            House existingHouse = House.getInstance();
+            if (existingHouse != null && existingHouse.getResidents() != null) {
+                for (greenhome.household.User user : existingHouse.getResidents()) {
+                    allUsers.add(user.getName());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("No existing users found");
+        }
+
+        // Add new users from form
+        allUsers.addAll(users);
+
+        for (String user : allUsers) {
             sb.append("- ").append(user).append("\n");
         }
 
@@ -551,10 +547,10 @@ public class Form {
                 if (line.startsWith("Name:")) {
                     sb.append(line).append("\n");
                 } else if (line.startsWith("Power Consumption:")) {
-                    String val = line.replaceAll("[^0-9]", ""); // Strip units
+                    String val = line.replaceAll("[^0-9]", "");
                     sb.append("Power Consumption: ").append(val).append("\n");
                 } else if (line.startsWith("Embodied Emission:")) {
-                    String val = line.replaceAll("[^0-9]", ""); // Strip units
+                    String val = line.replaceAll("[^0-9]", "");
                     sb.append("Embodied Emission: ").append(val).append("\n");
                 }
             }
@@ -569,13 +565,13 @@ public class Form {
             }
         }
 
-        //sb.append("\n----- End of Report -----");
-
         String finalInput = sb.toString();
         System.out.println("✅ Final submission to parser:\n" + finalInput);
+
+        // 🔧 DON'T clear existing data, just add new data
         House h = House.getInstance();
         Parser.populateHouseFromForm(finalInput);
-        System.out.println("flag");
+        System.out.println("Data merged with existing house");
         try {
             Parser.saveHouse("json.json");
         } catch (IOException e) {

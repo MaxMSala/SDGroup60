@@ -50,7 +50,7 @@ public class Appliance {
             }
         }
 
-        double combinedFootprint = embodiedEmissions + totalFootprint ;
+        double combinedFootprint = embodiedEmissions + (totalFootprint / 1000.0);
         this.generatedFootprint = combinedFootprint;
     }
 

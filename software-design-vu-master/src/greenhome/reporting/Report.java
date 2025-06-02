@@ -42,7 +42,7 @@ public class Report {
         JButton whatIfButton = new JButton("What If scenarios");
         whatIfButton.addActionListener(e -> {
             dialog.dispose();
-            WhatIfScenarios.openApplianceScenarioWindow();
+            WhatIfScenarios.openWhatIfWindow();
         });
         buttonPanel.add(whatIfButton);
 
