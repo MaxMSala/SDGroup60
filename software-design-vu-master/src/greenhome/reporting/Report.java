@@ -64,25 +64,67 @@ public class Report {
     public static String generateReport(House house, String date) {
         StringBuilder report = new StringBuilder();
 
-        report.append("Carbon Footprint Report on ").append(date).append("\n\n");
-        report.append("Total CF: ").append(String.format("%.2f kg CO2", house.getFootPrint())).append("\n");
-        report.append("--------------------------------\n");
+        report.append("Carbon Footprint Report on ").append(date).append("\n");
+        report.append("\n");
+        String title = " REPORT ";
+        int totalWidth = 100;
+        int titleLength = title.length();
+        int titlePadding = (totalWidth - titleLength) / 2;
+        String centeredTitle = "#".repeat(titlePadding) + title + "#".repeat(98 - titlePadding - titleLength);
+        report.append(centeredTitle).append("\n\n");
 
-        List<Appliance> appliances = house.getAppliances();
-        if (appliances != null) {
-            for (Appliance appliance : appliances) {
+        report.append("Total Carbon Footprint: ").append(String.format("%.2f kg CO2", house.getFootPrint())).append("\n");
+        report.append("Total Costs: ").append(String.format("%.2f EUR", house.getCosts())).append(String.format(" with %.2f EUR per kW", house.getElectricityTariff())).append("\n");
+
+        // section 1 report
+        report.append("\n");
+        String section1 = " Appliances Ranked by Carbon Footprint (Descending) ";
+        int section1Length = section1.length();
+        int section1Padding = (totalWidth - section1Length) / 2;
+
+        String centeredSection1 = "-".repeat(section1Padding) + section1 + "-".repeat(totalWidth - section1Padding - section1Length);
+        report.append(centeredSection1).append("\n\n");
+
+        List<Appliance> appliances_byCF = house.getAppliances();
+        if (appliances_byCF != null) {
+            // Sort appliances by footprint in descending order
+            appliances_byCF.sort((a1, a2) -> Double.compare(a2.getGeneratedFootprint(), a1.getGeneratedFootprint()));
+            for (Appliance appliance : appliances_byCF) {
                 report.append(appliance.getName()).append(" - ")
-                        .append(appliance.getGeneratedFootprint()).append(" kg CO2\n");
+                        .append(String.format("%.2f", appliance.getGeneratedFootprint()))
+                        .append(" kg CO2\n");
             }
         }
+        // section 2 report
+        report.append("\n");
+        String section2 = " Appliances Ranked by Costs Generated (Descending) ";
+        int section2Lentgth = section2.length();
+        int section2Padding = (totalWidth - section2Lentgth) / 2;
 
-        report.append("--------------------------------\n");
-        report.append("Local Ecoscore: ").append(house.getEcoScore()).append("\n");
-        report.append("Total Costs: ").append(String.format("%.2f EUR", house.getElectricityTariff())).append("\n");
+        String centeredSection2 = "-".repeat(section2Padding) + section2 + "-".repeat(totalWidth - section2Padding - section2Lentgth);
+        report.append(centeredSection2).append("\n\n");
+        List<Appliance> appliances_byCosts = house.getAppliances();
+        if (appliances_byCosts != null) {
+            // Sort appliances by generated cost in descending order
+            appliances_byCosts.sort((a1, a2) -> Double.compare(a2.getGeneratedCost(), a1.getGeneratedCost()));
+
+            for (Appliance appliance : appliances_byCosts) {
+                report.append(appliance.getName()).append(" - ")
+                        .append(String.format("%.2f", appliance.getGeneratedCost()))
+                        .append(" EUR\n");
+            }
+        }
+        // section 3 report
+        report.append("\n");
+        String section3 = " Appliances Ranked by Costs Generated (Descending) ";
+        int section3Lentgth = section3.length();
+        int section3Padding = (totalWidth - section3Lentgth) / 2;
+
+        String centeredSection3 = "-".repeat(section3Padding) + section3 + "-".repeat(totalWidth - section3Padding - section3Lentgth);
+        report.append(centeredSection3).append("\n\n");
         Average avg = new Average();
         avg.fetchAverage();
-        double perCapita = house.getFootPrint() / house.getResidents().size();
-        report.append("\n--- Comparison to Global Averages ---\n");
+        double perCapita = house.getFootPrint() / house.getResidents().size() / 1000;
         report.append(String.format("Your household CO2 per capita: %.2f tonnes\n", perCapita));
         report.append(String.format("Global average CO2 per capita: %.2f tonnes\n", avg.getAverageEmissionsPerCap()));
 
@@ -93,8 +135,12 @@ public class Report {
             double savings = avg.getAverageEmissionsPerCap() - perCapita;
             report.append(String.format(" You are %.2f tonnes below the global average. Well done!\n", savings));
         }
-        report.append("--------------------------------\n");
-        report.append("Recommendations:\n\n");
+        report.append("\n\n");
+        String title2 = " RECOMMENDATIONS ";
+        int title2Length = title2.length();
+        int title2Padding = (totalWidth - title2Length) / 2;
+        String centeredTitile2 = "#".repeat(title2Padding) + title2 + "#".repeat(98 - title2Padding - title2Length);
+        report.append(centeredTitile2).append("\n\n");
         report.append(Recommendations.generate());
 
         return report.toString();

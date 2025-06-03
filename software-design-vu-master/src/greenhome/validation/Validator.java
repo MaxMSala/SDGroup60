@@ -114,8 +114,8 @@ public class Validator {
     }
 
     public static boolean validateEmbodiedEmissions(double value) {
-        if (value < 10 || value > 500) {
-            System.out.println("Validation failed: Embodied emissions " + value + " kg CO₂e is out of range (10 - 500 kg CO₂e).");
+        if (value < 10 || value > 2000) {
+            System.out.println("Validation failed: Embodied emissions " + value + " kg CO₂e is out of range (10 - 2000 kg CO₂e).");
             return false;
         }
         return true;

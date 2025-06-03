@@ -257,7 +257,7 @@ public class WhatIfScenarios {
                     return;
                 }
                 if (!Validator.validateEmbodiedEmissions(newEmission)) {
-                    JOptionPane.showMessageDialog(panel, "Embodied emissions must be between 10-500 kg CO₂");
+                    JOptionPane.showMessageDialog(panel, "Embodied emissions must be between 10-2000 kg CO₂");
                     return;
                 }
 
@@ -361,7 +361,7 @@ public class WhatIfScenarios {
                     return;
                 }
                 if (!Validator.validateEmbodiedEmissions(emissions)) {
-                    JOptionPane.showMessageDialog(addDialog, "Embodied emissions must be between 10 and 500 kg CO₂e.");
+                    JOptionPane.showMessageDialog(addDialog, "Embodied emissions must be between 10 and 2000 kg CO₂e.");
                     return;
                 }
 

@@ -1,0 +1,75 @@
+{
+  "residents": [
+    {
+      "name": "sam",
+      "ecoScore": 0,
+      "carbonFootprint": 0.0,
+      "costsGenerated": 0.0
+    }
+  ],
+  "appliances": [
+    {
+      "powerConsumption": 200.0,
+      "embodiedEmissions": 500.0,
+      "name": "fridge",
+      "generatedFootprint": 0.0,
+      "generatedCost": 0.0
+    }
+  ],
+  "timeframes": [
+    {
+      "users": [
+        {
+          "name": "sam",
+          "ecoScore": 0,
+          "carbonFootprint": 0.0,
+          "costsGenerated": 0.0
+        }
+      ],
+      "appliance": {
+        "powerConsumption": 200.0,
+        "embodiedEmissions": 500.0,
+        "name": "fridge",
+        "generatedFootprint": 0.0,
+        "generatedCost": 0.0
+      },
+      "period": [
+        {
+          "day": 13,
+          "month": 6,
+          "year": 2025,
+          "hour": 0,
+          "minute": 0
+        },
+        {
+          "day": 14,
+          "month": 6,
+          "year": 2025,
+          "hour": 0,
+          "minute": 0
+        }
+      ],
+      "carbonIntensity": 272.0,
+      "carbonFootprint": 0.0
+    }
+  ],
+  "region": "Netherlands",
+  "electricityTariff": 0.25,
+  "startDate": {
+    "day": 1,
+    "month": 6,
+    "year": 2025,
+    "hour": 0,
+    "minute": 0
+  },
+  "endDate": {
+    "day": 30,
+    "month": 6,
+    "year": 2025,
+    "hour": 0,
+    "minute": 0
+  },
+  "ecoScore": 0,
+  "footPrintGenerated": 0.0,
+  "costsGenerated": 0.0
+}

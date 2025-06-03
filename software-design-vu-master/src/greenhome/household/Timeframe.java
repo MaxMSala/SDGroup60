@@ -62,7 +62,9 @@ public class    Timeframe {
         double usageHours = getUsageDurationInHoursForAppliance();
         double power = appliance.getPowerConsumption();
         double energyUsed = (power * usageHours)/1000;
-        this.carbonFootprint = energyUsed * carbonIntensity;
+        this.carbonFootprint = (energyUsed * carbonIntensity) / 1000;
+        System.out.println(String.format("Damian: Timeframe: Carbon intensity %f ", this.carbonIntensity));
+        System.out.println(String.format("Damian: Timeframe: EnergyUserd %f ", energyUsed));
     }
 
 

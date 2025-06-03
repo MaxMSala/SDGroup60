@@ -103,26 +103,45 @@ public class Form {
         JComboBox<String> regionDropdown = new JComboBox<>(new String[]{
                 "Andorra", "United Arab Emirates", "Afghanistan", "Antigua and Barbuda", "Albania", "Armenia", "Angola", "Argentina", "Austria", "Australia", "Lord Howe Island", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Cape Barren Island", "Flinders Island", "King Island", "Victoria", "Western Australia", "Rottnest Island", "Aruba", "Åland Islands", "Azerbaijan", "Bosnia and Herzegovina", "Barbados", "Bangladesh", "Belgium", "Burkina Faso", "Bulgaria", "Bahrain", "Burundi", "Benin", "Bermuda", "Brunei", "Bolivia", "Brazil", "Central Brazil", "North Brazil", "North-East Brazil", "South Brazil", "Bahamas", "Bhutan", "Botswana", "Belarus", "Belize", "Canada", "Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "Prince Edward Island", "Québec", "Saskatchewan", "Yukon", "Democratic Republic of the Congo", "Central African Republic", "Congo", "Switzerland", "Ivory Coast", "Easter Island", "Sistema Eléctrico de Aysén", "Sistema Eléctrico de Magallanes", "Sistema Eléctrico Nacional", "Cameroon", "China", "Colombia", "Costa Rica", "Cuba", "Cabo Verde", "Curaçao", "Cyprus", "Czechia", "Germany", "Djibouti", "Denmark", "Bornholm", "West Denmark", "East Denmark", "Dominica", "Dominican Republic", "Algeria", "Ecuador", "Estonia", "Egypt", "Western Sahara", "Eritrea", "Spain", "Ceuta", "Fuerteventura", "Gran Canaria", "El Hierro", "Isla de la Gomera", "La Palma", "Lanzarote", "Tenerife", "Formentera", "Ibiza", "Mallorca", "Menorca", "Melilla", "Ethiopia", "Finland", "Fiji", "Falkland Islands", "Micronesia", "Faroe Islands", "Main Islands", "South Island", "France", "Corsica", "Gabon", "Great Britain", "Northern Ireland", "Orkney Islands", "Shetland Islands", "Georgia", "French Guiana", "Guernsey", "Ghana", "Gibraltar", "Greenland", "Gambia", "Guinea", "Guadeloupe", "Equatorial Guinea", "Greece", "South Georgia and the South Sandwich Islands", "Guatemala", "Guam", "Guinea-Bissau", "Guyana", "Hong Kong", "Heard Island and McDonald Islands", "Honduras", "Croatia", "Haiti", "Hungary", "Indonesia", "Ireland", "Israel", "Isle of Man", "Mainland India", "Andaman and Nicobar Islands", "Eastern India", "Himachal Pradesh", "North Eastern India", "Northern India", "Southern India", "Uttar Pradesh", "Uttarakhand", "Western India", "Iraq", "Iran", "Iceland", "Italy", "Central North Italy", "Central South Italy", "North Italy", "Sardinia", "Sicily", "South Italy", "Jersey", "Jamaica", "Jordan", "Japan", "Chūbu", "Chūgoku", "Hokkaidō", "Hokuriku", "Kansai", "Kyūshū", "Okinawa", "Shikoku", "Tōhoku", "Tōkyō", "Kenya", "Kyrgyzstan", "Cambodia", "Comoros", "North Korea", "South Korea", "Kuwait", "Cayman Islands", "Kazakhstan", "Laos", "Lebanon", "Saint Lucia", "Liechtenstein", "Sri Lanka", "Liberia", "Lesotho", "Lithuania", "Luxembourg", "Latvia", "Libya", "Morocco", "Monaco", "Moldova", "Montenegro", "Madagascar", "North Macedonia", "Mali", "Myanmar", "Mongolia", "Macao", "Martinique", "Mauritania", "Malta", "Mauritius", "Maldives", "Malawi", "Mexico", "Malaysia", "Borneo", "Peninsula", "Mozambique", "Namibia", "New Caledonia", "Niger", "Nigeria", "Nicaragua", "Netherlands", "Norway", "Southeast Norway", "Southwest Norway", "Middle Norway", "North Central Sweden", "South Central Sweden", "South Sweden", "Singapore", "Slovenia", "Svalbard and Jan Mayen", "Slovakia", "Sierra Leone", "Senegal", "Somalia", "Suriname", "South Sudan", "São Tomé and Príncipe", "El Salvador", "Syria", "Eswatini", "Chad", "French Southern Territories", "Togo", "Thailand", "Tajikistan", "Timor-Leste", "Turkmenistan", "Tunisia", "Tonga", "Turkey", "Trinidad and Tobago", "Taiwan", "Tanzania", "Ukraine", "Crimea", "Uganda", "Contiguous United States", "Alaska", "Southeast Alaska Power Agency", "Balancing Authority of Northern California", "CAISO", "Imperial Irrigation District", "Los Angeles Department of Water and Power", "Turlock Irrigation District", "Duke Energy Progress East", "Duke Energy Progress West", "Duke Energy Carolinas", "South Carolina Public Service Authority", "South Carolina Electric & Gas Company", "Alcoa Power Generating, Inc. Yadkin Division", "Southwestern Power Administration", "Southwest Power Pool"
         });
+        regionDropdown.setSelectedItem("Netherlands");
+
+
 
         JLabel tariffLabel = new JLabel("Tariff:");
         JTextField tariffField = new JTextField();
         addPlaceholder(tariffField, "e.g., 0.25 EUR/kWh");
+        tariffField.setText("0.25");
+        tariffField.setForeground(Color.BLACK); // make it look like user-entered text
 
         JLabel startDateLabel = new JLabel("Start Date:");
         JDateChooser startDateChooser = new JDateChooser();
+        Calendar cal = Calendar.getInstance();
+        cal.set(2025, Calendar.JUNE, 1); // June is 0-based in Java Calendar
+        startDateChooser.setDate(cal.getTime());
 
         JLabel startTimeLabel = new JLabel("Start Time:");
         JSpinner startTimeSpinner = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor startTimeEditor = new JSpinner.DateEditor(startTimeSpinner, "HH:mm");
         startTimeSpinner.setEditor(startTimeEditor);
+        Calendar timeCal = Calendar.getInstance();
+        timeCal.set(Calendar.HOUR_OF_DAY, 0);
+        timeCal.set(Calendar.MINUTE, 0);
+        startTimeSpinner.setValue(timeCal.getTime());
 
         JLabel endDateLabel = new JLabel("End Date:");
         JDateChooser endDateChooser = new JDateChooser();
+        Calendar cal2 = Calendar.getInstance();
+        cal2.set(2025, Calendar.JUNE, 30); // June is 0-based in Java Calendar
+        endDateChooser.setDate(cal2.getTime());
 
         JLabel endTimeLabel = new JLabel("End Time:");
         JSpinner endTimeSpinner = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor endTimeEditor = new JSpinner.DateEditor(endTimeSpinner, "HH:mm");
         endTimeSpinner.setEditor(endTimeEditor);
+        Calendar timeCal2 = Calendar.getInstance();
+        timeCal2.set(Calendar.HOUR_OF_DAY, 0);
+        timeCal2.set(Calendar.MINUTE, 0);
+        endTimeSpinner.setValue(timeCal2.getTime());
 
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(e -> {
@@ -261,10 +280,10 @@ public class Form {
         addPlaceholder(nameField, "e.g., Fridge");
 
         JTextField powerField = new JTextField();
-        addPlaceholder(powerField, "e.g., 150W");
+        addPlaceholder(powerField, "e.g., 150 [W]");
 
         JTextField embodiedEmissions = new JTextField();
-        addPlaceholder(embodiedEmissions, "e.g., 2.4 kg CO2");
+        addPlaceholder(embodiedEmissions, "e.g., 100 [kg CO2]");
 
         fieldsPanel.add(new JLabel("Name:"));
         fieldsPanel.add(nameField);
@@ -330,7 +349,7 @@ public class Form {
                 return;
             }
             if (!Validator.validateEmbodiedEmissions(emissions)) {
-                JOptionPane.showMessageDialog(applianceFrame, "Embodied emissions must be between 10 and 500 kg CO₂e.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(applianceFrame, "Embodied emissions must be between 10 and 2000 kg CO₂e.", "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 

@@ -47,11 +47,15 @@ public class Appliance {
         for (Timeframe timeframe : timeframes) {
             if(timeframe.getAppliance().getName().equals(this.name)) {
                 totalFootprint  += timeframe.getCarbonFootprint();
+                System.out.println("total footprint: " + totalFootprint);
             }
         }
+        System.out.println("finish: total footprint: " + totalFootprint);
+        System.out.println("embodied emisions: " + embodiedEmissions);
 
-        double combinedFootprint = embodiedEmissions + (totalFootprint / 1000.0);
+        double combinedFootprint = (embodiedEmissions / 10) + totalFootprint;
         this.generatedFootprint = combinedFootprint;
+        System.out.println(String.format("Damian: CF for appliance = {%s}: %f ",this.name, this.generatedFootprint));
     }
 
 
@@ -68,6 +72,7 @@ public class Appliance {
             }
         }
         this.generatedCost = totalCost;
+        System.out.println(String.format("Damian: Costs for appliance = {%s}: %f ",this.name, this.generatedCost));
     }
 
 }

@@ -45,7 +45,7 @@ public class User {
             }
         }
         this.costsGenerated = totalCost;
-
+        System.out.println(String.format("Damian: Costs generated for user {%s}: %f ", this.name, this.costsGenerated));
     }
 
     private void sumFootPrint (){
@@ -60,6 +60,7 @@ public class User {
             }
         }
         this.carbonFootprint = totalFootPrint;
+        System.out.println(String.format("Damian: CF for user {%s}: %f ", this.name, this.carbonFootprint));
     }
 
     private void calcEcoScore() {
@@ -81,6 +82,7 @@ public class User {
 
 
         this.ecoScore = (int) ecoScore;
+        System.out.println(String.format("Damian: Eco Score for user {%s}: %d ", this.name, this.ecoScore));
 
     }
 

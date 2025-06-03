@@ -221,6 +221,7 @@ public class House {
             }
         }
         this.costsGenerated = totalCost;
+        System.out.println(String.format("Damian: Costs Generated for HOUSE: %f ", this.costsGenerated));
     }
 
     private void sumFootPrint() {
@@ -233,6 +234,7 @@ public class House {
             }
         }
         this.footPrintGenerated = totalFootPrint;
+        System.out.println(String.format("Damian: CF for HOUSE: %f ", this.footPrintGenerated));
     }
 
     private void calcEcoScore() {
@@ -250,10 +252,20 @@ public class House {
                 LocalDateTime start = this.startDate.toLocalDateTime();
                 LocalDateTime end = this.endDate.toLocalDateTime();
                 Duration runTime = Duration.between(start, end);
-
                 long hours = Math.max(runTime.toHours(), 1); // Prevent division by zero
-                double ecoScore = 100 / (1 + Math.exp(0.04 * ((totalFootPrint / hours) - 1125)));
-                this.ecoScore = (int) Math.max(0, Math.min(100, ecoScore)); // Clamp between 0-100
+
+                double footprintPerHour = totalFootPrint / hours;
+                System.out.println("Footprint / hour: " + footprintPerHour);
+
+                // Thresholds
+                double ideal = 0.1;  // Best case: ~0.1 kg CO2/hour
+                double bad = 1.0;    // Worst case: ≥ 1.0 kg CO2/hour
+
+                // Linear scale from 100 (ideal) to 0 (bad)
+                double score = 100 * (1 - ((footprintPerHour - ideal) / (bad - ideal)));
+                score = Math.max(0, Math.min(100, score)); // Clamp to [0, 100]
+
+                this.ecoScore = (int) score;
             } catch (Exception e) {
                 System.err.println("⚠️ Error calculating eco score: " + e.getMessage());
                 this.ecoScore = 50; // Default score on error
@@ -261,5 +273,6 @@ public class House {
         } else {
             this.ecoScore = 50; // Default score if dates are invalid
         }
+        System.out.println(String.format("Damian: Eco Score for HOUSE: %d ", this.ecoScore));
     }
 }
