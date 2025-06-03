@@ -34,7 +34,7 @@ public class Appliance {
     public double getGeneratedFootprint() {sumFootPrint(); return generatedFootprint;}
     public String getName() {return this.name;}
     public double getPowerConsumption() { return powerConsumption; }
-    public double getEmbodiedEmissions() {return embodiedEmissions;}
+    public double getEmbodiedEmissions() {return embodiedEmissions / 10.0;}
 
 
     // internal calculations
@@ -55,7 +55,6 @@ public class Appliance {
 
         double combinedFootprint = (embodiedEmissions / 10) + totalFootprint;
         this.generatedFootprint = combinedFootprint;
-        System.out.println(String.format("Damian: CF for appliance = {%s}: %f ",this.name, this.generatedFootprint));
     }
 
 
@@ -67,12 +66,13 @@ public class Appliance {
             if(tf.getAppliance().getName().equals(this.name)) {
                 double usageHours = tf.getUsageDurationInHoursForAppliance();
                 double elecTariff = house.getElectricityTariff();
+                double watts = tf.getAppliance().powerConsumption; // Make sure this method exists
 
-                totalCost += usageHours * elecTariff;
+                double kWh = (watts / 1000.0) * usageHours;
+                totalCost += kWh * elecTariff;
             }
         }
         this.generatedCost = totalCost;
-        System.out.println(String.format("Damian: Costs for appliance = {%s}: %f ",this.name, this.generatedCost));
     }
 
 }

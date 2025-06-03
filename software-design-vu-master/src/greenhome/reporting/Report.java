@@ -3,6 +3,7 @@ package greenhome.reporting;
 import greenhome.apiintegration.Average;
 import greenhome.household.*;
 import greenhome.input.WhatIfScenarios;
+import greenhome.time.DateTime;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -10,7 +11,9 @@ import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 import java.util.List;
+
 
 public class Report {
 
@@ -65,6 +68,7 @@ public class Report {
         StringBuilder report = new StringBuilder();
 
         report.append("Carbon Footprint Report on ").append(date).append("\n");
+        report.append(String.format("Generated for period: %s -- %s\n", house.getStart().toSlashString(), house.getEnd().toSlashString()));
         report.append("\n");
         String title = " REPORT ";
         int totalWidth = 100;
@@ -87,36 +91,51 @@ public class Report {
 
         List<Appliance> appliances_byCF = house.getAppliances();
         if (appliances_byCF != null) {
-            // Sort appliances by footprint in descending order
             appliances_byCF.sort((a1, a2) -> Double.compare(a2.getGeneratedFootprint(), a1.getGeneratedFootprint()));
+
+            Set<String> printedNames = new HashSet<>();
+
             for (Appliance appliance : appliances_byCF) {
-                report.append(appliance.getName()).append(" - ")
-                        .append(String.format("%.2f", appliance.getGeneratedFootprint()))
-                        .append(" kg CO2\n");
+                String name = appliance.getName();
+                if (!printedNames.contains(name)) {
+                    report.append(name).append(" - ")
+                            .append(String.format("%.2f", appliance.getGeneratedFootprint()))
+                            .append(" kg CO2\n");
+                    printedNames.add(name);
+                }
             }
         }
+
         // section 2 report
         report.append("\n");
         String section2 = " Appliances Ranked by Costs Generated (Descending) ";
-        int section2Lentgth = section2.length();
-        int section2Padding = (totalWidth - section2Lentgth) / 2;
+        int section2Length = section2.length(); // fixed typo from section2Lentgth
+        int section2Padding = (totalWidth - section2Length) / 2;
 
-        String centeredSection2 = "-".repeat(section2Padding) + section2 + "-".repeat(totalWidth - section2Padding - section2Lentgth);
+        String centeredSection2 = "-".repeat(section2Padding) + section2 + "-".repeat(totalWidth - section2Padding - section2Length);
         report.append(centeredSection2).append("\n\n");
+
         List<Appliance> appliances_byCosts = house.getAppliances();
         if (appliances_byCosts != null) {
             // Sort appliances by generated cost in descending order
             appliances_byCosts.sort((a1, a2) -> Double.compare(a2.getGeneratedCost(), a1.getGeneratedCost()));
 
+            Set<String> printedNames = new HashSet<>();
+
             for (Appliance appliance : appliances_byCosts) {
-                report.append(appliance.getName()).append(" - ")
-                        .append(String.format("%.2f", appliance.getGeneratedCost()))
-                        .append(" EUR\n");
+                String name = appliance.getName();
+                if (!printedNames.contains(name)) {
+                    report.append(name).append(" - ")
+                            .append(String.format("%.2f", appliance.getGeneratedCost()))
+                            .append(" EUR\n");
+                    printedNames.add(name);
+                }
             }
         }
+
         // section 3 report
         report.append("\n");
-        String section3 = " Appliances Ranked by Costs Generated (Descending) ";
+        String section3 = " Household Compared to International Average  ";
         int section3Lentgth = section3.length();
         int section3Padding = (totalWidth - section3Lentgth) / 2;
 
@@ -126,15 +145,17 @@ public class Report {
         avg.fetchAverage();
         double perCapita = house.getFootPrint() / house.getResidents().size() / 1000;
         report.append(String.format("Your household CO2 per capita: %.2f tonnes\n", perCapita));
-        report.append(String.format("Global average CO2 per capita: %.2f tonnes\n", avg.getAverageEmissionsPerCap()));
+        report.append(String.format("Global average CO2 per capita for the interval of %d days: %.2f tonnes\n", DateTime.daysBetween(house.getStart(),house.getEnd()), avg.getAverageEmissionsPerCap(house.getStart(),house.getEnd())));
 
-        if (perCapita > avg.getAverageEmissionsPerCap()) {
-            double excess = perCapita - avg.getAverageEmissionsPerCap();
-            report.append(String.format(" You are %.2f tonnes above the global average.\n", excess));
+        if (perCapita > avg.getAverageEmissionsPerCap(house.getStart(),house.getEnd())) {
+            double excess = perCapita - avg.getAverageEmissionsPerCap(house.getStart(),house.getEnd());
+            report.append(String.format("You are %.2f tonnes above the global average.\n", excess));
         } else {
-            double savings = avg.getAverageEmissionsPerCap() - perCapita;
-            report.append(String.format(" You are %.2f tonnes below the global average. Well done!\n", savings));
+            double savings = avg.getAverageEmissionsPerCap(house.getStart(),house.getEnd()) - perCapita;
+            report.append(String.format("You are %.2f tonnes below the global average. Well done!\n", savings));
         }
+
+
         report.append("\n\n");
         String title2 = " RECOMMENDATIONS ";
         int title2Length = title2.length();

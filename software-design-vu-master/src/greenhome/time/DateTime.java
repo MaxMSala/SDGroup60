@@ -1,5 +1,6 @@
 package greenhome.time;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,13 @@ public class DateTime {
         this.minute = minute;
     }
 
+    public static int daysBetween(DateTime start, DateTime end) {
+        LocalDateTime startDateTime = start.toLocalDateTime();
+        LocalDateTime endDateTime = end.toLocalDateTime();
+        return (int) ChronoUnit.DAYS.between(startDateTime, endDateTime) + 1;
+    }
+
+
     public LocalDateTime toLocalDateTime() {
         return LocalDateTime.of(year, month, day, hour, minute);
     }
@@ -66,6 +74,11 @@ public class DateTime {
         sb.append(minute);
         return sb.toString();
     }
+
+    public String toSlashString() {
+        return String.format("%02d/%02d/%04d %02d:%02d", day, month, year, hour, minute);
+    }
+
 
     public int getYear(){return this.year;}
     public int getMonth(){return this.month;}

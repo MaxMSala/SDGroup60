@@ -227,7 +227,8 @@ public class Form {
         });
 
         continueButton.addActionListener(e -> {
-            if (form.getUsers().isEmpty()) {
+            House house = House.getInstance();
+            if (form.getUsers().isEmpty() && house.getResidents().isEmpty()) {
                 JOptionPane.showMessageDialog(userFrame, "Please add at least one user before continuing.");
                 return;
             }

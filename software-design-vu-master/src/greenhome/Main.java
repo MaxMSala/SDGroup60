@@ -1,11 +1,15 @@
 package greenhome;
+import greenhome.household.Appliance;
 import greenhome.household.House;
 import greenhome.household.Parser;
+import greenhome.household.User;
 import greenhome.input.Form;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
@@ -100,17 +104,37 @@ public class Main {
     private static void continueWithData() {
         try {
             House house = House.getInstance();
+
+            // Filter unique appliances by name
+            Set<String> uniqueApplianceNames = new HashSet<>();
+            for (Appliance appliance : house.getAppliances()) {
+                if (appliance != null) {
+                    uniqueApplianceNames.add(appliance.getName());
+                }
+            }
+
+            // Filter unique users by name
+            Set<String> uniqueUserNames = new HashSet<>();
+            for (User user : house.getResidents()) {
+                if (user != null) {
+                    uniqueUserNames.add(user.getName());
+                }
+            }
+
             JOptionPane.showMessageDialog(null,
-                    "Loaded: " + house.getAppliances().size() + " appliances, " +
-                            house.getResidents().size() + " users",
+                    "Loaded: " + uniqueApplianceNames.size() + " appliances, " +
+                            uniqueUserNames.size() + " users",
                     "Data Loaded", JOptionPane.INFORMATION_MESSAGE);
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error loading data. Starting fresh.");
             startFresh();
             return;
         }
+
         Form.main(new String[]{});
     }
+
 
     private static void startFresh() {
         resetHouse();

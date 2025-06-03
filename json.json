@@ -1,7 +1,31 @@
 {
   "residents": [
     {
-      "name": "sam",
+      "name": "lol",
+      "ecoScore": 0,
+      "carbonFootprint": 0.0,
+      "costsGenerated": 0.0
+    },
+    {
+      "name": "lol",
+      "ecoScore": 0,
+      "carbonFootprint": 0.0,
+      "costsGenerated": 0.0
+    },
+    {
+      "name": "lol",
+      "ecoScore": 0,
+      "carbonFootprint": 0.0,
+      "costsGenerated": 0.0
+    },
+    {
+      "name": "max",
+      "ecoScore": 0,
+      "carbonFootprint": 0.0,
+      "costsGenerated": 0.0
+    },
+    {
+      "name": "lol",
       "ecoScore": 0,
       "carbonFootprint": 0.0,
       "costsGenerated": 0.0
@@ -14,13 +38,20 @@
       "name": "fridge",
       "generatedFootprint": 0.0,
       "generatedCost": 0.0
+    },
+    {
+      "powerConsumption": 800.0,
+      "embodiedEmissions": 500.0,
+      "name": "oven",
+      "generatedFootprint": 0.0,
+      "generatedCost": 0.0
     }
   ],
   "timeframes": [
     {
       "users": [
         {
-          "name": "sam",
+          "name": "lol",
           "ecoScore": 0,
           "carbonFootprint": 0.0,
           "costsGenerated": 0.0
@@ -35,21 +66,56 @@
       },
       "period": [
         {
-          "day": 13,
+          "day": 7,
           "month": 6,
           "year": 2025,
-          "hour": 0,
+          "hour": 23,
           "minute": 0
         },
         {
           "day": 14,
           "month": 6,
           "year": 2025,
-          "hour": 0,
+          "hour": 23,
           "minute": 0
         }
       ],
-      "carbonIntensity": 272.0,
+      "carbonIntensity": 155.0,
+      "carbonFootprint": 0.0
+    },
+    {
+      "users": [
+        {
+          "name": "max",
+          "ecoScore": 0,
+          "carbonFootprint": 0.0,
+          "costsGenerated": 0.0
+        }
+      ],
+      "appliance": {
+        "powerConsumption": 800.0,
+        "embodiedEmissions": 500.0,
+        "name": "oven",
+        "generatedFootprint": 0.0,
+        "generatedCost": 0.0
+      },
+      "period": [
+        {
+          "day": 7,
+          "month": 6,
+          "year": 2025,
+          "hour": 23,
+          "minute": 4
+        },
+        {
+          "day": 26,
+          "month": 6,
+          "year": 2025,
+          "hour": 23,
+          "minute": 4
+        }
+      ],
+      "carbonIntensity": 155.0,
       "carbonFootprint": 0.0
     }
   ],

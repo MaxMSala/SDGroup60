@@ -4,7 +4,9 @@ import greenhome.time.DateTime;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class House {
     // Thread-safe singleton implementation
@@ -213,28 +215,39 @@ public class House {
     // PRIVATE CALCULATIONS (with comprehensive null safety)
     private void calcCost() {
         double totalCost = 0.0;
+        Set<String> countedNames = new HashSet<>();
+
         if (appliances != null && !appliances.isEmpty()) {
             for (Appliance appliance : appliances) {
                 if (appliance != null) {
-                    totalCost += appliance.getGeneratedCost();
+                    String name = appliance.getName();
+                    if (!countedNames.contains(name)) {
+                        totalCost += appliance.getGeneratedCost();
+                        countedNames.add(name);
+                    }
                 }
             }
         }
         this.costsGenerated = totalCost;
-        System.out.println(String.format("Damian: Costs Generated for HOUSE: %f ", this.costsGenerated));
     }
+
 
     private void sumFootPrint() {
         double totalFootPrint = 0.0;
+        Set<String> countedNames = new HashSet<>();
+
         if (appliances != null && !appliances.isEmpty()) {
             for (Appliance appliance : appliances) {
                 if (appliance != null) {
-                    totalFootPrint += appliance.getGeneratedFootprint();
+                    String name = appliance.getName();
+                    if (!countedNames.contains(name)) {
+                        totalFootPrint += appliance.getGeneratedFootprint();
+                        countedNames.add(name);
+                    }
                 }
             }
         }
         this.footPrintGenerated = totalFootPrint;
-        System.out.println(String.format("Damian: CF for HOUSE: %f ", this.footPrintGenerated));
     }
 
     private void calcEcoScore() {
@@ -273,6 +286,5 @@ public class House {
         } else {
             this.ecoScore = 50; // Default score if dates are invalid
         }
-        System.out.println(String.format("Damian: Eco Score for HOUSE: %d ", this.ecoScore));
     }
 }
