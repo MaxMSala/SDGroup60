@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import greenhome.household.House;
 import greenhome.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,14 +22,15 @@ public class CarbonIntensity {
     // derived
     private double carbonIntensity;
 
-    private CarbonIntensity(DateTime[] period) {
-        this.period = period;
+    private CarbonIntensity() {
+        House house = House.getInstance();
+        this.period = new DateTime[] {house.getStart(), house.getEnd()};
     }
 
     // public interface
-    public static synchronized CarbonIntensity getInstance(DateTime[] period) {
+    public static synchronized CarbonIntensity getInstance() {
         if (instance == null) {
-            instance = new CarbonIntensity(period);
+            instance = new CarbonIntensity();
         }
         return instance;
     }
