@@ -504,7 +504,6 @@ public class Form {
 
             finalReportButton.addActionListener(ev -> {
                 form.mergeAllData();
-                JOptionPane.showMessageDialog(confirmFrame, summary, "Final Report", JOptionPane.INFORMATION_MESSAGE);
                 confirmFrame.dispose();
                 applianceFrame.dispose();
                 Report.main(new String[]{});
