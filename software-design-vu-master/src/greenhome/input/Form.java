@@ -120,14 +120,14 @@ public class Form {
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 15, 15));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        JButton keepButton = new JButton("📊 Continue with Previous Data");
+        JButton keepButton = new JButton("Continue with Previous Data");
         keepButton.setPreferredSize(new Dimension(350, 60));
         keepButton.addActionListener(e -> {
             dialog.dispose();
             continueWithData();
         });
 
-        JButton freshButton = new JButton("🆕 Start with Fresh Data");
+        JButton freshButton = new JButton("Start with Fresh Data");
         freshButton.setPreferredSize(new Dimension(350, 60));
         freshButton.addActionListener(e -> {
             dialog.dispose();
@@ -411,11 +411,11 @@ public class Form {
             if (!newTimeframe.equals("None")) {
                 form.addTimeframe(nameField.getText(), newTimeframe);
                 timeframeArea.append("Timeframe " + timeframes.size() + ": " + newTimeframe + "\n");
-                System.out.println("✅ Timeframe added: " + newTimeframe);
-                System.out.println("📦 Appliance: " + nameField.getText());
-                System.out.println("👥 Current Users: " + form.getUsers());
+                System.out.println("Timeframe added: " + newTimeframe);
+                System.out.println("Appliance: " + nameField.getText());
+                System.out.println("Current Users: " + form.getUsers());
             } else {
-                System.out.println("❌ Timeframe rejected or validation failed.");
+                System.out.println("Timeframe rejected or validation failed.");
             }
         });
 
@@ -589,7 +589,7 @@ public class Form {
 
             if (!Validator.validateTimeframe(timeframe, usersString.toString(), houseData)) {
                 JOptionPane.showMessageDialog(parentFrame,
-                        "⛔ Invalid timeframe:\n- Dates out of range\n- Start must be before End",
+                        "Invalid timeframe:\n- Dates out of range\n- Start must be before End",
                         "Validation Error", JOptionPane.ERROR_MESSAGE);
                 return "None";
             }
@@ -685,7 +685,7 @@ public class Form {
         }
 
         String finalInput = sb.toString();
-        System.out.println("✅ Final submission to parser:\n" + finalInput);
+        System.out.println("Final submission to parser:\n" + finalInput);
 
 
         House h = House.getInstance();
