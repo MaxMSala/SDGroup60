@@ -59,24 +59,24 @@ software-design-vu-master/
 ├── src/
 │   └── greenhome/
 │       ├── apiintegration/
-│       │   ├── Average.java
-│       │   └── CarbonIntensity.java
+│       │   └── Average.java
 │       ├── household/
 │       │   ├── Appliance.java
+│       │   ├── CarbonIntensity.java
 │       │   ├── House.java
 │       │   ├── Parser.java
 │       │   ├── Timeframe.java
 │       │   └── User.java
 │       ├── input/
 │       │   ├── Form.java
+│       │   ├── Report.java
 │       │   └── WhatIfScenarios.java
 │       ├── reporting/
-│       │   ├── Recommendations.java
-│       │   └── Report.java
+│       │   └── Recommendations.java
 │       ├── time/
 │       │   └── DateTime.java
 │       └── validation/
-│           └── [validation classes]
+│           └── Validator.java
 ├── out/production/SDGroup60/greenhome/
 ├── lib/
 ├── .idea/
@@ -90,4 +90,3 @@ software-design-vu-master/
 ├── README.md                          # Project documentation
 └── json.json
 ``````
-
