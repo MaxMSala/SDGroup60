@@ -111,17 +111,19 @@ public class User {
         }
 
         if (uniqueUserFootprints.size() == 1) {
-            this.ecoScore = 80;
-            System.out.printf("User: %s | Sole contributor | CF: %.2f kg CO₂ | Score: %d\n",
-                    this.name, myFootprint, this.ecoScore);
+            // Get the only contributor's name
+            String soleContributor = uniqueUserFootprints.keySet().iterator().next();
+
+            if (this.name.equals(soleContributor)) {
+                this.ecoScore = 80;
+            } else {
+                this.ecoScore = 100;
+            }
             return;
         }
 
         double myShare = myFootprint / totalContributingFootprint;
         double score = 100 - (myShare * 100);
-
-        System.out.printf("User: %s | CF: %.2f kg CO₂ | Total CF: %.2f kg CO₂ | Share: %.2f%%\n",
-                this.name, myFootprint, totalContributingFootprint, myShare * 100);
 
         this.ecoScore = (int) Math.round(score);
     }
