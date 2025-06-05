@@ -34,7 +34,7 @@ public class Appliance {
     public double getGeneratedFootprint() {sumFootPrint(); return generatedFootprint;}
     public String getName() {return this.name;}
     public double getPowerConsumption() { return powerConsumption; }
-    public double getEmbodiedEmissions() {return embodiedEmissions / 10.0;}
+    public double getEmbodiedEmissions() {return embodiedEmissions ;}
 
 
     // internal calculations

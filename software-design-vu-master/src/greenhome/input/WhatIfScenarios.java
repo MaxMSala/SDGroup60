@@ -364,7 +364,6 @@ public class WhatIfScenarios {
                     JOptionPane.showMessageDialog(addDialog, "Embodied emissions must be between 10 and 2000 kg CO₂e.");
                     return;
                 }
-
                 Appliance newAppliance = new Appliance(name, power, emissions);
                 House.getInstance().getAppliances().add(newAppliance);
 
