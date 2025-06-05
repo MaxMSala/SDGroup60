@@ -2,8 +2,10 @@ package greenhome.input;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+import greenhome.household.Appliance;
 import greenhome.household.House;
 import greenhome.household.Parser;
+import greenhome.household.User;
 import greenhome.reporting.Report;
 import greenhome.validation.Validator;
 
@@ -86,6 +88,148 @@ public class Form {
         return sb.toString();
     }
 
+    // ==============================
+    // STARTUP AND DATA MANAGEMENT METHODS (moved from Main.java)
+    // ==============================
+
+    public static void showStartupChoice() {
+        boolean hasData = checkExistingData();
+        if (!hasData) {
+            startFresh();
+            return;
+        }
+
+        JDialog dialog = new JDialog((Frame) null, "GreenHome - Data Options", true);
+        dialog.setSize(450, 300);
+        dialog.setLayout(new BorderLayout(10, 10));
+        dialog.setLocationRelativeTo(null);
+        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        JLabel header = new JLabel("<html><h2>Welcome back to GreenHome!</h2>" +
+                "<p>Previous data found. What would you like to do?</p></html>");
+        header.setHorizontalAlignment(SwingConstants.CENTER);
+        header.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        dialog.add(header, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 15, 15));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+
+        JButton keepButton = new JButton("<html><b>📊 Continue with Previous Data</b><br>" +
+                "<small>Keep your existing household setup</small></html>");
+        keepButton.setPreferredSize(new Dimension(350, 60));
+        keepButton.addActionListener(e -> {
+            dialog.dispose();
+            continueWithData();
+        });
+
+        JButton freshButton = new JButton("<html><b>🆕 Start with Fresh Data</b><br>" +
+                "<small>Clear all previous data and start over</small></html>");
+        freshButton.setPreferredSize(new Dimension(350, 60));
+        freshButton.addActionListener(e -> {
+            dialog.dispose();
+            int choice = JOptionPane.showConfirmDialog(null,
+                    "Delete all previous data? This cannot be undone.",
+                    "Confirm", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION) {
+                startFresh();
+            } else {
+                showStartupChoice();
+            }
+        });
+
+        buttonPanel.add(keepButton);
+        buttonPanel.add(freshButton);
+        dialog.add(buttonPanel, BorderLayout.CENTER);
+
+        dialog.setVisible(true);
+    }
+
+    private static boolean checkExistingData() {
+        try {
+            Parser.loadHouse("json.json");
+            House house = House.getInstance();
+            return house != null &&
+                    (!house.getAppliances().isEmpty() || !house.getResidents().isEmpty());
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    private static String getDataPreview() {
+        try {
+            House house = House.getInstance();
+            if (house != null) {
+                return String.format("%d appliances, %d users in %s",
+                        house.getAppliances().size(),
+                        house.getResidents().size(),
+                        house.getRegion());
+            }
+        } catch (Exception e) {
+            return "Data found but unreadable";
+        }
+        return "No data";
+    }
+
+    private static void continueWithData() {
+        try {
+            House house = House.getInstance();
+
+            // Filter unique appliances by name
+            Set<String> uniqueApplianceNames = new HashSet<>();
+            for (Appliance appliance : house.getAppliances()) {
+                if (appliance != null) {
+                    uniqueApplianceNames.add(appliance.getName());
+                }
+            }
+
+            // Filter unique users by name
+            Set<String> uniqueUserNames = new HashSet<>();
+            for (User user : house.getResidents()) {
+                if (user != null) {
+                    uniqueUserNames.add(user.getName());
+                }
+            }
+
+            JOptionPane.showMessageDialog(null,
+                    "Loaded: " + uniqueApplianceNames.size() + " appliances, " +
+                            uniqueUserNames.size() + " users",
+                    "Data Loaded", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error loading data. Starting fresh.");
+            startFresh();
+            return;
+        }
+
+        main(new String[]{});
+    }
+
+    private static void startFresh() {
+        resetHouse();
+        House.constructInstance(
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                "Netherlands",
+                0.25
+        );
+        JOptionPane.showMessageDialog(null, "Starting with fresh data!");
+        main(new String[]{});
+    }
+
+    private static void resetHouse() {
+        try {
+            java.lang.reflect.Field field = House.class.getDeclaredField("instance");
+            field.setAccessible(true);
+            field.set(null, null);
+        } catch (Exception ignored) {
+        }
+    }
+
+    // ==============================
+    // FORM UI METHODS
+    // ==============================
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Form::createAndShowGUI);
     }
@@ -104,8 +248,6 @@ public class Form {
                 "Andorra", "United Arab Emirates", "Afghanistan", "Antigua and Barbuda", "Albania", "Armenia", "Angola", "Argentina", "Austria", "Australia", "Lord Howe Island", "New South Wales", "Northern Territory", "Queensland", "South Australia", "Tasmania", "Cape Barren Island", "Flinders Island", "King Island", "Victoria", "Western Australia", "Rottnest Island", "Aruba", "Åland Islands", "Azerbaijan", "Bosnia and Herzegovina", "Barbados", "Bangladesh", "Belgium", "Burkina Faso", "Bulgaria", "Bahrain", "Burundi", "Benin", "Bermuda", "Brunei", "Bolivia", "Brazil", "Central Brazil", "North Brazil", "North-East Brazil", "South Brazil", "Bahamas", "Bhutan", "Botswana", "Belarus", "Belize", "Canada", "Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Northwest Territories", "Nunavut", "Ontario", "Prince Edward Island", "Québec", "Saskatchewan", "Yukon", "Democratic Republic of the Congo", "Central African Republic", "Congo", "Switzerland", "Ivory Coast", "Easter Island", "Sistema Eléctrico de Aysén", "Sistema Eléctrico de Magallanes", "Sistema Eléctrico Nacional", "Cameroon", "China", "Colombia", "Costa Rica", "Cuba", "Cabo Verde", "Curaçao", "Cyprus", "Czechia", "Germany", "Djibouti", "Denmark", "Bornholm", "West Denmark", "East Denmark", "Dominica", "Dominican Republic", "Algeria", "Ecuador", "Estonia", "Egypt", "Western Sahara", "Eritrea", "Spain", "Ceuta", "Fuerteventura", "Gran Canaria", "El Hierro", "Isla de la Gomera", "La Palma", "Lanzarote", "Tenerife", "Formentera", "Ibiza", "Mallorca", "Menorca", "Melilla", "Ethiopia", "Finland", "Fiji", "Falkland Islands", "Micronesia", "Faroe Islands", "Main Islands", "South Island", "France", "Corsica", "Gabon", "Great Britain", "Northern Ireland", "Orkney Islands", "Shetland Islands", "Georgia", "French Guiana", "Guernsey", "Ghana", "Gibraltar", "Greenland", "Gambia", "Guinea", "Guadeloupe", "Equatorial Guinea", "Greece", "South Georgia and the South Sandwich Islands", "Guatemala", "Guam", "Guinea-Bissau", "Guyana", "Hong Kong", "Heard Island and McDonald Islands", "Honduras", "Croatia", "Haiti", "Hungary", "Indonesia", "Ireland", "Israel", "Isle of Man", "Mainland India", "Andaman and Nicobar Islands", "Eastern India", "Himachal Pradesh", "North Eastern India", "Northern India", "Southern India", "Uttar Pradesh", "Uttarakhand", "Western India", "Iraq", "Iran", "Iceland", "Italy", "Central North Italy", "Central South Italy", "North Italy", "Sardinia", "Sicily", "South Italy", "Jersey", "Jamaica", "Jordan", "Japan", "Chūbu", "Chūgoku", "Hokkaidō", "Hokuriku", "Kansai", "Kyūshū", "Okinawa", "Shikoku", "Tōhoku", "Tōkyō", "Kenya", "Kyrgyzstan", "Cambodia", "Comoros", "North Korea", "South Korea", "Kuwait", "Cayman Islands", "Kazakhstan", "Laos", "Lebanon", "Saint Lucia", "Liechtenstein", "Sri Lanka", "Liberia", "Lesotho", "Lithuania", "Luxembourg", "Latvia", "Libya", "Morocco", "Monaco", "Moldova", "Montenegro", "Madagascar", "North Macedonia", "Mali", "Myanmar", "Mongolia", "Macao", "Martinique", "Mauritania", "Malta", "Mauritius", "Maldives", "Malawi", "Mexico", "Malaysia", "Borneo", "Peninsula", "Mozambique", "Namibia", "New Caledonia", "Niger", "Nigeria", "Nicaragua", "Netherlands", "Norway", "Southeast Norway", "Southwest Norway", "Middle Norway", "North Central Sweden", "South Central Sweden", "South Sweden", "Singapore", "Slovenia", "Svalbard and Jan Mayen", "Slovakia", "Sierra Leone", "Senegal", "Somalia", "Suriname", "South Sudan", "São Tomé and Príncipe", "El Salvador", "Syria", "Eswatini", "Chad", "French Southern Territories", "Togo", "Thailand", "Tajikistan", "Timor-Leste", "Turkmenistan", "Tunisia", "Tonga", "Turkey", "Trinidad and Tobago", "Taiwan", "Tanzania", "Ukraine", "Crimea", "Uganda", "Contiguous United States", "Alaska", "Southeast Alaska Power Agency", "Balancing Authority of Northern California", "CAISO", "Imperial Irrigation District", "Los Angeles Department of Water and Power", "Turlock Irrigation District", "Duke Energy Progress East", "Duke Energy Progress West", "Duke Energy Carolinas", "South Carolina Public Service Authority", "South Carolina Electric & Gas Company", "Alcoa Power Generating, Inc. Yadkin Division", "Southwestern Power Administration", "Southwest Power Pool"
         });
         regionDropdown.setSelectedItem("Netherlands");
-
-
 
         JLabel tariffLabel = new JLabel("Tariff:");
         JTextField tariffField = new JTextField();
@@ -234,7 +376,6 @@ public class Form {
             }
             userFrame.dispose();
             addAppliance(form);
-            //showApplianceWindow(form);
         });
 
         userFrame.add(userPanel, BorderLayout.NORTH);
@@ -243,31 +384,6 @@ public class Form {
         userFrame.setLocationRelativeTo(null);
         userFrame.setVisible(true);
     }
-
- //   private static void showApplianceWindow(Form form) {
- //       JFrame applianceFrame = new JFrame("Add Appliance");
- //       applianceFrame.setSize(400, 300);
- //       applianceFrame.setLayout(new GridLayout(6, 2, 10, 10));
- //
- //       JTextField nameField = new JTextField();
- //       addPlaceholder(nameField, "e.g., Fridge");
- //       JTextField powerField = new JTextField();
- //       addPlaceholder(powerField, "e.g., 150W");
- //       JTextField embodiedEmission = new JTextField();
- //       addPlaceholder(embodiedEmission, "e.g., Fridge");
- //
- //       JButton addButton = new JButton("Add Appliance");
- //       addButton.addActionListener(e -> {
- //           String applianceInfo = "Name: " + nameField.getText() + "\n" +
- //                   "Power Consumption: " + powerField.getText() + "\n" +
- //                   "Embodied Emmsion: " + embodiedEmission.getText();
- //
- //           form.addAppliance(applianceInfo);
- //           JOptionPane.showMessageDialog(applianceFrame, "Appliance added:\n" + applianceInfo);
- //       });
- //
- //       addAppliance(form);
- //   }
 
     public static void addAppliance(Form form) {
         JFrame applianceFrame = new JFrame("Add Appliance");
@@ -418,7 +534,7 @@ public class Form {
         try {
             House existingHouse = House.getInstance();
             if (existingHouse != null && existingHouse.getResidents() != null) {
-                for (greenhome.household.User user : existingHouse.getResidents()) {
+                for (User user : existingHouse.getResidents()) {
                     allUsers.add(user.getName());
                 }
             }
@@ -541,7 +657,7 @@ public class Form {
         try {
             House existingHouse = House.getInstance();
             if (existingHouse != null && existingHouse.getResidents() != null) {
-                for (greenhome.household.User user : existingHouse.getResidents()) {
+                for (User user : existingHouse.getResidents()) {
                     allUsers.add(user.getName());
                 }
             }
