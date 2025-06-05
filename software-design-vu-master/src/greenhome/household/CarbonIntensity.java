@@ -1,11 +1,10 @@
-package greenhome.apiintegration;
+package greenhome.household;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import greenhome.household.House;
 import greenhome.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +18,7 @@ public class CarbonIntensity {
     private static CarbonIntensity instance;
     private DateTime[] period = new DateTime[2];
 
-    // derived
+
     private double carbonIntensity;
 
     private CarbonIntensity() {
@@ -27,7 +26,7 @@ public class CarbonIntensity {
         this.period = new DateTime[] {house.getStart(), house.getEnd()};
     }
 
-    // public interface
+
     public static synchronized CarbonIntensity getInstance() {
         if (instance == null) {
             instance = new CarbonIntensity();
@@ -37,7 +36,7 @@ public class CarbonIntensity {
 
     public double getCarbonIntensity() {updateInternalCarbonIntensity(); return carbonIntensity;}
 
-    // for recommendations
+
     public static String findBestLowCarbonTimeRange() {
         List<CarbonHour> history = fetchCarbonIntensityHistory();
         if (history.size() < 3) return "Not enough data";
@@ -63,7 +62,7 @@ public class CarbonIntensity {
             }
         }
 
-        // BEST
+
         CarbonHour b1 = history.get(bestStart);
         CarbonHour b2 = history.get(bestStart + 1);
         CarbonHour b3 = history.get(bestStart + 2);
@@ -72,7 +71,7 @@ public class CarbonIntensity {
         int bCI1 = b1.carbonIntensity, bCI2 = b2.carbonIntensity, bCI3 = b3.carbonIntensity;
         double bestAvg = (bCI1 + bCI2 + bCI3) / 3.0;
 
-        // WORST
+
         CarbonHour w1 = history.get(worstStart);
         CarbonHour w2 = history.get(worstStart + 1);
         CarbonHour w3 = history.get(worstStart + 2);
@@ -100,7 +99,7 @@ public class CarbonIntensity {
     }
 
 
-    // private calculations
+
     private void updateInternalCarbonIntensity() {
         List<CarbonHour> history = fetchCarbonIntensityHistory();
 
@@ -109,7 +108,7 @@ public class CarbonIntensity {
             return;
         }
 
-        // Extract hours from the two DateTime objects
+
         int startHour = this.period[0].toLocalDateTime().getHour();
         int endHour = this.period[1].toLocalDateTime().getHour();
 
@@ -120,13 +119,13 @@ public class CarbonIntensity {
         this.carbonIntensity = avgCI;
     }
 
-    // Format ISO time to readable local hour:minute
+
     private static String formatTime(String isoDatetime) {
         ZonedDateTime zdt = ZonedDateTime.parse(isoDatetime);
         return zdt.toLocalTime().withSecond(0).withNano(0).toString();
     }
 
-    // Fetches the full 24-hour carbon intensity history
+
     private static List<CarbonHour> fetchCarbonIntensityHistory() {
         List<CarbonHour> history = new ArrayList<>();
         try {
@@ -159,7 +158,7 @@ public class CarbonIntensity {
         return history;
     }
 
-    // Represents one hour of carbon intensity data
+
     private static class CarbonHour {
         public int carbonIntensity;
         public String datetime;

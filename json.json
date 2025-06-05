@@ -1,49 +1,13 @@
 {
   "residents": [
     {
-      "name": "lol",
+      "name": "Steve",
       "ecoScore": 0,
       "carbonFootprint": 0.0,
       "costsGenerated": 0.0
     },
     {
-      "name": "lol",
-      "ecoScore": 0,
-      "carbonFootprint": 0.0,
-      "costsGenerated": 0.0
-    },
-    {
-      "name": "lol",
-      "ecoScore": 0,
-      "carbonFootprint": 0.0,
-      "costsGenerated": 0.0
-    },
-    {
-      "name": "max",
-      "ecoScore": 0,
-      "carbonFootprint": 0.0,
-      "costsGenerated": 0.0
-    },
-    {
-      "name": "lol",
-      "ecoScore": 0,
-      "carbonFootprint": 0.0,
-      "costsGenerated": 0.0
-    },
-    {
-      "name": "test",
-      "ecoScore": 0,
-      "carbonFootprint": 0.0,
-      "costsGenerated": 0.0
-    },
-    {
-      "name": "max",
-      "ecoScore": 0,
-      "carbonFootprint": 0.0,
-      "costsGenerated": 0.0
-    },
-    {
-      "name": "lol",
+      "name": "Bob",
       "ecoScore": 0,
       "carbonFootprint": 0.0,
       "costsGenerated": 0.0
@@ -51,16 +15,9 @@
   ],
   "appliances": [
     {
-      "powerConsumption": 200.0,
-      "embodiedEmissions": 500.0,
-      "name": "fridge",
-      "generatedFootprint": 0.0,
-      "generatedCost": 0.0
-    },
-    {
-      "powerConsumption": 800.0,
-      "embodiedEmissions": 500.0,
-      "name": "oven",
+      "powerConsumption": 99.0,
+      "embodiedEmissions": 99.0,
+      "name": "Fridge",
       "generatedFootprint": 0.0,
       "generatedCost": 0.0
     }
@@ -69,71 +26,36 @@
     {
       "users": [
         {
-          "name": "lol",
+          "name": "Steve",
           "ecoScore": 0,
           "carbonFootprint": 0.0,
           "costsGenerated": 0.0
         }
       ],
       "appliance": {
-        "powerConsumption": 200.0,
-        "embodiedEmissions": 500.0,
-        "name": "fridge",
+        "powerConsumption": 99.0,
+        "embodiedEmissions": 99.0,
+        "name": "Fridge",
         "generatedFootprint": 0.0,
         "generatedCost": 0.0
       },
       "period": [
         {
-          "day": 7,
+          "day": 9,
           "month": 6,
           "year": 2025,
-          "hour": 23,
-          "minute": 0
+          "hour": 18,
+          "minute": 1
         },
         {
-          "day": 14,
+          "day": 19,
           "month": 6,
           "year": 2025,
-          "hour": 23,
-          "minute": 0
+          "hour": 18,
+          "minute": 1
         }
       ],
-      "carbonIntensity": 155.0,
-      "carbonFootprint": 0.0
-    },
-    {
-      "users": [
-        {
-          "name": "max",
-          "ecoScore": 0,
-          "carbonFootprint": 0.0,
-          "costsGenerated": 0.0
-        }
-      ],
-      "appliance": {
-        "powerConsumption": 800.0,
-        "embodiedEmissions": 500.0,
-        "name": "oven",
-        "generatedFootprint": 0.0,
-        "generatedCost": 0.0
-      },
-      "period": [
-        {
-          "day": 7,
-          "month": 6,
-          "year": 2025,
-          "hour": 23,
-          "minute": 4
-        },
-        {
-          "day": 26,
-          "month": 6,
-          "year": 2025,
-          "hour": 23,
-          "minute": 4
-        }
-      ],
-      "carbonIntensity": 155.0,
+      "carbonIntensity": 210.0,
       "carbonFootprint": 0.0
     }
   ],

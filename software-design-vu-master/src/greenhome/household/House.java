@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Set;
 
 public class House {
-    // Thread-safe singleton implementation
+
     private static volatile House instance;
     private static final Object LOCK = new Object();
 
-    // Core attributes
+
     private List<User> residents;
     private List<Appliance> appliances;
     private List<Timeframe> timeframes;
@@ -22,12 +22,12 @@ public class House {
     private DateTime startDate;
     private DateTime endDate;
 
-    // Derived values
+
     private int ecoScore;
     private double footPrintGenerated;
     private double costsGenerated;
 
-    // Private constructor
+
     private House(List<User> residents, List<Appliance> appliances, List<Timeframe> timeframes,
                   String region, double electricityTariff) {
         this.residents = residents != null ? residents : new ArrayList<>();
@@ -44,7 +44,6 @@ public class House {
         System.out.println("🏠 House instance created with region: " + this.region);
     }
 
-    // 🔧 MAIN FIX: getInstance() never returns null
     public static House getInstance() {
         if (instance == null) {
             synchronized (LOCK) {
@@ -63,7 +62,6 @@ public class House {
         return instance;
     }
 
-    // 🔧 IMPROVED: constructInstance with better logic
     public static synchronized House constructInstance(List<User> residents,
                                                        List<Appliance> appliances,
                                                        List<Timeframe> timeframes,
@@ -84,7 +82,6 @@ public class House {
         return instance;
     }
 
-    // 🔧 IMPROVED: Safe overwrite with validation and null-safety
     public static void overwriteInstance(House newHouse) {
         if (newHouse != null) {
             synchronized (LOCK) {
@@ -105,23 +102,7 @@ public class House {
         }
     }
 
-    // 🆕 NEW: Method to check if instance exists
-    public static boolean hasInstance() {
-        return instance != null;
-    }
 
-    // 🆕 NEW: Reset for testing (keeps singleton pattern but allows reset)
-    public static synchronized void resetInstance() {
-        System.out.println("🔄 Resetting House instance");
-        instance = null;
-    }
-
-    // 🆕 NEW: Initialize with default values
-    public static House getOrCreateDefault() {
-        return getInstance(); // This will create default if needed
-    }
-
-    // DERIVED GETTERS with automatic calculation
     public double getFootPrint() {
         sumFootPrint();
         return this.footPrintGenerated;
@@ -137,7 +118,7 @@ public class House {
         return this.ecoScore;
     }
 
-    // SETTERS with validation
+
     public void setRegion(String region) {
         this.region = region != null ? region : "Netherlands";
         System.out.println("🌍 Region set to: " + this.region);
@@ -156,7 +137,6 @@ public class House {
         this.endDate = endDate != null ? endDate : new DateTime(31, 12, 2025, 18, 0);
     }
 
-    // COLLECTION MODIFIERS with null safety
     public void addUser(User user) {
         if (user != null) {
             this.residents.add(user);
@@ -178,20 +158,6 @@ public class House {
         }
     }
 
-    // COLLECTION REPLACERS with null safety
-    public void modUser(List<User> newRes) {
-        this.residents = newRes != null ? newRes : new ArrayList<>();
-    }
-
-    public void modAppliances(List<Appliance> newApps) {
-        this.appliances = newApps != null ? newApps : new ArrayList<>();
-    }
-
-    public void modTimeframes(List<Timeframe> newFrames) {
-        this.timeframes = newFrames != null ? newFrames : new ArrayList<>();
-    }
-
-    // 🔧 FIXED GETTERS - Never return null
     public List<Appliance> getAppliances() {
         if (appliances == null) appliances = new ArrayList<>();
         return appliances;
@@ -211,8 +177,6 @@ public class House {
     public String getRegion() { return region != null ? region : "Netherlands"; }
     public DateTime getStart() { return startDate != null ? startDate : new DateTime(1, 1, 2025, 8, 0); }
     public DateTime getEnd() { return endDate != null ? endDate : new DateTime(31, 12, 2025, 18, 0); }
-
-    // PRIVATE CALCULATIONS (with comprehensive null safety)
     private void calcCost() {
         double totalCost = 0.0;
         Set<String> countedNames = new HashSet<>();
