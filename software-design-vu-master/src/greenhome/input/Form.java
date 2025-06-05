@@ -105,8 +105,8 @@ public class Form {
         dialog.setLocationRelativeTo(null);
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        JLabel header = new JLabel("<html><h2>Welcome back to GreenHome!</h2>" +
-                "<p>Previous data found. What would you like to do?</p></html>");
+        JLabel header = new JLabel("Welcome back to GreenHome!" +
+                "Previous data found. What would you like to do?");
         header.setHorizontalAlignment(SwingConstants.CENTER);
         header.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         dialog.add(header, BorderLayout.NORTH);
@@ -114,16 +114,14 @@ public class Form {
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 15, 15));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        JButton keepButton = new JButton("<html><b>📊 Continue with Previous Data</b><br>" +
-                "<small>Keep your existing household setup</small></html>");
+        JButton keepButton = new JButton("📊 Continue with Previous Data");
         keepButton.setPreferredSize(new Dimension(350, 60));
         keepButton.addActionListener(e -> {
             dialog.dispose();
             continueWithData();
         });
 
-        JButton freshButton = new JButton("<html><b>🆕 Start with Fresh Data</b><br>" +
-                "<small>Clear all previous data and start over</small></html>");
+        JButton freshButton = new JButton("<html><b>🆕 Start with Fresh Data</b><br>");
         freshButton.setPreferredSize(new Dimension(350, 60));
         freshButton.addActionListener(e -> {
             dialog.dispose();
@@ -132,8 +130,6 @@ public class Form {
                     "Confirm", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.YES_OPTION) {
                 startFresh();
-            } else {
-                showStartupChoice();
             }
         });
 
@@ -155,20 +151,20 @@ public class Form {
         }
     }
 
-    private static String getDataPreview() {
-        try {
-            House house = House.getInstance();
-            if (house != null) {
-                return String.format("%d appliances, %d users in %s",
-                        house.getAppliances().size(),
-                        house.getResidents().size(),
-                        house.getRegion());
-            }
-        } catch (Exception e) {
-            return "Data found but unreadable";
-        }
-        return "No data";
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private static void continueWithData() {
         try {
@@ -685,7 +681,7 @@ public class Form {
                     String val = line.replaceAll("[^0-9]", "");
                     sb.append("Power Consumption: ").append(val).append("\n");
                 } else if (line.startsWith("Embodied Emission:")) {
-                    String val = line.replaceAll("[^0-9]", "");
+                    String val = line.replaceAll("[^0-9.]", "");  // allow decimal points
                     sb.append("Embodied Emission: ").append(val).append("\n");
                 }
             }

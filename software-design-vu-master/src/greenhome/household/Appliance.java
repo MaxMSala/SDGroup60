@@ -53,7 +53,7 @@ public class Appliance {
         System.out.println("finish: total footprint: " + totalFootprint);
         System.out.println("embodied emisions: " + embodiedEmissions);
 
-        double combinedFootprint = (embodiedEmissions / 10) + totalFootprint;
+        double combinedFootprint = (embodiedEmissions ) + totalFootprint;
         this.generatedFootprint = combinedFootprint;
     }
 
