@@ -175,19 +175,19 @@ public class WhatIfScenarios {
 
         // Bottom buttons
         JPanel bottomPanel = new JPanel(new FlowLayout());
-        JButton addNewButton = new JButton("➕ Add New Appliance");
+       // JButton addNewButton = new JButton("➕ Add New Appliance");
         JButton closeButton = new JButton("✅ Done");
 
-        addNewButton.addActionListener(e -> {
-            addNewAppliance(() -> refreshApplianceList(mainPanel, house));
-        });
+      //  addNewButton.addActionListener(e -> {
+      //      addNewAppliance(() -> refreshApplianceList(mainPanel, house));
+      //  });
 
         closeButton.addActionListener(e -> {
             dialog.dispose();
             onClose.run();
         });
 
-        bottomPanel.add(addNewButton);
+        //bottomPanel.add(addNewButton);
         bottomPanel.add(closeButton);
         dialog.add(bottomPanel, BorderLayout.SOUTH);
 
