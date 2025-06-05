@@ -40,7 +40,7 @@ All calculations and recommendations are based on live or averaged carbon intens
 
 ## Prerequisites
 Before running the project, ensure you have the following installed:
-- Java Development Kit (JDK) 11
+- SDK: corretto-21 Amazon Corretto 21.0.6 (Java 21)
 - IntelliJ IDEA installation
 - Gradle
 
