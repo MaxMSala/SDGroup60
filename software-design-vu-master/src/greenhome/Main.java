@@ -65,12 +65,12 @@ public class Main {
         buttonPanel.add(freshButton);
         dialog.add(buttonPanel, BorderLayout.CENTER);
 
-        String preview = getDataPreview();
-        JLabel previewLabel = new JLabel("<html><small><b>Current data:</b> " +
-                preview + "</small></html>");
-        previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        previewLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 15, 10));
-        dialog.add(previewLabel, BorderLayout.SOUTH);
+//        String preview = getDataPreview();
+//        JLabel previewLabel = new JLabel("<html><small><b>Current data:</b> " +
+//                preview + "</small></html>");
+//        previewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+//        previewLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 15, 10));
+//        dialog.add(previewLabel, BorderLayout.SOUTH);
 
         dialog.setVisible(true);
     }
