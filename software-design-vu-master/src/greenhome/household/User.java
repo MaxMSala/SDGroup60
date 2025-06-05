@@ -10,12 +10,15 @@ public class User {
     private double carbonFootprint;
     private double costsGenerated;
     @Override
-    public boolean equals (Object obj) {
-        return obj instanceof User && Objects.equals(name, ((User) obj) .name) ;
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User)) return false;
+        User other = (User) obj;
+        return name.equals(other.name);
     }
+
     @Override
-    public int hashCode () {
-        return Objects.hash(name);
+    public int hashCode() {
+        return name.hashCode();
     }
     public User(String name) {
         this.name = name;
