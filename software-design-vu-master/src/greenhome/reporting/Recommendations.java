@@ -4,7 +4,7 @@ import java.util.*;
 import greenhome.apiintegration.CarbonIntensity;
 import greenhome.household.*;
 import greenhome.household.Timeframe;
-import greenhome.time.DateTime;
+
 
 
 public class Recommendations {
@@ -22,8 +22,8 @@ public class Recommendations {
 
         House house = House.getInstance();
 
-        // EcoScore feedback
-        System.out.println("House eco score: " + house.getEcoScore());
+
+
         if (house.getEcoScore() >= 75) {
             String formatted = String.format("STRONG (%d)! Keep optimizing your energy habits. Look below at recommendations!\n", house.getEcoScore());
             recs.append(formatted);
@@ -37,7 +37,7 @@ public class Recommendations {
         }
         recs.append("\n");
 
-        //  Individual User Eco-Scores (sorted)
+
         String section2 = " User Eco-Scores ";
         int section2Length = section2.length();
         int section2Padding = (totalWidth - section2Length) / 2;
@@ -47,8 +47,8 @@ public class Recommendations {
         Set<String> seenNames = new HashSet<>();
 
         house.getResidents().stream()
-                .filter(user -> seenNames.add(user.getName())) // only pass if name is not already in the set
-                .sorted((u1, u2) -> Integer.compare(u2.getEcoScore(), u1.getEcoScore())) // descending
+                .filter(user -> seenNames.add(user.getName()))
+                .sorted((u1, u2) -> Integer.compare(u2.getEcoScore(), u1.getEcoScore()))
                 .forEach(user -> recs.append(
                         String.format("   • %s – Eco-Score: %d\n", user.getName(), user.getEcoScore())
                 ));
@@ -57,7 +57,7 @@ public class Recommendations {
 
 
         recs.append("\n");
-        // Recommend user-specific behavior change based on highest carbon footprint appliance
+
         String section3 = " Household Recommendations: ";
         int section3Length = section3.length();
         int section3Padding = (totalWidth - section3Length) / 2;
@@ -69,7 +69,7 @@ public class Recommendations {
                 .orElse(null);
 
         if (worstAppliance != null) {
-            // Map to keep track of total usage hours per user
+
             Map<String, Double> userUsageMap = new HashMap<>();
 
             for (Timeframe tf : house.getTimeframes()) {
@@ -84,7 +84,7 @@ public class Recommendations {
                 }
             }
 
-            // Find the user with the most total usage hours
+
             String worstUser = null;
             double maxHours = 0;
 
@@ -108,14 +108,14 @@ public class Recommendations {
             }
         }
 
-        // Top carbon footprint appliances
+
         recs.append("Appliances generating the most carbon footprint:\n");
 
         Set<String> seenNames2 = new HashSet<>();
 
         List<Appliance> topCarbon = house.getAppliances().stream()
                 .sorted((a1, a2) -> Double.compare(a2.getGeneratedFootprint(), a1.getGeneratedFootprint()))
-                .filter(a -> seenNames2.add(a.getName())) // ensures uniqueness
+                .filter(a -> seenNames2.add(a.getName()))
                 .limit(3)
                 .toList();
 
@@ -128,25 +128,25 @@ public class Recommendations {
 
 
 
-        // Suggest replacing inefficient appliances
+
         recs.append("Appliance Efficiency Tips:\n");
 
         Set<String> seenNames3 = new HashSet<>();
 
         house.getAppliances().stream()
                 .filter(a -> a.getPowerConsumption() > 2.0)
-                .filter(a -> seenNames3.add(a.getName())) // ensure each name is used only once
+                .filter(a -> seenNames3.add(a.getName()))
                 .forEach(a -> recs.append(String.format(
                         "   • '%s' consumes %.2f kWh. Consider replacing it with a more efficient model.\n\n",
                         a.getName(), a.getPowerConsumption()
                 )));
 
 
-        // Most costly appliance
+
         Set<String> seenNames4 = new HashSet<>();
 
         Appliance mostCostly = house.getAppliances().stream()
-                .filter(a -> seenNames4.add(a.getName())) // keep only the first occurrence of each name
+                .filter(a -> seenNames4.add(a.getName()))
                 .max(Comparator.comparingDouble(Appliance::getGeneratedCost))
                 .orElse(null);
 
@@ -161,56 +161,5 @@ public class Recommendations {
 
         return recs.toString();
     }
-//
-//    public static void main(String[] args) {
-//        try {
-//            // === Create Mock Data ===
-//
-//            User user1 = new User("Alice");
-//            User user2 = new User("Bob");
-//            // List with only Alice
-//            List<User> onlyAlice = new ArrayList<>(List.of(user1));
-//
-//            // List with only Bob
-//            List<User> onlyBob = new ArrayList<>(List.of(user2));
-//
-//            // List with both
-//            List<User> bothUsers = new ArrayList<>(List.of(user1, user2));
-//
-//            Appliance fridge = new Appliance("Fridge", 10, 10.0);
-//            Appliance heater = new Appliance("Heater", 2.5, 50.0);
-//            List<Appliance> appliances = new ArrayList<>(List.of(fridge, heater));
-//            fridge.setGeneratedFootprint(20);
-//            heater.setGeneratedFootprint(7);
-//
-//            // Create manual DateTime instances
-//            DateTime start1 = new DateTime(27, 3, 2025, 8, 0);
-//            DateTime end1 = new DateTime(30, 3, 2025, 10, 0);
-//            DateTime start2 = new DateTime(27, 3, 2025, 14, 0);
-//            DateTime end2 = new DateTime(31, 3, 2025, 16, 0);
-//
-//            List<Integer> carbonIntensities = Arrays.asList(200, 220, 180);
-//
-//            Timeframe tf1 = new Timeframe(onlyBob, heater, start1, end1);
-//            Timeframe tf2 = new Timeframe(onlyAlice, fridge, start2, end2);
-//            List<Timeframe> timeframes = new ArrayList<>(List.of(tf1, tf2));
-//
-//            DateTime startDate = new DateTime(27, 3, 2025, 8, 0);
-//            DateTime endDate = new DateTime(30, 3, 2025, 8, 0);
-//
-//            House mockHouse = House.constructInstance(bothUsers, appliances, timeframes, "NL", 0.25);
-//            mockHouse.setStart(startDate);
-//            mockHouse.setEnd(endDate);
-//
-//            System.out.println("Alice CF: " + user1.getCarbonFootprint());
-//            System.out.println("Bob CF: " + user2.getCarbonFootprint());
-//            // === Generate & print recommendations ===
-//            String output = generate(mockHouse);
-//            System.out.println(output);
-//
-//        } catch (Exception e) {
-//            System.out.println("⚠️ Error during mock execution: " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
+
 }

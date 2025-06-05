@@ -80,7 +80,7 @@ public class Report {
         report.append("Total Carbon Footprint: ").append(String.format("%.2f kg CO2", house.getFootPrint())).append("\n");
         report.append("Total Costs: ").append(String.format("%.2f EUR", house.getCosts())).append(String.format(" with %.2f EUR per kW", house.getElectricityTariff())).append("\n");
 
-        // section 1 report
+
         report.append("\n");
         String section1 = " Appliances Ranked by Carbon Footprint (Descending) ";
         int section1Length = section1.length();
@@ -106,10 +106,10 @@ public class Report {
             }
         }
 
-        // section 2 report
+
         report.append("\n");
         String section2 = " Appliances Ranked by Costs Generated (Descending) ";
-        int section2Length = section2.length(); // fixed typo from section2Lentgth
+        int section2Length = section2.length();
         int section2Padding = (totalWidth - section2Length) / 2;
 
         String centeredSection2 = "-".repeat(section2Padding) + section2 + "-".repeat(totalWidth - section2Padding - section2Length);
@@ -117,7 +117,7 @@ public class Report {
 
         List<Appliance> appliances_byCosts = house.getAppliances();
         if (appliances_byCosts != null) {
-            // Sort appliances by generated cost in descending order
+
             appliances_byCosts.sort((a1, a2) -> Double.compare(a2.getGeneratedCost(), a1.getGeneratedCost()));
 
             Set<String> printedNames = new HashSet<>();
@@ -133,7 +133,7 @@ public class Report {
             }
         }
 
-        // section 3 report
+
         report.append("\n");
         String section3 = " Household Compared to International Average  ";
         int section3Lentgth = section3.length();

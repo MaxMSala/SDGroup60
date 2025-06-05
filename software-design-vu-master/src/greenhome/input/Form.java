@@ -89,9 +89,7 @@ public class Form {
         return sb.toString();
     }
 
-    // ==============================
-    // STARTUP AND DATA MANAGEMENT METHODS (moved from Main.java)
-    // ==============================
+
 
     public static void showStartupChoice() {
         boolean hasData = checkExistingData();
@@ -165,7 +163,7 @@ public class Form {
         try {
             House house = House.getInstance();
 
-            // Filter unique appliances by name
+
             Set<String> uniqueApplianceNames = new HashSet<>();
             for (Appliance appliance : house.getAppliances()) {
                 if (appliance != null) {
@@ -173,7 +171,7 @@ public class Form {
                 }
             }
 
-            // Filter unique users by name
+
             Set<String> uniqueUserNames = new HashSet<>();
             for (User user : house.getResidents()) {
                 if (user != null) {
@@ -217,9 +215,6 @@ public class Form {
         }
     }
 
-    // ==============================
-    // FORM UI METHODS
-    // ==============================
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Form::createAndShowGUI);
@@ -244,12 +239,12 @@ public class Form {
         JTextField tariffField = new JTextField();
         addPlaceholder(tariffField, "e.g., 0.25 €/kWh");
         tariffField.setText("0.25");
-        tariffField.setForeground(Color.BLACK); // make it look like user-entered text
+        tariffField.setForeground(Color.BLACK);
 
         JLabel startDateLabel = new JLabel("Start Date:");
         JDateChooser startDateChooser = new JDateChooser();
         Calendar cal = Calendar.getInstance();
-        cal.set(2025, Calendar.JUNE, 1); // June is 0-based in Java Calendar
+        cal.set(2025, Calendar.JUNE, 1);
         startDateChooser.setDate(cal.getTime());
 
         JLabel startTimeLabel = new JLabel("Start Time:");
@@ -264,7 +259,7 @@ public class Form {
         JLabel endDateLabel = new JLabel("End Date:");
         JDateChooser endDateChooser = new JDateChooser();
         Calendar cal2 = Calendar.getInstance();
-        cal2.set(2025, Calendar.JUNE, 30); // June is 0-based in Java Calendar
+        cal2.set(2025, Calendar.JUNE, 30);
         endDateChooser.setDate(cal2.getTime());
 
         JLabel endTimeLabel = new JLabel("End Time:");
@@ -509,18 +504,17 @@ public class Form {
         applianceFrame.setVisible(true);
     }
 
-    // 🔧 IMPROVED: User dropdown with ALL users (existing + new)
     public static String addApplianceTimeframe(JFrame parentFrame, Form form) {
         JPanel timeframePanel = new JPanel();
         timeframePanel.setLayout(new BoxLayout(timeframePanel, BoxLayout.Y_AXIS));
 
-        // 🎯 GET ALL AVAILABLE USERS (from form + existing house)
+
         Set<String> allUsers = new HashSet<>();
 
-        // Add users from current form
+
         allUsers.addAll(form.getUsers());
 
-        // Add users from existing house data
+
         try {
             House existingHouse = House.getInstance();
             if (existingHouse != null && existingHouse.getResidents() != null) {
@@ -584,16 +578,16 @@ public class Form {
 
             String timeframe = "User: " + selectedUser + "\n Start: " + start + "\n End: " + end;
 
-            // Create combined user list for validation
+
             StringBuilder usersString = new StringBuilder();
             for (String u : allUsers) {
                 usersString.append("- ").append(u).append("\n");
             }
 
-            // Extract house block for validation
+
             String houseData = form.getFormattedInput().split("USERS:")[0];
 
-            // Validate the timeframe
+
             if (!Validator.validateTimeframe(timeframe, usersString.toString(), houseData)) {
                 JOptionPane.showMessageDialog(parentFrame,
                         "⛔ Invalid timeframe:\n- Dates out of range\n- Start must be before End",
@@ -640,10 +634,10 @@ public class Form {
         }
         sb.append("\nUSERS\n");
 
-        // 🔧 COMBINE existing users with new users (no flushing)
+
         Set<String> allUsers = new HashSet<>();
 
-        // Add existing users from house
+
         try {
             House existingHouse = House.getInstance();
             if (existingHouse != null && existingHouse.getResidents() != null) {
@@ -655,7 +649,7 @@ public class Form {
             System.out.println("No existing users found");
         }
 
-        // Add new users from form
+
         allUsers.addAll(users);
 
         for (String user : allUsers) {
@@ -676,7 +670,7 @@ public class Form {
                     String val = line.replaceAll("[^0-9]", "");
                     sb.append("Power Consumption: ").append(val).append("\n");
                 } else if (line.startsWith("Embodied Emission:")) {
-                    String val = line.replaceAll("[^0-9.]", "");  // allow decimal points
+                    String val = line.replaceAll("[^0-9.]", "");
                     sb.append("Embodied Emission: ").append(val).append("\n");
                 }
             }
@@ -694,7 +688,7 @@ public class Form {
         String finalInput = sb.toString();
         System.out.println("✅ Final submission to parser:\n" + finalInput);
 
-        // 🔧 DON'T clear existing data, just add new data
+
         House h = House.getInstance();
         Parser.populateHouseFromForm(finalInput);
         System.out.println("Data merged with existing house");

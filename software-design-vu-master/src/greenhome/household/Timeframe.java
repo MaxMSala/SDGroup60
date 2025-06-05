@@ -7,17 +7,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class    Timeframe {
-    public static int count;
+
 
     private List<User> users;
     private Appliance appliance;
     private DateTime[] period = new DateTime[2];
     private double carbonIntensity;
 
-    // derived
+
     private double carbonFootprint;
 
-    // public interface
     public Timeframe(List<User> users, Appliance appliance, DateTime start, DateTime end) {
         this.users = users;
         this.appliance = appliance;
@@ -28,7 +27,7 @@ public class    Timeframe {
         this.carbonIntensity = ci.getCarbonIntensity();
     }
 
-    // returns number of hours the appliance was used through the timeframe
+
     public double getUsageDurationInHoursForAppliance() {
         if (period == null || period.length != 2) return 0.0;
 
@@ -39,7 +38,7 @@ public class    Timeframe {
         return duration.toMinutes() / 60.0;
     }
 
-    // getters
+
     public double getCarbonFootprint() {calcFootPrint();return this.carbonFootprint;}
     public List<User> getUsers() {
         return users;
@@ -47,17 +46,7 @@ public class    Timeframe {
     public Appliance getAppliance() {
         return appliance;
     }
-    public DateTime[] getPeriod() {
-        return period;
-    }
 
-    public DateTime getStart(){
-        return period[0];
-    }
-    public DateTime getEnd(){
-        return period[1];
-    }
-    // private calculations
     private void calcFootPrint() {
         double usageHours = getUsageDurationInHoursForAppliance();
         double power = appliance.getPowerConsumption();
