@@ -7,7 +7,6 @@ import greenhome.household.Appliance;
 import greenhome.household.House;
 import greenhome.household.Parser;
 import greenhome.household.User;
-import greenhome.reporting.Report;
 import greenhome.validation.Validator;
 
 import java.awt.*;

@@ -1,4 +1,5 @@
 package greenhome.household;
+
 import java.util.*;
 
 public class User {

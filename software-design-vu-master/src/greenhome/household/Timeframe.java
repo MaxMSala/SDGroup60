@@ -1,5 +1,4 @@
 package greenhome.household;
-import greenhome.apiintegration.*;
 import greenhome.time.DateTime;
 
 import java.time.Duration;

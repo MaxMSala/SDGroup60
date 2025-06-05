@@ -1,11 +1,10 @@
-package greenhome.apiintegration;
+package greenhome.household;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import greenhome.household.House;
 import greenhome.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;

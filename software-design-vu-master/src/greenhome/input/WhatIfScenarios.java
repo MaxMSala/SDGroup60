@@ -4,7 +4,6 @@ package greenhome.input;
 import greenhome.household.*;
 
 import greenhome.validation.Validator;
-import greenhome.reporting.Report;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

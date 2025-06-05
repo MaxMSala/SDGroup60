@@ -1,7 +1,7 @@
 package greenhome.reporting;
 import java.util.*;
 
-import greenhome.apiintegration.CarbonIntensity;
+import greenhome.household.CarbonIntensity;
 import greenhome.household.*;
 import greenhome.household.Timeframe;
 

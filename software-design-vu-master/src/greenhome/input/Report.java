@@ -1,8 +1,8 @@
-package greenhome.reporting;
+package greenhome.input;
 
 import greenhome.apiintegration.Average;
 import greenhome.household.*;
-import greenhome.input.WhatIfScenarios;
+import greenhome.reporting.Recommendations;
 import greenhome.time.DateTime;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
