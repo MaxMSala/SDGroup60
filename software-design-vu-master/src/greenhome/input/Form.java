@@ -1,6 +1,7 @@
 package greenhome.input;
 
 import javax.swing.*;
+
 import com.toedter.calendar.JDateChooser;
 import greenhome.household.Appliance;
 import greenhome.household.House;
@@ -104,12 +105,20 @@ public class Form {
         dialog.setLayout(new BorderLayout(10, 10));
         dialog.setLocationRelativeTo(null);
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        JPanel headerPanel = new JPanel(new GridLayout(2, 1));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        JLabel header = new JLabel("Welcome back to GreenHome!" +
-                "Previous data found. What would you like to do?");
-        header.setHorizontalAlignment(SwingConstants.CENTER);
-        header.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        dialog.add(header, BorderLayout.NORTH);
+        JLabel welcomeLabel = new JLabel("Welcome back to GreenHome!");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        welcomeLabel.setFont(welcomeLabel.getFont().deriveFont(Font.BOLD));
+
+
+        JLabel questionLabel = new JLabel("Previous data found. What would you like to do?");
+        questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        headerPanel.add(welcomeLabel);
+        headerPanel.add(questionLabel);
+        dialog.add(headerPanel, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 15, 15));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
@@ -121,7 +130,7 @@ public class Form {
             continueWithData();
         });
 
-        JButton freshButton = new JButton("<html><b>🆕 Start with Fresh Data</b><br>");
+        JButton freshButton = new JButton("🆕 Start with Fresh Data");
         freshButton.setPreferredSize(new Dimension(350, 60));
         freshButton.addActionListener(e -> {
             dialog.dispose();
@@ -150,20 +159,6 @@ public class Form {
             return false;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     private static void continueWithData() {

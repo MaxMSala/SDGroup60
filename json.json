@@ -29,6 +29,24 @@
       "ecoScore": 0,
       "carbonFootprint": 0.0,
       "costsGenerated": 0.0
+    },
+    {
+      "name": "test",
+      "ecoScore": 0,
+      "carbonFootprint": 0.0,
+      "costsGenerated": 0.0
+    },
+    {
+      "name": "max",
+      "ecoScore": 0,
+      "carbonFootprint": 0.0,
+      "costsGenerated": 0.0
+    },
+    {
+      "name": "lol",
+      "ecoScore": 0,
+      "carbonFootprint": 0.0,
+      "costsGenerated": 0.0
     }
   ],
   "appliances": [
