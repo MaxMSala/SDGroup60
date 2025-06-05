@@ -240,9 +240,9 @@ public class Form {
         });
         regionDropdown.setSelectedItem("Netherlands");
 
-        JLabel tariffLabel = new JLabel("Tariff:");
+        JLabel tariffLabel = new JLabel("Electricity Tariff (€):");
         JTextField tariffField = new JTextField();
-        addPlaceholder(tariffField, "e.g., 0.25 EUR/kWh");
+        addPlaceholder(tariffField, "e.g., 0.25 €/kWh");
         tariffField.setText("0.25");
         tariffField.setForeground(Color.BLACK); // make it look like user-entered text
 
