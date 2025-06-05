@@ -38,10 +38,10 @@ public class User {
         for (Timeframe tf : house.getTimeframes()) {
             Set<String> uniqueUserNames = new HashSet<>();
             for (User user : tf.getUsers()) {
-                uniqueUserNames.add(user.getName()); // Only names are used to ensure uniqueness
+                uniqueUserNames.add(user.getName());
             }
 
-            // Only count the footprint if this user is uniquely part of the timeframe
+
             if (uniqueUserNames.contains(this.name)) {
                 totalFootPrint += (tf.getCarbonFootprint() / uniqueUserNames.size());
             }
@@ -55,7 +55,7 @@ public class User {
     private void calcEcoScore() {
         House house = House.getInstance();
 
-        // Step 1: Collect unique users by name, and sum only those with > 0 footprint
+
         Map<String, Double> uniqueUserFootprints = new HashMap<>();
 
         for (User user : house.getResidents()) {
@@ -77,7 +77,7 @@ public class User {
         }
 
         if (uniqueUserFootprints.size() == 1) {
-            // Get the only contributor's name
+
             String soleContributor = uniqueUserFootprints.keySet().iterator().next();
 
             if (this.name.equals(soleContributor)) {
