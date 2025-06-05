@@ -1,26 +1,42 @@
 # Software Design 
 # Green Home System
 
-#### Software Design Group 68
+#### Software Design Group 60
 
 ## Project Overview
-The Green Home software enables households to calculate and better understand their carbon footprint, helping users make more informed and sustainable choices regarding energy consumption. Although the interface allows users to select from a wide range of countries, the current implementation is restricted to real data for The Netherlands due to financial constraints
-Specifically, the costs associated with accessing live environmental and energy APIs. Nevertheless, users can still explore other regions for fictional or educational purposes, simulating how the tool would behave if expanded in the future.
+The Green Home software is built as a modular Java application that processes household data to calculate environmental and financial impacts. Users interact with the system through a simple Swing-based interface, where they can input details such as appliance types, usage timeframes, number of residents, and electricity tariff.
 
-Users can input details about their household appliances and usage schedules, and the system estimates both carbon emissions and energy costs based on a comprehensive internal appliance database. This database contains:
+Once the data is entered, the system performs a series of calculations based on values retrieved from an internal appliance database and carbon intensity estimates. These calculations include:
 
-Average power consumption (used to estimate electricity usage and associated emissions)
+Total carbon emissions per appliance, based on usage duration, power consumption, and average carbon intensity
 
-House EcoScore and UserEcoScore
+Total cost per appliance, based on electricity tariff and energy usage
 
+User and household EcoScores, which gamify sustainability by rating low-emission behaviors
 
-Additionally, the system enables users to simulate alternative scenarios by adding, removing, or configuring appliances to explore how their choices affect carbon emissions. Finally, the system provides personalized recommendations to help users lower their household's carbon footprint.
+The system stores and retrieves user data using a JSON-based format, allowing households to save and reload configurations. The central House class ensures that all components, users, appliances, timeframes, and tariffs remain consistent across the application.
+
+In addition to real-time reports, the software allows users to simulate alternative scenarios using a dedicated What-If tool. This enables households to explore the effects of removing or adjusting appliances or even general inputs, without altering the main dataset.
+
+Finally, Green Home generates a comprehensive report that:
+
+Ranks appliances by carbon emissions and cost
+
+Compares the household’s footprint to the global per capita average
+
+Provides personalized recommendations, including the worst emitters, optimal usage times, and suggestions for more efficient alternatives
+
+All calculations and recommendations are based on live or averaged carbon intensity data, and though users can select from multiple regions, real-time data is currently supported only for The Netherlands due to API limitations. Other regions are included for simulation purposes only.
+
 
 ### Key Aspects of the System
-- **Data-Driven Predictions** ⟹ The system estimates carbon intensity based on historical data from the past three years, ensuring more accurate and reliable predictions.
-- **Personalized Insights** ⟹ Users receive tailored emission reports, comparisons with other households, and actionable recommendations.
-- **Scenario Exploration** ⟹ Users can simulate "what-if" scenarios to understand the impact of changing appliances or usage habits.
-- **Peak and Off-Peak Energy Optimization** ⟹ The system suggests optimal appliance usage times based on carbon intensity fluctuations, helping users reduce emissions.
+-**Real-Time and Averaged Carbon Data** ⟹ The system estimates carbon intensity using averaged values retrieved from the Electricity Maps API (limited to the past 24 hours and a single country). These are applied at the start and end of each appliance usage interval to provide realistic, session-based emission estimates.
+
+-**Tailored Reports and EcoScores** ⟹ Users receive detailed carbon and cost reports, including personalized User EcoScores and a Household EcoScore. These scores promote awareness and encourage lower emissions by ranking users and usage efficiency.
+
+-**Interactive Scenario Simulation** ⟹ The built-in What-If Scenarios tool allows users to add, remove, or reconfigure appliances and timeframes, helping them visualize the environmental and financial impact of potential lifestyle changes.
+
+-**Emission Timing Recommendations** ⟹ The system identifies optimal 3-hour intervals with lower carbon intensity and highlights periods to avoid, guiding users toward more sustainable usage schedules based on real-time or average carbon data.
 
 ## Prerequisites
 Before running the project, ensure you have the following installed:
