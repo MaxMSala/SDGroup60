@@ -4,7 +4,8 @@
 #### Software Design Group 68
 
 ## Project Overview
-The Green Home software enables households to calculate and better understand their carbon footprint, helping users make more informed and sustainable choices regarding energy consumption. Although the interface allows users to select from a wide range of countries, the current implementation is restricted to real data for The Netherlands due to financial constraints—specifically, the costs associated with accessing live environmental and energy APIs. Nevertheless, users can still explore other regions for fictional or educational purposes, simulating how the tool would behave if expanded in the future.
+The Green Home software enables households to calculate and better understand their carbon footprint, helping users make more informed and sustainable choices regarding energy consumption. Although the interface allows users to select from a wide range of countries, the current implementation is restricted to real data for The Netherlands due to financial constraints
+Specifically, the costs associated with accessing live environmental and energy APIs. Nevertheless, users can still explore other regions for fictional or educational purposes, simulating how the tool would behave if expanded in the future.
 
 Users can input details about their household appliances and usage schedules, and the system estimates both carbon emissions and energy costs based on a comprehensive internal appliance database. This database contains:
 
