@@ -162,7 +162,6 @@ public class Form {
         try {
             House house = House.getInstance();
 
-
             Set<String> uniqueApplianceNames = new HashSet<>();
             for (Appliance appliance : house.getAppliances()) {
                 if (appliance != null) {

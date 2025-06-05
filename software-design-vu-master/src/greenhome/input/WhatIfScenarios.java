@@ -173,9 +173,9 @@ public class WhatIfScenarios {
         mainPanel.removeAll();
 
         if (house.getAppliances().isEmpty()) {
-            JLabel noAppliance = new JLabel("No appliances found.");
-            noAppliance.setHorizontalAlignment(SwingConstants.CENTER);
-            mainPanel.add(noAppliance);
+            JLabel noAppliancemessage = new JLabel("No appliances found.");
+            noAppliancemessage.setHorizontalAlignment(SwingConstants.CENTER);
+            mainPanel.add(noAppliancemessage);
         } else {
             for (Appliance appliance : house.getAppliances()) {
                 JPanel appliancePanel = createAppliancePanel(appliance, house, mainPanel);
